@@ -28,3 +28,18 @@ function loadObject(url) {
   const objPromise = fetch(url).then(promiseResponse => promiseResponse.json());
   return objPromise;
 }
+
+/**
+ * Fetches data from the keywords servlet, which includes salient terms from user input.
+ */
+function getSalientTerms() {
+  let keyTermPromise = loadObject('/keyword');
+  keyTermPromise.then((keyTerms) => {
+    console.log(keyTerms);
+
+    // Temporary. TODO: Make some use of salient terms, such as word cloud.
+    // For now, append them to the end of the website.
+    let footer = document.getElementById('footer');
+    footer.textContent = keyTerms.join(" ");
+  });
+}

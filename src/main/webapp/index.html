@@ -8,7 +8,7 @@
     <script src="https://unpkg.com/mustache@latest"></script>
     <script src="/scripts/load.js"></script>
   </head>
-  <body>
+  <body onload="getSalientTerms()">
     <div id="content">
       <header id="header">This is the header</header>
       <div id="menu">
@@ -20,7 +20,12 @@
         <label for="actions-radio" id="actions-label" class="menu-label">Action</label>
       </div>
       <div id="selected-option">
-        <div id="slogan"><p>Slogan</p></div>
+        <!--<div id="slogan"><p>Slogan</p></div>-->
+        <form action="/keyword" method="POST">
+          <textarea name="keyword-sentence" style="resize: none; width: 600px; height: 350px;" placeholder="Enter your tweet or interests here"></textarea>
+          <br/>
+          <input type="submit" />
+        </form>
       </div>
       <footer id="footer">This is the footer</footer>
     </div>
