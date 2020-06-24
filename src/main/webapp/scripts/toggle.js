@@ -23,7 +23,7 @@ async function loadHtmlSections(templatesUrls, objsUrls, sectionsNames) {
   const templates = values[0];
   const objs = values[1];
   let htmlSections = new Object();
-  for (let i = 0; i < sectionsNames.length; i++){
+  for (let i = 0; i < sectionsNames.length; i++) {
     let sectionHtml = Mustache.render(templates[i], objs[i]);
     htmlSections[sectionsNames[i]] = sectionHtml;
   }
