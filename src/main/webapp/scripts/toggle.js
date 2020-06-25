@@ -4,7 +4,7 @@ const actionsTemplateUrl = '/templates/actions.html';
 const templatesUrls = [keywordsTemplateUrl, newsTemplateUrl, actionsTemplateUrl];
 
 const keywordsObjUrl = '/json/keywords.json';
-const newsObjUrl =  '/json/news.json';
+const newsObjUrl =  '/news';
 const actionsObjUrl = '/json/actions.json';
 const objectsUrls = [keywordsObjUrl, newsObjUrl, actionsObjUrl];
 
