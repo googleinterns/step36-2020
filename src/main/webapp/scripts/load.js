@@ -43,3 +43,4 @@ function getSalientTerms() {
     footer.textContent = keyTerms.join(" ");
   });
 }
+

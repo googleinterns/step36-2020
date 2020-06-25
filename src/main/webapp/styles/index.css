@@ -57,8 +57,15 @@
   grid-area: result;
   margin: 4vh 4vw;
 }
+
 #selected-option:hover {
   overflow:auto;
+}
+
+#selected-option textarea {
+  resize: none;
+  width: 600px;
+  height: 350px;
 }
 
 #slogan {
