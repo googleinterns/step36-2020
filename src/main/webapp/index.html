@@ -4,11 +4,12 @@
     <meta charset="UTF-8">
     <title>Main Page</title>
     <link rel="stylesheet" type="text/css" href="/styles/index.css">
+    <link rel="stylesheet" type="text/css" href="/styles/keywords.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://unpkg.com/mustache@latest"></script>
     <script src="/scripts/load.js"></script>
   </head>
-  <body onload="getSalientTerms()">
+  <body>
     <div id="content">
       <header id="header">This is the header</header>
       <div id="menu">
@@ -19,16 +20,7 @@
         <input type="radio" name="option" id="actions-radio" value="actions" class="hide">
         <label for="actions-radio" id="actions-label" class="menu-label">Action</label>
       </div>
-      <div id="selected-option">
-        <!--<div id="slogan"><p>Slogan</p></div>-->
-        <form action="/keyword" method="POST">
-          <textarea 
-            name="keyword-sentence" 
-            placeholder="Enter your tweet or interests here">Black Lives Matter and COVID-19.</textarea>
-          <br/>
-          <input type="submit" />
-        </form>
-      </div>
+      <div id="selected-option"></div>
       <footer id="footer">This is the footer</footer>
     </div>
     <script src="/scripts/toggle.js"></script>

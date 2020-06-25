@@ -1,4 +1,15 @@
-<h1>This is a Header for {{title}}</h1>
+<h1>{{title}}</h1>
+<form id="keyword-form" action="/keyword" method="POST">
+  <textarea 
+    name="keyword-sentence" 
+    placeholder="Enter your tweet or interests here">Black Lives Matter and COVID-19.</textarea>
+  <br/>
+  <input type="submit" />
+</form>
 <div id="keyword">
-
+  <ul>
+    {{#keywords}}
+    <li>{{term}}</li>
+    {{/keywords}}
+  </ul>
 </div>
