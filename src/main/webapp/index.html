@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Main Page</title>
+    <link rel="stylesheet" type="text/css" href="/styles/index.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://unpkg.com/mustache@latest"></script>
+    <script src="/scripts/load.js"></script>
+  </head>
+  <body>
+    <div id="content">
+      <header id="header">This is the header</header>
+      <div id="menu">
+        <input type="radio" name="option" id="keywords-radio" value="keywords" class="hide">
+        <label for="keywords-radio" id="keywords-label" class="menu-label">Keywords</label>
+        <input type="radio" name="option" id="news-radio" value="news" class="hide">
+        <label for="news-radio" id="news-label" class="menu-label">News</label>
+        <input type="radio" name="option" id="actions-radio" value="actions" class="hide">
+        <label for="actions-radio" id="actions-label" class="menu-label">Action</label>
+      </div>
+      <div id="selected-option">
+        <div id="slogan"><p>Slogan</p></div>
+      </div>
+      <footer id="footer">This is the footer</footer>
+    </div>
+    <script src="/scripts/toggle.js"></script>
+    <script src="/scripts/listenersIndex.js"></script>
+  </body>
+</html>

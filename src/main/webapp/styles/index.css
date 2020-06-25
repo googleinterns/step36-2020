@@ -1,0 +1,77 @@
+.hide {
+  display: none;
+}
+
+#content {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  display: grid;
+  grid: [row1-start] "header header" 1fr [row1-end]
+        [row2-start] "menu   result" 10fr [row2-end]
+        [row3-start] "footer footer" 1fr [row3-end]
+        / 1fr 2fr;
+}
+
+#header {
+  grid-area: header;
+  place-self: center center;
+}
+
+#menu {
+  grid-area: menu;
+  border-right: 1px solid black;
+  margin: auto 0;
+  display: grid;
+  grid: [row1-start] "keywords" 1fr [row1-end]
+        [row2-start] "news    " 1fr [row2-end]
+        [row3-start] "actions " 1fr [row3-end]
+        / 1fr;
+  place-items: center end;
+  padding: 4vh 4vw;
+}
+
+.menu-label {
+  padding: 1.5vh 0;
+}
+
+.menu-label:hover,
+#menu > input:checked + label {
+  font-weight: bold;
+}
+
+#keywords {
+  grid-area: keywords;
+}
+
+#new {
+  grid-area: news;
+}
+
+#actions {
+  grid-area: actions;
+}
+
+#selected-option {
+  overflow: hidden;
+  grid-area: result;
+  margin: 4vh 4vw;
+}
+#selected-option:hover {
+  overflow:auto;
+}
+
+#slogan {
+  width: 100%;
+  height: 100%;
+  display: flex;
+}
+
+#slogan > p {
+  margin: auto;
+}
+
+#footer {
+  grid-area: footer;
+  place-self: center center;
+}
