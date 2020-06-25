@@ -3,8 +3,8 @@ package com.google.sps.servlets;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
-import com.google.gson.Gson;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -23,8 +23,7 @@ public class KeywordServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     // TODO: Extract saliency
-    Gson gson = new Gson();
-    String json = gson.toJson(terms);
+    String json = mustacheJsonBuilder(terms);
     response.getWriter().println(json);
   }
 
@@ -35,6 +34,20 @@ public class KeywordServlet extends HttpServlet {
       tweets.add(request.getParameter("keyword-sentence"));
     }
     response.sendRedirect("/index.html");
+  }
+
+  /**
+   * Generates and returns a JSON usable by Mustache.
+   */
+  private String mustacheJsonBuilder(Collection<String> toJson) {
+    String builder = "{\"keywords\": [";
+    for (String term : toJson) {
+      builder += "{\"term\": \"" + term + "\"},";
+    }
+
+    // Remove extra comma at the end.
+    builder = builder.substring(0, builder.length() - 1) + "]}";
+    return builder;
   }
 
 }
