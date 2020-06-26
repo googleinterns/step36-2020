@@ -21,17 +21,16 @@ import com.google.gson.Gson;
 public class ActionsServlet extends HttpServlet {
 
   private static final List<String> terms = Arrays.asList("Black Lives Matter", "COVID-19");
+  private static final String API_KEY = "API_KEY"; //Insert the API_KEY here for testing
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     List<String> jsonResultList = new ArrayList<>();
-    String apiKey = "API_KEY"; //Insert the API_KEY here for testing
     for (String term : terms) {
       String queryTerm = encodeTerm(term);
-      String jsonResult = curlProjects(apiKey, queryTerm);
+      String jsonResult = curlProjects(API_KEY, queryTerm);
       jsonResultList.add(jsonResult);
     }
-
     String jsonResultString = "{\"results\": ["+String.join(",", jsonResultList)+"]}";
     response.setContentType("application/json;");
     response.getWriter().println(jsonResultString);
