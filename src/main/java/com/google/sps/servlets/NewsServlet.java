@@ -11,25 +11,33 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Loads news
+ * Servlet for generating news articles from keywords.
  */
 @WebServlet("/news")
 public class NewsServlet extends HttpServlet {
 
   private List<String> keywords = new ArrayList<String>();
+
+  // Hardcoded list of articles. 
+  // In future implementation, will be generated based on key words.
   private List<Article> articles = new ArrayList<Article>(
       List.of(
-        new ArticleBuilder("Bolton says Trump turned a blind eye to the coronavirus pandemic")
-          .withLink("https://www.cnn.com/2020/06/24/politics/john-bolton-interview-cnntv/index.html")
+        new ArticleBuilder("""Bolton says Trump turned a blind eye to the 
+        coronavirus pandemic""")
+          .withLink("""https://www.cnn.com/2020/06/24/politics/
+          john-bolton-interview-cnntv/index.html""")
           .build(),
-        new ArticleBuilder("Hearing goes off the rails when lawmaker keeps banging table")
-          .withLink("https://www.cnn.com/videos/politics/2020/06/24/louie-gohmert-bangs-table-judiciary-hearing-vpx.cnn")
+        new ArticleBuilder("""Hearing goes off the rails when lawmaker
+          keeps banging table")
+          .withLink("https://www.cnn.com/videos/politics/2020/06/24/
+          louie-gohmert-bangs-table-judiciary-hearing-vpx.cnn")
           .build()
       )   
   );
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    getArticles(keywords);
     String json = makeNewsJson();
     System.out.println(json); // test
     response.getWriter().println(json);
@@ -37,17 +45,6 @@ public class NewsServlet extends HttpServlet {
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    /*
-    Article firstArticle = new ArticleBuilder("Bolton says Trump turned 'a blind eye' to the coronavirus pandemic")
-    .withLink("https://www.cnn.com/2020/06/24/politics/john-bolton-interview-cnntv/index.html")
-    .build();
-    Article secondArticle = new ArticleBuilder("Hearing goes off the rails when lawmaker keeps banging table")
-    .withLink("https://www.cnn.com/videos/politics/2020/06/24/louie-gohmert-bangs-table-judiciary-hearing-vpx.cnn")
-    .build();
-    articles.add(firstArticle);
-    articles.add(secondArticle);
-    response.sendRedirect("/news.html");
-    */
   }
 
   private String makeNewsJson() {
