@@ -9,6 +9,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import com.google.sps.data.Article;
+import com.google.sps.data.ArticleBuilder;
 
 /**
  * Servlet for generating news articles from keywords.
@@ -22,29 +24,19 @@ public class NewsServlet extends HttpServlet {
   // In future implementation, will be generated based on key words.
   private List<Article> articles = new ArrayList<Article>(
       List.of(
-        new ArticleBuilder("""Bolton says Trump turned a blind eye to the 
-        coronavirus pandemic""")
-          .withLink("""https://www.cnn.com/2020/06/24/politics/
-          john-bolton-interview-cnntv/index.html""")
+        new ArticleBuilder("Bolton says Trump turned a blind eye to the coronavirus pandemic")
+          .withLink("https://www.cnn.com/2020/06/24/politics/john-bolton-interview-cnntv/index.html")
           .build(),
-        new ArticleBuilder("""Hearing goes off the rails when lawmaker
-          keeps banging table")
-          .withLink("https://www.cnn.com/videos/politics/2020/06/24/
-          louie-gohmert-bangs-table-judiciary-hearing-vpx.cnn")
+        new ArticleBuilder("Hearing goes off the rails when lawmaker keeps banging table")
+          .withLink("https://www.cnn.com/videos/politics/2020/06/24/louie-gohmert-bangs-table-judiciary-hearing-vpx.cnn")
           .build()
       )   
   );
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    getArticles(keywords);
     String json = makeNewsJson();
-    System.out.println(json); // test
     response.getWriter().println(json);
-  }
-
-  @Override
-  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
   }
 
   private String makeNewsJson() {
@@ -53,35 +45,5 @@ public class NewsServlet extends HttpServlet {
     json = "{\"articles\": " + json + "}";  
     return json;
   }
-
-  private class Article {
-
-    private String title;
-    private String link;
-
-    private Article(String title, String link) {
-      this.title = title;
-      this.link = link;
-    }
-  }
-
-  private class ArticleBuilder {
-
-    private String title;
-    private String link;
-
-    private ArticleBuilder(String title) {
-      this.title = title;
-    }
-
-    private ArticleBuilder withLink(String link) {
-      this.link = link;
-      return this;
-    }
-  
-    private Article build() {
-      return new Article(this.title, this.link);
-    }
-  }  
 
 }
