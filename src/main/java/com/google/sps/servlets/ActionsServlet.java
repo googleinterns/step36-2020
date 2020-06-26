@@ -44,14 +44,16 @@ public class ActionsServlet extends HttpServlet {
         throw new RuntimeException(ex.getCause());
     }
   }
-
+  /**
+   * Returns the a json string with the API response given a queryTerm and the API key.
+   */
   private String curlProjects(String apiKey, String queryTerm) throws IOException{
     String path = "https://api.globalgiving.org/api/public/services/search/projects";
     String queryString = String.format("?api_key=%s&q=%s", apiKey, queryTerm);
+    String[] curlCommand = { "curl", "-H", "Accept: application/json", "-H", "Content-Type: application/json", "-X", "GET", path+queryString};
 
-		String[] curlCommand = { "curl", "-H", "Accept: application/json", "-H", "Content-Type: application/json", "-X", "GET", path+queryString};
     ProcessBuilder process = new ProcessBuilder(curlCommand);
-		Process p = process.start();
+    Process p = process.start();
     BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
     StringBuilder builder = new StringBuilder();
     String line = null;
