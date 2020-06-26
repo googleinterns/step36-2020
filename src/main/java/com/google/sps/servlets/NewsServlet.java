@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import com.google.sps.data.Article;
-import com.google.sps.data.ArticleBuilder;
 
 /**
  * Servlet for generating news articles from keywords.
@@ -18,16 +17,15 @@ import com.google.sps.data.ArticleBuilder;
 @WebServlet("/news")
 public class NewsServlet extends HttpServlet {
 
-  private List<String> keywords = new ArrayList<String>();
-
+  private List<String> keywords = new ArrayList<>();
   // Hardcoded list of articles. 
   // In future implementation, will be generated based on key words.
-  private List<Article> articles = new ArrayList<Article>(
+  private List<Article> articles = new ArrayList<>(
       List.of(
-        new ArticleBuilder("Bolton says Trump turned a blind eye to the coronavirus pandemic")
+        new Article.Builder("Bolton says Trump turned a blind eye to the coronavirus pandemic")
           .withLink("https://www.cnn.com/2020/06/24/politics/john-bolton-interview-cnntv/index.html")
           .build(),
-        new ArticleBuilder("Hearing goes off the rails when lawmaker keeps banging table")
+        new Article.Builder("Hearing goes off the rails when lawmaker keeps banging table")
           .withLink("https://www.cnn.com/videos/politics/2020/06/24/louie-gohmert-bangs-table-judiciary-hearing-vpx.cnn")
           .build()
       )   
@@ -45,5 +43,4 @@ public class NewsServlet extends HttpServlet {
     json = "{\"articles\": " + json + "}";  
     return json;
   }
-
 }
