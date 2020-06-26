@@ -36,17 +36,17 @@ public class ActionsServlet extends HttpServlet {
     response.getWriter().println(jsonResultString);
   }
 
-  private String encodeTerm(String term) throws RuntimeException {
+  private String encodeTerm(String term) {
     try {
-        return URLEncoder.encode(term, StandardCharsets.UTF_8.toString());
+      return URLEncoder.encode(term, StandardCharsets.UTF_8.toString());
     } catch (UnsupportedEncodingException ex) {
-        throw new RuntimeException(ex.getCause());
+      throw new RuntimeException(ex.getCause());
     }
   }
   /**
    * Returns the a json string with the API response given a queryTerm and the API key.
    */
-  private String curlProjects(String apiKey, String queryTerm) throws IOException{
+  private String curlProjects(String apiKey, String queryTerm) throws IOException {
     String path = "https://api.globalgiving.org/api/public/services/search/projects";
     String queryString = String.format("?api_key=%s&q=%s", apiKey, queryTerm);
     String[] curlCommand = { "curl", "-H", "Accept: application/json", "-H", "Content-Type: application/json", "-X", "GET", path+queryString};
