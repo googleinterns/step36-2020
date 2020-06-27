@@ -21,7 +21,8 @@ import com.google.gson.Gson;
 public class ActionsServlet extends HttpServlet {
 
   private static final List<String> terms = Arrays.asList("Black Lives Matter", "COVID-19");
-  private static final String API_KEY = "API_KEY"; //Insert the API_KEY here for testing
+  private static final String API_KEY = "API_KEY";  // Insert the API_KEY here for testing.
+  private static final String API_PATH = "https://api.globalgiving.org/api/public/services/search/projects";
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -31,7 +32,8 @@ public class ActionsServlet extends HttpServlet {
       String jsonResult = curlProjects(API_KEY, queryTerm);
       jsonResultList.add(jsonResult);
     }
-    String jsonResultString = "{\"results\": ["+String.join(",", jsonResultList)+"]}";
+    String jsonBase = "{\"results\": [%s]}";
+    String jsonResultString = String.format(jsonBase, String.join(",", jsonResultList));
     response.setContentType("application/json;");
     response.getWriter().println(jsonResultString);
   }
@@ -43,13 +45,13 @@ public class ActionsServlet extends HttpServlet {
       throw new RuntimeException(ex.getCause());
     }
   }
+  
   /**
    * Returns the a json string with the API response given a queryTerm and the API key.
    */
   private String curlProjects(String apiKey, String queryTerm) throws IOException {
-    String path = "https://api.globalgiving.org/api/public/services/search/projects";
     String queryString = String.format("?api_key=%s&q=%s", apiKey, queryTerm);
-    String[] curlCommand = { "curl", "-H", "Accept: application/json", "-H", "Content-Type: application/json", "-X", "GET", path+queryString};
+    String[] curlCommand = { "curl", "-H", "Accept: application/json", "-H", "Content-Type: application/json", "-X", "GET", API_PATH+queryString};
 
     ProcessBuilder process = new ProcessBuilder(curlCommand);
     Process p = process.start();
