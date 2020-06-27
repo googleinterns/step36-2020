@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Given a tweet or sentence, the servlet will extract salient terms from those
+ * Given a tweet or sentence, the servlet will extract salient terms
  * and store them in a list.
  */
 @WebServlet("/keyword")
@@ -22,7 +22,7 @@ public class KeywordServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    // TODO: Extract saliency
+    // TODO: Extract saliency.
     String json = mustacheJsonBuilder(terms);
     response.getWriter().println(json);
   }
@@ -42,13 +42,12 @@ public class KeywordServlet extends HttpServlet {
   private String mustacheJsonBuilder(Collection<String> toJson) {
     String builder = "{\"keywords\": [";
     for (String term : toJson) {
-      builder += "{\"term\": \"" + term + "\"},";
+      builder += String.format("{\"term\": \"%s\"},", term);
     }
 
     // Remove extra comma at the end.
     builder = builder.substring(0, builder.length() - 1) + "]}";
     return builder;
   }
-
 }
 
