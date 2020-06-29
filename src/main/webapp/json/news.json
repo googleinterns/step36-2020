@@ -1,1 +1,12 @@
-{"title" : "News"}
+{
+  "articles": {
+    "Black Lives Matter" : [{
+      "title": "Bolton says Trump turned 'a blind eye' to the coronavirus pandemic",
+      "link": "https://www.cnn.com/2020/06/24/politics/john-bolton-interview-cnntv/index.html"
+    }],
+    "COVID-19" : [{
+      "title": "Hearing goes off the rails when lawmaker keeps banging table",
+      "link": "https://www.cnn.com/videos/politics/2020/06/24/louie-gohmert-bangs-table-judiciary-hearing-vpx.cnn"
+    }]
+  }
+}
