@@ -1,32 +1,34 @@
-const keywordsTemplateUrl = '/templates/keywords.html';
-const newsTemplateUrl =  '/templates/news.html';
-const actionsTemplateUrl = '/templates/actions.html';
-const templatesUrls = [keywordsTemplateUrl, newsTemplateUrl, actionsTemplateUrl];
+const KEYWORDS_TEMPLATE_URL = '/templates/keywords.html';
+const TEMPLATES_URL = [KEYWORDS_TEMPLATE_URL];
 
-const keywordsObjUrl = '/json/keywords.json';
-const newsObjUrl =  '/json/news.json';
-const actionsObjUrl = '/actions';
-const objectsUrls = [keywordsObjUrl, newsObjUrl, actionsObjUrl];
+const KEYWORDS_OBJ_URL = '/json/keywords.json';
+const NEWS_OBJ_URL =  '/json/news.json';
+const ACTIONS_OBJ_URL = '/json/actions.json';
+const OBJECTS_URLS = [KEYWORDS_OBJ_URL, NEWS_OBJ_URL, ACTIONS_OBJ_URL];
 
-const sectionsNames = ['keywords', 'news', 'actions'];
-
-const htmlSectionsPromises = loadHtmlSections(templatesUrls, objectsUrls, sectionsNames);
+const HTML_SECTIONS_PROMISE = loadHtmlSections(TEMPLATES_URL, OBJECTS_URLS);
 
 /**
  * Loads an array of html templates, an array of json objects, and renders them using mustache.
  * Returns a promise.all of all the render html sections.
  */
-async function loadHtmlSections(templatesUrls, objsUrls, sectionsNames) {
+async function loadHtmlSections(templatesUrls, objsUrls) {
   const htmlTemplatesPromises = loadUrls(templatesUrls, loadTemplate);
   const objsPromises = loadUrls(objsUrls, loadObject);
   const values =  await Promise.all([htmlTemplatesPromises, objsPromises]);
   const templates = values[0];
   const objs = values[1];
-  let htmlSections = new Object();
-  for (let i = 0; i < sectionsNames.length; i++) {
-    let sectionHtml = Mustache.render(templates[i], objs[i]);
-    htmlSections[sectionsNames[i]] = sectionHtml;
+  return renderTemplateObj(templates, objs);
+}
+
+function renderTemplateObj(templates, objs) {
+  let keywords = objs[0];
+  for (let i = 0; i < keywords.keyterms.length; i++) {
+    let term = keywords.keyterms[i].term;
+    keywords.keyterms[i].news = objs[1].articles[term];
+    keywords.keyterms[i].actions = objs[2].results[term].search.response.projects.project;
   }
+  let htmlSections = Mustache.render(templates[0], keywords);
   return htmlSections;
 }
 
@@ -40,11 +42,10 @@ function activateSection(event) {
 }
 
 /**
- * Loads a section from the htmlSectionsPromises array.
+ * Loads the content section.
  */
-async function loadSection(sectionName) {
-  resultSection.innerHTML = "";
-  const htmlSections = await htmlSectionsPromises;
-  resultSection.innerHTML = htmlSections[sectionName];
+async function loadContentSection() {
+  const htmlSection = await HTML_SECTIONS_PROMISE;
+  $("#content").html(htmlSection);
   return;
 }
