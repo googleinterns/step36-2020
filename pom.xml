@@ -44,7 +44,7 @@
         <artifactId>appengine-maven-plugin</artifactId>
         <version>2.2.0</version>
         <configuration>
-          <deploy.projectId>[projectId-here]</deploy.projectId>
+          <deploy.projectId>step2020-team36-capstone</deploy.projectId>
           <deploy.version>1</deploy.version>
         </configuration>
       </plugin>
