@@ -23,7 +23,7 @@ public class KeywordServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     // TODO: Extract saliency.
-    String json = mustacheJsonBuilder(terms);
+    String json = jsonBuilder(terms);
     response.getWriter().println(json);
   }
 
@@ -39,15 +39,22 @@ public class KeywordServlet extends HttpServlet {
   /**
    * Generates and returns a JSON usable by Mustache.
    */
-  private String mustacheJsonBuilder(Collection<String> toJson) {
-    String builder = "{\"keywords\": [";
+  private String jsonBuilder(Collection<String> toJson) {
+    List<String> terms = new ArrayList<>();
     for (String term : toJson) {
-      builder += String.format("{\"term\": \"%s\"},", term);
+      terms.add(keyValueJson("term", term));
     }
 
     // Remove extra comma at the end.
-    builder = builder.substring(0, builder.length() - 1) + "]}";
-    return builder;
+    String keywordPrefix = "{\"keywords\": [";
+    return String.format(keywordPrefix + "%s]}", String.join(",", terms));
+  }
+
+  /**
+   * Given a key-value pair, this function returns "{key: value}".
+   */
+  private String keyValueJson(String key, String value) {
+    return String.format("{\"%s\": \"%s\"}", key, value);
   }
 }
 
