@@ -32,8 +32,7 @@ public class ActionsServlet extends HttpServlet {
       String jsonResult = curlProjects(API_KEY, queryTerm);
       jsonResultList.add(jsonResult);
     }
-    String jsonBase = "{\"results\": [%s]}";
-    String jsonResultString = String.format(jsonBase, String.join(",", jsonResultList));
+    String jsonResultString = String.format("{\"results\": [%s]}", String.join(",", jsonResultList));
     response.setContentType("application/json;");
     response.getWriter().println(jsonResultString);
   }
