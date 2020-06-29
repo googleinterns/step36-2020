@@ -45,9 +45,7 @@ public class KeywordServlet extends HttpServlet {
       terms.add(keyValueJson("term", term));
     }
 
-    // Remove extra comma at the end.
-    String keywordPrefix = "{\"keywords\": [";
-    return String.format(keywordPrefix + "%s]}", String.join(",", terms));
+    return String.format("{\"keywords\": [%s]}", String.join(",", terms));
   }
 
   /**
