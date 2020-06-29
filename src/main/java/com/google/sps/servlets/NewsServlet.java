@@ -36,13 +36,13 @@ public class NewsServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    String json = makeNewsJson();
+    String json = makeNewsJson(articles);
     response.getWriter().println(json);
   }
 
-  private String makeNewsJson() {
+  private String makeNewsJson(List<Article> articleList) {
     Gson gson = new Gson();
-    String json = gson.toJson(articles);
+    String json = gson.toJson(articleList);
     json = String.format("{\"articles\": %s}", json);
     return json;
   }
