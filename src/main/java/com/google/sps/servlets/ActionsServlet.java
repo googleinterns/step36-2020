@@ -25,14 +25,16 @@ public class ActionsServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     List<String> jsonResultList = new ArrayList<>();
-    String apiKey = "API_KEY"; //Insert the API_KEY here for testing
+    String apiKey = "a752ec3e-9fcf-4500-9107-694351adc5ee"; //Insert the API_KEY here for testing
+    String jsonBase = "\"%s\" : %s";
     for (String term : terms) {
       String queryTerm = encodeTerm(term);
       String jsonResult = curlProjects(apiKey, queryTerm);
+      jsonResult = String.format(jsonBase, term, jsonResult);
       jsonResultList.add(jsonResult);
     }
 
-    String jsonResultString = "{\"results\": ["+String.join(",", jsonResultList)+"]}";
+    String jsonResultString = "{\"results\": {"+String.join(",", jsonResultList)+"}}";
     response.setContentType("application/json;");
     response.getWriter().println(jsonResultString);
   }
@@ -48,7 +50,7 @@ public class ActionsServlet extends HttpServlet {
    * Returns the a json string with the API response given a queryTerm and the API key.
    */
   private String curlProjects(String apiKey, String queryTerm) throws IOException{
-    String path = "https://api.globalgiving.org/api/public/services/search/projects";
+    String path = "https://api.globalgiving.org/api/public/services/search/projects/summary";
     String queryString = String.format("?api_key=%s&q=%s", apiKey, queryTerm);
     String[] curlCommand = { "curl", "-H", "Accept: application/json", "-H", "Content-Type: application/json", "-X", "GET", path+queryString};
 
