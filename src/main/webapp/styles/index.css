@@ -59,6 +59,7 @@
   padding: 0 4vw;
   display: flex;
 }
+
 #selected-option:hover {
   overflow:auto;
 }

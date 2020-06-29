@@ -3,7 +3,7 @@ const NEWS_TEMPLATE_URL =  '/templates/news.html';
 const ACTIONS_TEMPLATE_URL = '/templates/actions.html';
 const TEMPLATES_URLS = [KEYWORDS_TEMPLATE_URL, NEWS_TEMPLATE_URL, ACTIONS_TEMPLATE_URL];
 
-const KEYWORDS_OBJ_URL = '/json/keywords.json';
+const KEYWORDS_OBJ_URL = '/keyword';
 const NEWS_OBJ_URL =  '/json/news.json';
 const ACTIONS_OBJ_URL = '/json/actions.json';
 const OBJECTS_URLS = [KEYWORDS_OBJ_URL, NEWS_OBJ_URL, ACTIONS_OBJ_URL];
