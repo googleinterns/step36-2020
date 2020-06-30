@@ -28,4 +28,3 @@ function loadObject(url) {
   const objPromise = fetch(url).then(promiseResponse => promiseResponse.json());
   return objPromise;
 }
-
