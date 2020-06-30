@@ -19,7 +19,7 @@ body {
   border-left: var(--thickness) solid rgb(66, 133, 244);
   width: 3em;
   height: 3em;
-  animation: spin 2s linear infinite;
+  animation: spin 4s linear infinite;
 }
 
 @keyframes spin {
