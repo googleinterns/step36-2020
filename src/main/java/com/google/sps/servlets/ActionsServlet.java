@@ -82,7 +82,7 @@ public class ActionsServlet extends HttpServlet {
   }
 
   /**
-   * Extracts and returns the a list of projects given a jsonStirng.
+   * Extracts and returns a list of projects given a jsonStirng.
    */
   private List<Project> extractProjectsList(String originalJsonString) {
     Gson gson = new Gson();
