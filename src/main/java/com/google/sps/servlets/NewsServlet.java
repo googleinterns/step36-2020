@@ -28,8 +28,8 @@ import java.util.HashMap;
 @WebServlet("/news")
 public class NewsServlet extends HttpServlet {
 
-  private String API_KEY = "1e440394-0b63-40c2-a16a-b24e5db4ea44";
-  private int NumArticlesPerKeyword = 3;
+  private String API_KEY = "test";
+  private int numArticlesPerKeyword = 3;
   private List<String> keywords = new ArrayList<String>(
     List.of("Black Lives Matter", "COVID-19")
   );
@@ -42,10 +42,13 @@ public class NewsServlet extends HttpServlet {
       addArticlesForTerm(keyword);
     }
     String json = makeNewsJson();
-    System.out.println(json);
     response.getWriter().println(json);
   }
 
+ /**
+  * Encodes the given term so that it can fit in a url.
+  * @return An encoded string
+  */
   private String encodeTerm(String term) {
     try {
       return URLEncoder.encode(term, StandardCharsets.UTF_8.toString());
@@ -69,12 +72,12 @@ public class NewsServlet extends HttpServlet {
     // Check to see if json has valid status and enough entries.
     String status = responseObject.get("status").getAsString();
     int numResults = responseObject.get("total").getAsInt();
-    int resultsToShow = NumArticlesPerKeyword;
+    int resultsToShow = numArticlesPerKeyword;
     if (!status.equals("ok")) {
       System.out.println("Error: status of JSON returned from Guardian API is " + status);
       return;
     }
-    else if (numResults < NumArticlesPerKeyword) {
+    else if (numResults < numArticlesPerKeyword) {
       if (numResults > 0) {
         resultsToShow = numResults;
       }
@@ -117,10 +120,9 @@ public class NewsServlet extends HttpServlet {
   */
   private void addArticlesForTerm(String keyTerm) {
     String path = "https://content.guardianapis.com/search";
-    String queryParam = "?q=" + keyTerm; // should maybe be encoded first (see Juan's)
+    String queryParam = "?q=" + keyTerm; 
     String apiKeyParam = "&api-key=" + API_KEY;
     String queryPath = path + queryParam + apiKeyParam;
-    System.out.println(queryPath); // test
     try {
       URL url = new URL(queryPath);
       HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -133,7 +135,6 @@ public class NewsServlet extends HttpServlet {
       }
       else {
         System.out.println("Error: connection response code is: " + responseCode);
-        // is this the proper way to throw an error?
       }    
     }
     catch(Exception e) {
