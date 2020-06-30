@@ -17,30 +17,34 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.HashMap;
+import com.google.gson.Gson;
+import com.google.sps.data.Project;
 
 /** Servlet that actions items.*/
 @WebServlet("/actions")
 public class ActionsServlet extends HttpServlet {
 
   private static final List<String> terms = Arrays.asList("Black Lives Matter", "COVID-19");
-  private static final String API_KEY = "API_KEY";  // Insert the API_KEY here for testing.
+  private static final String API_KEY = "a752ec3e-9fcf-4500-9107-694351adc5ee";  // Insert the API_KEY here for testing.
   private static final String API_PATH = "https://api.globalgiving.org/api/public/services/search/projects/summary";
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    List<String> jsonResultList = new ArrayList<>();
+    Map<String, List<Project>> jsonResultMap = new HashMap<>();
     for (String term : terms) {
       String queryTerm = encodeTerm(term);
       Map<String, String> queryParameters = new HashMap<>();
       queryParameters.put("api_key", API_KEY);
       queryParameters.put("q", queryTerm);
       String jsonResult = urlQuery(API_PATH, queryParameters);
-      jsonResult = String.format("\"%s\" : %s", term, jsonResult);
-      jsonResultList.add(jsonResult);
+      List<Project> projectsList = extractProjectsList(jsonResult);
+      jsonResultMap.put(term, projectsList);
     }
-    
-    // TODO: Factor this out into an Action class that uses GSON.
-    String jsonResultString = String.format("{\"results\": {%s}}", String.join(",", jsonResultList));
+  
+    Gson gson = new Gson();
+    Map<String, Object> results = new HashMap<>();
+    results.put("results", jsonResultMap);
+    String jsonResultString = gson.toJson(results);
     response.setContentType("application/json;");
     response.getWriter().println(jsonResultString);
   }
@@ -78,6 +82,32 @@ public class ActionsServlet extends HttpServlet {
   }
 
   /**
+   * Extracts and returns the a list of projects given a jsonStirng.
+   */
+  private List<Project> extractProjectsList(String originalJsonString) {
+    Gson gson = new Gson();
+    Map jsonMap = gson.fromJson(originalJsonString, Map.class);
+    String[] jsonSections = {"search", "response", "projects"};
+    for (String section : jsonSections) {
+      jsonMap = (Map) jsonMap.get(section);
+    }
+    List projectsListJson = (List) jsonMap.get("project");
+    List<Project> projectsList = new ArrayList<>();
+    for (int i = 0; i < projectsListJson.size(); i++) {
+      Map projectJson = (Map) projectsListJson.get(i);
+      double id = (double) projectJson.get("id");
+      String title = (String) projectJson.get("title");
+      String summary = (String) projectJson.get("summary");
+      Project project = new Project.ProjectBuilder(id)
+                                  .withTitle(title)
+                                  .withSummary(summary)
+                                  .build();
+      projectsList.add(project);
+    }
+    return projectsList;
+  }
+
+  /**
   * MIT License
   * 
   * Copyright (c) 2017 Eugen Paraschiv
@@ -106,5 +136,4 @@ public class ActionsServlet extends HttpServlet {
       String resultString = result.toString();
       return resultString.length() > 0 ? resultString.substring(0, resultString.length() - 1) : resultString;
   }
-
 }
