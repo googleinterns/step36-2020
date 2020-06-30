@@ -1,4 +1,3 @@
-
 package com.google.sps.servlets;
 
 import java.io.IOException;
@@ -12,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Given a tweet or sentence, the servlet will extract salient terms from those
+ * Given a tweet or sentence, the servlet will extract salient terms
  * and store them in a list.
  */
 @WebServlet("/keyword")
@@ -23,8 +22,8 @@ public class KeywordServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    // TODO: Extract saliency
-    String json = mustacheJsonBuilder(terms);
+    // TODO: Extract saliency.
+    String json = jsonBuilder(terms);
     response.getWriter().println(json);
   }
 
@@ -40,15 +39,19 @@ public class KeywordServlet extends HttpServlet {
   /**
    * Generates and returns a JSON usable by Mustache.
    */
-  private String mustacheJsonBuilder(Collection<String> toJson) {
-    String builder = "{\"keywords\": [";
+  private String jsonBuilder(Collection<String> toJson) {
+    List<String> terms = new ArrayList<>();
     for (String term : toJson) {
-      builder += "{\"term\": \"" + term + "\"},";
+      terms.add(keyValueJson("term", term));
     }
 
-    // Remove extra comma at the end.
-    builder = builder.substring(0, builder.length() - 1) + "]}";
-    return builder;
+    return String.format("{\"keywords\": [%s]}", String.join(",", terms));
   }
 
+  /**
+   * Given a key-value pair, this function returns "{key: value}".
+   */
+  private String keyValueJson(String key, String value) {
+    return String.format("{\"%s\": \"%s\"}", key, value);
+  }
 }

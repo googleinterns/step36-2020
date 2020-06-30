@@ -1,9 +1,9 @@
 const KEYWORDS_TEMPLATE_URL = '/templates/keywords.html';
 const TEMPLATES_URL = [KEYWORDS_TEMPLATE_URL];
 
-const KEYWORDS_OBJ_URL = '/json/keywords.json';
-const NEWS_OBJ_URL =  '/json/news.json';
-const ACTIONS_OBJ_URL = '/json/actions.json';
+const KEYWORDS_OBJ_URL = '/keyword';
+const NEWS_OBJ_URL =  '/news';
+const ACTIONS_OBJ_URL = '/actions';
 const OBJECTS_URLS = [KEYWORDS_OBJ_URL, NEWS_OBJ_URL, ACTIONS_OBJ_URL];
 
 const HTML_SECTIONS_PROMISE = loadHtmlSections(TEMPLATES_URL, OBJECTS_URLS);
