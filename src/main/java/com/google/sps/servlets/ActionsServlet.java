@@ -29,7 +29,6 @@ public class ActionsServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     List<String> jsonResultList = new ArrayList<>();
-
     for (String term : terms) {
       String queryTerm = encodeTerm(term);
       Map<String, String> queryParameters = new HashMap<>();
@@ -57,7 +56,6 @@ public class ActionsServlet extends HttpServlet {
   /**
    * Returns the a json string with the API response given an URL path and the query parameters.
    */
-
   private String urlQuery(String basePath, Map<String, String> parameters) throws IOException {
     String path = String.format("%s?%s", basePath, getParamsString(parameters));
     URL url = new URL(path);
