@@ -17,7 +17,7 @@ body {
   grid: [row1-start] "header content" 90vh [row1-end]
         [row2-start] "footer footer " 10vh [row2-end]
         / 1fr 1fr;
-	place-items: center center;
+  place-items: center;
 }
 
 #header {
