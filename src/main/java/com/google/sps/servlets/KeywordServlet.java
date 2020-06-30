@@ -27,6 +27,7 @@ public class KeywordServlet extends HttpServlet {
 
   private final List<String> tweets = new ArrayList<>();
   private final TreeMap<Entity, Float> terms = new TreeMap<>((term1, term2) -> {
+    // Sort the Entity keys by their salience scores
     if (term1.getSalience() > term2.getSalience()) {
       return 1;
     } else if (term1.getSalience() < term2.getSalience()) {
@@ -45,8 +46,13 @@ public class KeywordServlet extends HttpServlet {
         if (entity.getSalience() == 0) {
           continue;
         }
-        
+       
+        // We are only looking at (at most) the 10 most salient keywords. 
         if (terms.size() < 10) {
+          if (terms.containsKey(entity)) {  // Keep the max salience score if the term already exists in the map.
+            terms.put(entity, Math.max(entity.getSalience(), terms.get(entity)));
+            continue;
+          }
           terms.put(entity, entity.getSalience());
         } else if (!terms.containsKey(entity) && entity.getSalience() > terms.get(terms.pollFirstEntry())) {
           terms.remove(terms.pollFirstEntry());
@@ -55,7 +61,7 @@ public class KeywordServlet extends HttpServlet {
       }
     }
 
-    String json = jsonBuilder(terms);
+    String json = keywordJsonBuilder(terms);
     response.getWriter().println(json);
   }
 
@@ -71,22 +77,13 @@ public class KeywordServlet extends HttpServlet {
   /**
    * Generates and returns a JSON usable by Mustache.
    */
-  private String jsonBuilder(Map<Entity, Float> toJson) {
+  private static String keywordJsonBuilder(Map<Entity, Float> toJson) {
     List<String> terms = new ArrayList<>();
     for (Entity term : toJson.keySet()) {
-      terms.add(keyValueJson("term", term.getName()));
+      terms.add(String.format("{\"term\": \"%s\"}", term));
     }
 
-    // Remove extra comma at the end.
-    String keywordPrefix = "{\"keywords\": [";
-    return String.format(keywordPrefix + "%s]}", String.join(",", terms));
-  }
-
-  /**
-   * Given a key-value pair, this function returns "{key: value}".
-   */
-  private String keyValueJson(String key, String value) {
-    return String.format("{\"%s\": \"%s\"}", key, value);
+    return String.format("{\"keywords\": [%s]}", String.join(",", terms));
   }
 
   /**
