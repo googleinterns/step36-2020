@@ -10,42 +10,127 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import com.google.sps.data.Article;
+import java.net.URL;
+import java.net.HttpURLConnection;
+import java.util.Scanner;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.JsonElement;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
+import java.net.URLEncoder;
 
 /**
  * Servlet for generating news articles from keywords.
  */
 @WebServlet("/news")
 public class NewsServlet extends HttpServlet {
-  private List<String> keywords = new ArrayList<>();
-  
-  // Hardcoded list of articles. 
-  // In future implementation, will be generated based on key words.
-  private List<Article> articles = new ArrayList<>(
-      List.of(
-        new Article.Builder(
-            "Bolton says Trump turned a blind eye to the coronavirus pandemic",
-            "https://www.cnn.com/2020/06/24/politics/john-bolton-interview-cnntv/index.html")
-          .withWriter("Zachary Cohen")
-          .withDate("06/24/2020")
-          .build(),
-        new Article.Builder(
-            "Hearing goes off the rails when lawmaker keeps banging table",
-            "https://www.cnn.com/videos/politics/2020/06/24/louie-gohmert-bangs-table-judiciary-hearing-vpx.cnn")
-          .withDate("06/24/2020")
-          .build()
-      )   
+
+  private String API_KEY = "1e440394-0b63-40c2-a16a-b24e5db4ea44";
+  private int NumArticlesPerKeyword = 3;
+  private List<String> keywords = new ArrayList<String>(
+    List.of("Black Lives Matter", "COVID-19")
   );
+  private List<Article> articles = new ArrayList<Article>();
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    String json = makeNewsJson(articles);
+    System.out.println("in doGet()");
+    for (String keyword : keywords) {
+      keyword = encodeTerm(keyword);
+      addArticleForTerm(keyword);
+    }
+    String json = makeNewsJson();
     response.getWriter().println(json);
   }
 
-  private String makeNewsJson(List<Article> articleList) {
+  private String encodeTerm(String term) {
+    try {
+      return URLEncoder.encode(term, StandardCharsets.UTF_8.toString());
+    } catch (UnsupportedEncodingException ex) {
+      throw new RuntimeException(ex.getCause());
+    }
+  }
+
+  private String makeNewsJson() {
     Gson gson = new Gson();
-    String json = gson.toJson(articleList);
-    json = String.format("{\"articles\": %s}", json);
+    String json = gson.toJson(articles);
+    json = "{\"articles\": " + json + "}";  
     return json;
+  }
+
+ /**
+  * Adds Article object to articles from JSON results of Guardian query.
+  */
+  private void jsonToArticle(String jsonString) {
+    JsonObject responseObject = new JsonParser().parse(jsonString).getAsJsonObject().getAsJsonObject("response");
+    // Check to see if json has valid status and enough entries.
+    String status = responseObject.get("status").getAsString();
+    int numResults = responseObject.get("total").getAsInt();
+    if (!status.equals("ok")) {
+      System.out.println("Error: status of JSON returned from Guardian API is " + status);
+      return;
+    }
+    else if (numResults < NumArticlesPerKeyword) {
+      if (numResults > 0) {
+        NumArticlesPerKeyword = numResults;
+      }
+      else {
+        System.out.println("Error: no results found for query");
+      }
+    }
+    else {
+      JsonArray storiesJsonArray = responseObject.getAsJsonArray("results");
+      JsonObject firstStoryJson = storiesJsonArray.get(0).getAsJsonObject();
+      String title = firstStoryJson.get("webTitle").getAsString();
+      String link = firstStoryJson.get("webUrl").getAsString();
+      String date = firstStoryJson.get("webPublicationDate").getAsString();
+      date = date.substring(0, date.indexOf("T"));
+      articles.add(new Article.Builder(title, link).withDate(date).build());
+    }
+  }
+
+ /**
+  * Reads in JSON from an open URL.
+  * @return JSON in String format.
+  */
+  private String getJson(URL url) throws IOException {
+    Scanner jsonReader = new Scanner(url.openStream());
+    String data = "";
+    while(jsonReader.hasNext()) {
+        data += jsonReader.nextLine();
+    }
+    jsonReader.close();
+    return data;
+  }
+
+ /**
+  * Adds an Article object in articles for a key term.
+  */
+  private void addArticleForTerm(String keyTerm) {
+    String path = "https://content.guardianapis.com/search";
+    String queryParam = "?q=" + keyTerm; // should maybe be encoded first (see Juan's)
+    String apiKeyParam = "&api-key=" + API_KEY;
+    String queryPath = path + queryParam + apiKeyParam;
+    System.out.println(queryPath); // test
+    try {
+      URL url = new URL(queryPath);
+      HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+      connection.setRequestMethod("GET");
+      connection.connect();
+      int responseCode = connection.getResponseCode();
+      if (responseCode == 200) {
+        String json = getJson(url);
+        jsonToArticle(json);
+      }
+      else {
+        System.out.println("Error: connection response code is: " + responseCode);
+        // is this the proper way to throw an error?
+      }    
+    }
+    catch(Exception e) {
+      e.printStackTrace();
+    }
   }
 }
