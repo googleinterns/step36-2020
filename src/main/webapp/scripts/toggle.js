@@ -1,31 +1,34 @@
 const KEYWORDS_TEMPLATE_URL = '/templates/keywords.html';
-const NEWS_TEMPLATE_URL =  '/templates/news.html';
-const ACTIONS_TEMPLATE_URL = '/templates/actions.html';
-const TEMPLATES_URLS = [KEYWORDS_TEMPLATE_URL, NEWS_TEMPLATE_URL, ACTIONS_TEMPLATE_URL];
+const TEMPLATES_URL = [KEYWORDS_TEMPLATE_URL];
+
 const KEYWORDS_OBJ_URL = '/keyword';
 const NEWS_OBJ_URL =  '/news';
 const ACTIONS_OBJ_URL = '/actions';
 const OBJECTS_URLS = [KEYWORDS_OBJ_URL, NEWS_OBJ_URL, ACTIONS_OBJ_URL];
 
-const SECTIONS_NAMES = ['keywords', 'news', 'actions'];
-
-const HTML_SECTIONS_PROMISES = loadHtmlSections(TEMPLATES_URLS, OBJECTS_URLS, SECTIONS_NAMES);
+const HTML_SECTIONS_PROMISE = loadHtmlSections(TEMPLATES_URL, OBJECTS_URLS);
 
 /**
  * Loads an array of html templates, an array of json objects, and renders them using mustache.
  * Returns a promise.all of all the render html sections.
  */
-async function loadHtmlSections(templatesUrls, objsUrls, sectionsNames) {
+async function loadHtmlSections(templatesUrls, objsUrls) {
   const htmlTemplatesPromises = loadUrls(templatesUrls, loadTemplate);
   const objsPromises = loadUrls(objsUrls, loadObject);
   const values =  await Promise.all([htmlTemplatesPromises, objsPromises]);
   const templates = values[0];
   const objs = values[1];
-  let htmlSections = new Object();
-  for (let i = 0; i < sectionsNames.length; i++) {
-    let sectionHtml = Mustache.render(templates[i], objs[i]);
-    htmlSections[sectionsNames[i]] = sectionHtml;
+  return renderTemplateObj(templates, objs);
+}
+
+function renderTemplateObj(templates, objs) {
+  let keywords = objs[0];
+  for (let i = 0; i < keywords.keyterms.length; i++) {
+    let term = keywords.keyterms[i].term;
+    keywords.keyterms[i].news = objs[1].articles[term];
+    keywords.keyterms[i].actions = objs[2].results[term].search.response.projects.project;
   }
+  let htmlSections = Mustache.render(templates[0], keywords);
   return htmlSections;
 }
 
@@ -39,11 +42,10 @@ function activateSection(event) {
 }
 
 /**
- * Loads a section from the HTML_SECTIONS_PROMISES array.
+ * Loads the content section.
  */
-async function loadSection(sectionName) {
-  resultSection.innerHTML = "";
-  const htmlSections = await HTML_SECTIONS_PROMISES;
-  resultSection.innerHTML = htmlSections[sectionName];
+async function loadContentSection() {
+  const htmlSection = await HTML_SECTIONS_PROMISE;
+  $("#content").html(htmlSection);
   return;
 }

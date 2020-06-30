@@ -33,7 +33,7 @@ public class KeywordServlet extends HttpServlet {
     if (tweet != null && !tweet.equals("")) {
       tweets.add(request.getParameter("keyword-sentence"));
     }
-    response.sendRedirect("/index.html");
+    response.sendRedirect("/main.html");
   }
 
   /**
@@ -55,4 +55,3 @@ public class KeywordServlet extends HttpServlet {
     return String.format("{\"%s\": \"%s\"}", key, value);
   }
 }
-

@@ -35,11 +35,12 @@ public class ActionsServlet extends HttpServlet {
       queryParameters.put("api_key", API_KEY);
       queryParameters.put("q", queryTerm);
       String jsonResult = urlQuery(API_PATH, queryParameters);
+      jsonResult = String.format("\"%s\" : %s", term, jsonResult);
       jsonResultList.add(jsonResult);
     }
     
     // TODO: Factor this out into an Action class that uses GSON.
-    String jsonResultString = String.format("{\"results\": [%s]}", String.join(",", jsonResultList));
+    String jsonResultString = String.format("{\"results\": {%s}}", String.join(",", jsonResultList));
     response.setContentType("application/json;");
     response.getWriter().println(jsonResultString);
   }
