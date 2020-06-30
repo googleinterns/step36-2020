@@ -37,6 +37,8 @@ public class ActionsServlet extends HttpServlet {
       String jsonResult = urlQuery(API_PATH, queryParameters);
       jsonResultList.add(jsonResult);
     }
+    
+    // TODO: Factor this out into an Action class that uses GSON.
     String jsonResultString = String.format("{\"results\": [%s]}", String.join(",", jsonResultList));
     response.setContentType("application/json;");
     response.getWriter().println(jsonResultString);
