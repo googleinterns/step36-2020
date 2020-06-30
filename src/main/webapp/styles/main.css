@@ -17,7 +17,7 @@ body {
         [row2-start] "content" 65vh [row2-end]
         [row3-start] "footer " 10vh [row3-end]
         / 1fr;
-	place-items: center center;
+  place-items: center center;
 }
 
 body.focus {
@@ -27,7 +27,7 @@ body.focus {
     var(--lowerColor));
   grid: [row1-start] "content " 100vh [row1-end]
         / 1fr;
-	place-items: strech strech;
+  place-items: strech strech;
 }
 
 #header {
@@ -49,17 +49,17 @@ body.focus {
 }
 
 #content {
-	width: 100vw;
+  width: 100vw;
   height: 100%;
   grid-area: content;
 }
 
 #keywords {
-	margin: auto;
+  margin: auto;
   height: 100%;
-	width: 100%;
-	display: flex;
-	justify-content: center;
+  width: 100%;
+  display: flex;
+  justify-content: center;
   align-items: start;
 }
 
@@ -68,14 +68,14 @@ body.focus #keywords {
 }
 
 .keyword {
-	margin: 0 0.5vw;
-	width: 4vw;
-	height: 50vh;
-	background-color: white;
+  margin: 0 0.5vw;
+  width: 4vw;
+  height: 50vh;
+  background-color: white;
   box-shadow: 0 1px 2px rgba(0,0,0,0.25);
-	border-radius: 3em;
-	display: flex;
-	transition: all 0.3s ease-in-out;
+  border-radius: 3em;
+  display: flex;
+  transition: all 0.3s ease-in-out;
   justify-content: center;
   align-items: center;
   font-family: 'Open Sans', sans-serif;
@@ -84,67 +84,67 @@ body.focus #keywords {
 
 .keyword > .title {
   margin: 0 0;
-	transform: rotate(180deg);
+  transform: rotate(180deg);
   writing-mode: vertical-rl;
-	transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
   height: auto;
 }
 
 .hide {
-	display: none;
+  display: none;
 }
 
 .keyword:hover { 
-	width: 40vw;
-	cursor: pointer;
+  width: 40vw;
+  cursor: pointer;
 }
 
 .active,
 .active:hover {
-	position: absolute;
-	z-index: 100;
-	width: 95vw;
-	height: 90vh;
-	background-color: white;
-	cursor: auto;
+  position: absolute;
+  z-index: 100;
+  width: 95vw;
+  height: 90vh;
+  background-color: white;
+  cursor: auto;
   box-shadow: 0 5px 15px rgba(0,0,0,0.5);
 }
 
 .keyword:hover,
 .active {
-	display: grid;
+  display: grid;
   grid: [row1-start] "title   close  " auto [row1-end]
         [row2-start] "news    news   " 1fr  [row2-end]
         [row3-start] "line    line   " auto [row3-end]
         [row4-start] "actions actions" 1fr  [row4-end]
         / auto 3em;
-	place-items: center center;
-	transition: all 0.3s ease-in-out;
+  place-items: center center;
+  transition: all 0.3s ease-in-out;
   font-weight: normal;
 }
 
 .keyword:hover > .title,
 .active > .title {
   padding: 3vh 0;
-	font-weight: bold;
-	font-size: 1.5em;
-	transform: rotate(0deg);
+  font-weight: bold;
+  font-size: 1.5em;
+  transform: rotate(0deg);
   writing-mode: horizontal-tb;
-	transition: all 0.5s ease-in-out;
-	grid-row: 1;
-	grid-column-start: 1;
-	grid-column-end: span 2;
+  transition: all 0.5s ease-in-out;
+  grid-row: 1;
+  grid-column-start: 1;
+  grid-column-end: span 2;
   font-family: 'Oswald', sans-serif;
 }
 
 .keyword:hover > .hide,
 .active .hide {
-	display: block;
-	transition: all 0.5s ease-in-out;
+  display: block;
+  transition: all 0.5s ease-in-out;
 }
 
 .section-header {
-	font-weight: bold;
+  font-weight: bold;
 }
 
 .active .section-header {
@@ -164,13 +164,13 @@ body.focus #keywords {
 .keyword:hover > .actions-section,
 .active > .news-section,
 .active > .actions-section {
-	transition: all 0.5s ease-in-out;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	width: 90%;
-	height: 98%;
-	padding: 0 1vw;
+  transition: all 0.5s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 90%;
+  height: 98%;
+  padding: 0 1vw;
   overflow: hidden;
 }
 
@@ -183,17 +183,17 @@ body.focus #keywords {
 
 .news,
 .action {
-	width: 100%;
+  width: 100%;
 }
 
 .keyword:hover > .news-section,
 .active > .news-section {
-	grid-area: news;
+  grid-area: news;
 }
 
 .keyword:hover > .actions-section,
 .active > .actions-section {
-	grid-area: actions;
+  grid-area: actions;
 }
 
 .active .news-title,
@@ -210,15 +210,15 @@ body.focus #keywords {
 }
 
 .keyword:hover > .close {
-	display: none;
+  display: none;
 }
 
 .active > .close,
 .active:hover > .close {
-	display: inline;
-	grid-area: close;
-	place-self: start center;
-	margin: 1em 0;
-	font-size: 1.5em;
+  display: inline;
+  grid-area: close;
+  place-self: start center;
+  margin: 1em 0;
+  font-size: 1.5em;
   cursor: pointer;
 }
