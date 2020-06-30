@@ -1,0 +1,28 @@
+:root {
+  --thickness: 1em;
+}
+
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+}
+
+#loader {
+  border: var(--thickness) solid #f3f3f3;
+  border-radius: 50%;
+  border-top: var(--thickness) solid rgb(53, 168, 83);
+  border-right: var(--thickness) solid rgb(251, 188, 1);
+  border-bottom: var(--thickness) solid rgb(234, 67, 53);
+  border-left: var(--thickness) solid rgb(66, 133, 244);
+  width: 3em;
+  height: 3em;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
