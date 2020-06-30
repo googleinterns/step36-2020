@@ -21,6 +21,7 @@ import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.net.URLEncoder;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Servlet for generating news articles from keywords.
@@ -28,7 +29,7 @@ import java.util.HashMap;
 @WebServlet("/news")
 public class NewsServlet extends HttpServlet {
 
-  private String API_KEY = "test";
+  private final String API_KEY = "test"; // Insert actual API key when testing.
   private int numArticlesPerKeyword = 3;
   private List<String> keywords = new ArrayList<String>(
     List.of("Black Lives Matter", "COVID-19")
@@ -42,6 +43,7 @@ public class NewsServlet extends HttpServlet {
       addArticlesForTerm(keyword);
     }
     String json = makeNewsJson();
+    System.out.println(json); // test
     response.getWriter().println(json);
   }
 
@@ -59,8 +61,8 @@ public class NewsServlet extends HttpServlet {
 
   private String makeNewsJson() {
     Gson gson = new Gson();
-    String json = gson.toJson(articleMap);
-    json = "{\"articles\": " + json + "}";  
+    Map<String, Object> articles = Map.of("articles", articleMap);
+    String json = gson.toJson(articles); 
     return json;
   }
 
@@ -76,17 +78,14 @@ public class NewsServlet extends HttpServlet {
     if (!status.equals("ok")) {
       System.out.println("Error: status of JSON returned from Guardian API is " + status);
       return;
-    }
-    else if (numResults < numArticlesPerKeyword) {
+    } else if (numResults < numArticlesPerKeyword) {
       if (numResults > 0) {
         resultsToShow = numResults;
-      }
-      else {
+      } else {
         System.out.println("Error: no results found for query");
         return;
       }
-    }
-    else {
+    } else {
       JsonArray storiesJsonArray = responseObject.getAsJsonArray("results");
       List<Article> articles = new ArrayList<Article>();
       for (int i = 0; i < resultsToShow; i++) {
@@ -132,12 +131,10 @@ public class NewsServlet extends HttpServlet {
       if (responseCode == 200) {
         String json = getJson(url);
         jsonToArticles(json, keyTerm);
-      }
-      else {
+      } else {
         System.out.println("Error: connection response code is: " + responseCode);
       }    
-    }
-    catch(Exception e) {
+    } catch(Exception e) {
       e.printStackTrace();
     }
   }
