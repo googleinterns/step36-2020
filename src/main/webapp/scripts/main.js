@@ -18,9 +18,9 @@ $().ready(() => {
     });
 
     $(".active .item").click(function() {
-        $(".item").off("click");
-        const url = $(this).attr("data-url");
-        window.location.replace(url);
+      $(".item").off("click");
+      const url = $(this).attr("data-url");
+      window.location.replace(url);
     });
   });
 });

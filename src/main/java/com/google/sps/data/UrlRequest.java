@@ -22,7 +22,6 @@ public final class UrlRequest {
     connection.setRequestMethod("GET");
     connection.setRequestProperty("Accept", "application/json");
     connection.setRequestProperty("Content-Type", "application/json");
-
     int responseCode = connection.getResponseCode();
     InputStreamReader inputStream = new InputStreamReader(connection.getInputStream());
     StringBuilder contentBuilder = new StringBuilder();

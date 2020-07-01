@@ -27,7 +27,6 @@ public class ProjectServlet extends HttpServlet {
     String idString = request.getParameter("id");
     String path = String.format(API_PATH, idString);
     String jsonString = UrlRequest.urlQuery(path, queryParameters);
-
     Gson gson = new Gson();
     Map jsonMap = gson.fromJson(jsonString, Map.class);
 
