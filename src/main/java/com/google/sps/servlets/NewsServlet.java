@@ -30,11 +30,11 @@ import java.util.Map;
 public class NewsServlet extends HttpServlet {
 
   private final String API_KEY = "test"; // Insert actual API key when testing.
-  private int numArticlesPerKeyword = 3;
+  private int NUM_ARTICLES_PER_KEYWORD = 3;
   private List<String> keywords = new ArrayList<String>(
     List.of("Black Lives Matter", "COVID-19")
   );
-  private HashMap<String, List<Article>> articleMap = new HashMap<String, List<Article>>();
+  private HashMap<String, List<Article>> articleMap = new HashMap<>();
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -43,7 +43,6 @@ public class NewsServlet extends HttpServlet {
       addArticlesForTerm(keyword);
     }
     String json = makeNewsJson();
-    System.out.println(json); // test
     response.getWriter().println(json);
   }
 
@@ -74,11 +73,11 @@ public class NewsServlet extends HttpServlet {
     // Check to see if json has valid status and enough entries.
     String status = responseObject.get("status").getAsString();
     int numResults = responseObject.get("total").getAsInt();
-    int resultsToShow = numArticlesPerKeyword;
+    int resultsToShow = NUM_ARTICLES_PER_KEYWORD;
     if (!status.equals("ok")) {
       System.out.println("Error: status of JSON returned from Guardian API is " + status);
       return;
-    } else if (numResults < numArticlesPerKeyword) {
+    } else if (numResults < resultsToShow) {
       if (numResults > 0) {
         resultsToShow = numResults;
       } else {
