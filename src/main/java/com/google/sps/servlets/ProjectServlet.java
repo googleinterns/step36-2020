@@ -7,10 +7,12 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Map;
 import java.util.HashMap;
+import java.lang.reflect.Type;
 import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheFactory;
 import com.github.mustachejava.DefaultMustacheFactory;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.google.sps.data.UrlRequest;
 
 /** Servlet that shows projects.*/
@@ -28,7 +30,8 @@ public class ProjectServlet extends HttpServlet {
     String path = String.format(API_PATH, idString);
     String jsonString = UrlRequest.urlQuery(path, queryParameters);
     Gson gson = new Gson();
-    Map jsonMap = gson.fromJson(jsonString, Map.class);
+    Type mapType = new TypeToken<Map<String, Object>>() {}.getType();
+    Map<String, Object> jsonMap = gson.fromJson(jsonString, mapType);
 
     MustacheFactory mf = new DefaultMustacheFactory();
     Mustache mustache = mf.compile("project.html");

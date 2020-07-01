@@ -10,7 +10,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.HashMap;
+import java.lang.reflect.Type;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.google.sps.data.Project;
 import com.google.sps.data.UrlRequest;
 
@@ -47,15 +49,16 @@ public class ActionsServlet extends HttpServlet {
    */
   private List<Project> extractProjectsList(String originalJsonString) {
     Gson gson = new Gson();
-    Map jsonMap = gson.fromJson(originalJsonString, Map.class);
+    Type mapType = new TypeToken<Map<String, Object>>() {}.getType();
+    Map<String, Object> jsonMap = gson.fromJson(originalJsonString, mapType);
     String[] jsonSections = {"search", "response", "projects"};
     for (String section : jsonSections) {
-      jsonMap = (Map) jsonMap.get(section);
+      jsonMap = (Map<String, Object>) jsonMap.get(section);
     }
-    List projectsListJson = (List) jsonMap.get("project");
+    List<Map<String, Object>> projectsListJson = (List<Map<String, Object>>) jsonMap.get("project");
     List<Project> projectsList = new ArrayList<>();
     for (int i = 0; i < projectsListJson.size(); i++) {
-      Map projectJson = (Map) projectsListJson.get(i);
+      Map<String, Object> projectJson = projectsListJson.get(i);
       Project project = getProjectFromMap(projectJson);
       projectsList.add(project);
     }
