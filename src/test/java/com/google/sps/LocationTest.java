@@ -13,7 +13,6 @@ import java.net.URL;
 @RunWith(JUnit4.class)
 public final class LocationTest {
     
-
   @Before
   public void setUp() {
   }
