@@ -20,7 +20,7 @@ public class ActionsServlet extends HttpServlet {
 
   private static final List<String> terms = Arrays.asList("Black Lives Matter", "COVID-19");
   private static final String API_KEY = "API_KEY";  // Insert the API_KEY here for testing.
-  private static final String API_PATH = "https://api.globalgiving.org/api/public/services/search/projects/summary";
+  private static final String API_PATH = "https://api.globalgiving.org/api/public/services/search/projects";
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -66,9 +66,11 @@ public class ActionsServlet extends HttpServlet {
     double id = (double) projectMap.get("id");
     String title = (String) projectMap.get("title");
     String summary = (String) projectMap.get("summary");
+    String url  = (String) projectMap.get("projectLink");
     Project project = new Project.ProjectBuilder(id)
                                 .withTitle(title)
                                 .withSummary(summary)
+                                .withUrl(url)
                                 .build();
     return project;
   }
