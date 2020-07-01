@@ -19,8 +19,9 @@ import java.util.Map;
 import java.util.HashMap;
 import com.google.gson.Gson;
 import com.google.sps.data.Project;
+import com.google.sps.data.UrlRequest;
 
-/** Servlet that actions items.*/
+/** Servlet that gets actions items. */
 @WebServlet("/actions")
 public class ActionsServlet extends HttpServlet {
 
@@ -36,7 +37,7 @@ public class ActionsServlet extends HttpServlet {
       Map<String, String> queryParameters = new HashMap<>();
       queryParameters.put("api_key", API_KEY);
       queryParameters.put("q", queryTerm);
-      String jsonResult = urlQuery(API_PATH, queryParameters);
+      String jsonResult = UrlRequest.urlQuery(API_PATH, queryParameters);
       List<Project> projectsList = extractProjectsList(jsonResult);
       jsonResultMap.put(term, projectsList);
     }
@@ -56,30 +57,6 @@ public class ActionsServlet extends HttpServlet {
       throw new RuntimeException(ex.getCause());
     }
   }
-  
-  /**
-   * Returns the a json string with the API response given an URL path and the query parameters.
-   */
-  private String urlQuery(String basePath, Map<String, String> parameters) throws IOException {
-    String path = String.format("%s?%s", basePath, getParamsString(parameters));
-    URL url = new URL(path);
-    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-    connection.setRequestMethod("GET");
-    connection.setRequestProperty("Accept", "application/json");
-    connection.setRequestProperty("Content-Type", "application/json");
-
-    int responseCode = connection.getResponseCode();
-    InputStreamReader inputStream = new InputStreamReader(connection.getInputStream());
-    StringBuilder contentBuilder = new StringBuilder();
-    try (BufferedReader inputReader = new BufferedReader(inputStream)) {
-      String inputLine;
-      while ((inputLine = inputReader.readLine()) != null) {
-        contentBuilder.append(inputLine);
-      }
-    }
-    connection.disconnect();
-    return contentBuilder.toString();
-  }
 
   /**
    * Extracts and returns a list of projects given a jsonStirng.
@@ -95,45 +72,20 @@ public class ActionsServlet extends HttpServlet {
     List<Project> projectsList = new ArrayList<>();
     for (int i = 0; i < projectsListJson.size(); i++) {
       Map projectJson = (Map) projectsListJson.get(i);
-      double id = (double) projectJson.get("id");
-      String title = (String) projectJson.get("title");
-      String summary = (String) projectJson.get("summary");
-      Project project = new Project.ProjectBuilder(id)
-                                  .withTitle(title)
-                                  .withSummary(summary)
-                                  .build();
+      Project project = getProjectFromMap(projectJson);
       projectsList.add(project);
     }
     return projectsList;
   }
 
-  /**
-  * MIT License
-  * 
-  * Copyright (c) 2017 Eugen Paraschiv
-  * 
-  * Permission is hereby granted, free of charge, to any person obtaining a copy
-  * of this software and associated documentation files (the "Software"), to deal
-  * in the Software without restriction, including without limitation the rights
-  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-  * copies of the Software, and to permit persons to whom the Software is
-  * furnished to do so, subject to the following conditions:
-  * 
-  * The above copyright notice and this permission notice shall be included in all
-  * copies or substantial portions of the Software.
-  */
-
-  private String getParamsString(Map<String, String> params) throws UnsupportedEncodingException {
-      StringBuilder result = new StringBuilder();
-
-      for (Map.Entry<String, String> entry : params.entrySet()) {
-          result.append(URLEncoder.encode(entry.getKey(), "UTF-8"));
-          result.append("=");
-          result.append(URLEncoder.encode(entry.getValue(), "UTF-8"));
-          result.append("&");
-      }
-
-      String resultString = result.toString();
-      return resultString.length() > 0 ? resultString.substring(0, resultString.length() - 1) : resultString;
+  private Project getProjectFromMap(Map projectMap) {
+    double id = (double) projectMap.get("id");
+    String title = (String) projectMap.get("title");
+    String summary = (String) projectMap.get("summary");
+    Project project = new Project.ProjectBuilder(id)
+                                .withTitle(title)
+                                .withSummary(summary)
+                                .build();
+    return project;
   }
 }
