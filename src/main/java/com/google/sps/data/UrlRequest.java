@@ -10,7 +10,7 @@ import java.net.URL;
 import java.net.HttpURLConnection;
 import java.util.Map;
 
-
+/* Class conatining helper methods to make url requests */
 public final class UrlRequest {
   /**
    * Returns the a json string with the API response given an URL path and the query parameters.
