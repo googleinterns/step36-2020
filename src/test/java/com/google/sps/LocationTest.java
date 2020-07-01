@@ -19,8 +19,7 @@ public final class LocationTest {
   }
   
   @Test
-  public void BasicTest() {
-    LocationServlet.doGetTest();
+  public void SanityTest() {
     Assert.assertEquals(1, 1);
   }
 
