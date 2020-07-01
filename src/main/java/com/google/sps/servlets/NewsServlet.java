@@ -60,7 +60,8 @@ public class NewsServlet extends HttpServlet {
 
   private String makeNewsJson() {
     Gson gson = new Gson();
-    Map<String, Object> articles = Map.of("articles", articleMap);
+    Map<String, Object> articles = new HashMap<>();
+    articles.put("articles", articleMap);
     String json = gson.toJson(articles); 
     return json;
   }
