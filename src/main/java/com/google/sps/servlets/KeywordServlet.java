@@ -60,7 +60,6 @@ public class KeywordServlet extends HttpServlet {
         } else {}
       }
     }
-
     String json = keywordJsonBuilder(terms);
     response.getWriter().println(json);
   }
