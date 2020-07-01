@@ -72,6 +72,7 @@ public class KeywordServlet extends HttpServlet {
     if (tweet != null && !tweet.equals("")) {
       tweets.add(request.getParameter("keyword-sentence"));
     }
+
     String key = "12345"; // TODO: use the datastore key containing the keywords. 
     response.sendRedirect(String.format("/results?k=%s", key));
   }
