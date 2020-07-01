@@ -1,7 +1,10 @@
 package com.google.sps.servlets;
 
 import java.io.IOException;
+<<<<<<< HEAD
 import java.io.PrintWriter;
+=======
+>>>>>>> Add blobstore servlet
 import com.google.appengine.api.blobstore.BlobInfo;
 import com.google.appengine.api.blobstore.BlobInfoFactory;
 import com.google.appengine.api.blobstore.BlobKey;
@@ -10,6 +13,7 @@ import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
 import com.google.appengine.api.images.ImagesService;
 import com.google.appengine.api.images.ImagesServiceFactory;
 import com.google.appengine.api.images.ServingUrlOptions;
+<<<<<<< HEAD
 import com.google.cloud.vision.v1.AnnotateImageRequest;
 import com.google.cloud.vision.v1.AnnotateImageResponse;
 import com.google.cloud.vision.v1.BatchAnnotateImagesResponse;
@@ -23,6 +27,10 @@ import java.io.ByteArrayOutputStream;
 import java.net.URL;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
+=======
+import java.net.URL;
+import java.net.MalformedURLException;
+>>>>>>> Add blobstore servlet
 import java.util.List;
 import java.util.Map;
 import javax.servlet.annotation.WebServlet;
@@ -32,6 +40,7 @@ import javax.servlet.http.HttpServletResponse;
 
 @WebServlet("/user-image")
 public class ImageServlet extends HttpServlet {
+<<<<<<< HEAD
   
   // TODO: Handle keywords in a datastore, and handle the adding and replacing of keywords within
   // the datastore in a separate class in the data package.
@@ -40,6 +49,9 @@ public class ImageServlet extends HttpServlet {
   /**
    * Writes an upload URL for file uploads to the servlet
    */
+=======
+
+>>>>>>> Add blobstore servlet
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     BlobstoreService blobstore = BlobstoreServiceFactory.getBlobstoreService();
@@ -50,6 +62,7 @@ public class ImageServlet extends HttpServlet {
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+<<<<<<< HEAD
     PrintWriter writer = response.getWriter();
     BlobKey blobKey = getBlobKey(request, "image");
     if (blobKey == null) {
@@ -90,7 +103,6 @@ public class ImageServlet extends HttpServlet {
 
     // Our form only contains a single file input, so get the first index.
     BlobKey blobKey = blobKeys.get(0);
-    System.out.println(blobKey.getKeyString());
 
     // User submitted form without selecting a file, so the BlobKey is empty.
     BlobInfo blobInfo = new BlobInfoFactory().loadBlobInfo(blobKey);
