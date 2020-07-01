@@ -5,13 +5,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-import java.nio.charset.StandardCharsets;
-import java.net.URLEncoder;
-import java.net.URL;
-import java.net.HttpURLConnection;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -33,10 +26,9 @@ public class ActionsServlet extends HttpServlet {
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     Map<String, List<Project>> jsonResultMap = new HashMap<>();
     for (String term : terms) {
-      String queryTerm = encodeTerm(term);
       Map<String, String> queryParameters = new HashMap<>();
       queryParameters.put("api_key", API_KEY);
-      queryParameters.put("q", queryTerm);
+      queryParameters.put("q", term);
       String jsonResult = UrlRequest.urlQuery(API_PATH, queryParameters);
       List<Project> projectsList = extractProjectsList(jsonResult);
       jsonResultMap.put(term, projectsList);
@@ -48,14 +40,6 @@ public class ActionsServlet extends HttpServlet {
     String jsonResultString = gson.toJson(results);
     response.setContentType("application/json;");
     response.getWriter().println(jsonResultString);
-  }
-
-  private String encodeTerm(String term) {
-    try {
-      return URLEncoder.encode(term, StandardCharsets.UTF_8.toString());
-    } catch (UnsupportedEncodingException ex) {
-      throw new RuntimeException(ex.getCause());
-    }
   }
 
   /**
