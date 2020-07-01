@@ -60,7 +60,6 @@ public class KeywordServlet extends HttpServlet {
         } else {}
       }
     }
-
     String json = keywordJsonBuilder(terms);
     response.getWriter().println(json);
   }
@@ -71,7 +70,7 @@ public class KeywordServlet extends HttpServlet {
     if (tweet != null && !tweet.equals("")) {
       tweets.add(request.getParameter("keyword-sentence"));
     }
-    response.sendRedirect("/index.html");
+    response.sendRedirect("/main.html");
   }
 
   /**
