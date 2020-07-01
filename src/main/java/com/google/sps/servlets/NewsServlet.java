@@ -30,7 +30,7 @@ import java.util.Map;
 public class NewsServlet extends HttpServlet {
 
   private final String API_KEY = "test"; // Insert actual API key when testing.
-  private int NUM_ARTICLES_PER_KEYWORD = 3;
+  private final int NUM_ARTICLES_PER_KEYWORD = 3;
   private List<String> keywords = new ArrayList<String>(
     List.of("Black Lives Matter", "COVID-19")
   );
