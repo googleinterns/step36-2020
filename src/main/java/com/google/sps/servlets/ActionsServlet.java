@@ -58,7 +58,7 @@ public class ActionsServlet extends HttpServlet {
   }
   
   /**
-   * Returns the a json string with the API response given an URL path and the query parameters.
+   * Returns the a JSON string with the API response given an URL path and the query parameters.
    */
   private String urlQuery(String basePath, Map<String, String> parameters) throws IOException {
     String path = String.format("%s?%s", basePath, getParamsString(parameters));
@@ -82,7 +82,7 @@ public class ActionsServlet extends HttpServlet {
   }
 
   /**
-   * Extracts and returns a list of projects given a jsonStirng.
+   * Extracts and returns a list of projects given a JSON string.
    */
   private List<Project> extractProjectsList(String originalJsonString) {
     Gson gson = new Gson();

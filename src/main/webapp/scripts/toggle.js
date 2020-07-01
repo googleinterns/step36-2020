@@ -2,7 +2,7 @@ const KEYWORDS_TEMPLATE_URL = '/templates/keywords.html';
 const TEMPLATES_URL = [KEYWORDS_TEMPLATE_URL];
 
 const KEYWORDS_OBJ_URL = '/keyword';
-const NEWS_OBJ_URL =  '/news';
+const NEWS_OBJ_URL =  '/json/news.json';
 const ACTIONS_OBJ_URL = '/actions';
 const OBJECTS_URLS = [KEYWORDS_OBJ_URL, NEWS_OBJ_URL, ACTIONS_OBJ_URL];
 
@@ -22,13 +22,13 @@ async function loadHtmlSections(templatesUrls, objsUrls) {
 }
 
 function renderTemplateObj(templates, objs) {
-  let keywords = objs[0];
-  for (let i = 0; i < keywords.keyterms.length; i++) {
-    let term = keywords.keyterms[i].term;
-    keywords.keyterms[i].news = objs[1].articles[term];
-    keywords.keyterms[i].actions = objs[2].results[term].search.response.projects.project;
+  let result = objs[0];
+  for (let i = 0; i < result.keywords.length; i++) {
+    let term = result.keywords[i].term;
+    result.keywords[i].news = objs[1].articles[term];
+    result.keywords[i].actions = objs[2].results[term];
   }
-  let htmlSections = Mustache.render(templates[0], keywords);
+  let htmlSections = Mustache.render(templates[0], result);
   return htmlSections;
 }
 

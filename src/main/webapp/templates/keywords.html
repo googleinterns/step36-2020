@@ -6,9 +6,12 @@
       <div class="news-section hide">
         <div class="section-header">News</div>
         {{#news}}
-          <div class="news section" data-url="{{link}}">
-            <p class="news-title element-title">{{title}}</p>
+          <div class="news item">
+            <p class="news-title element-title" data-url="{{link}}">{{title}}</p>
             <p class="news-content hide">{{content}}</p>
+            <div class="overlay hide">
+              <p>Learn More <ion-icon name="arrow-forward-outline"></ion-icon></p>
+            </div>
           </div>
         {{/news}}
         {{^news}}
@@ -19,10 +22,12 @@
       <div class="actions-section hide">
         <div class="section-header">Projects</div>
         {{#actions}}
-          <div class="action section" data-url="{{organization.url}}"> 
-            <p class="action-title element-title">{{organization.name}}</p>
-            <p class="action-content hide mission">{{organization.mission}}</p>
+          <div class="action item"> 
+            <p class="action-title element-title">{{title}}</p>
             <p class="action-content hide summary">{{summary}}</p>
+            <div class="overlay hide">
+              <p>Learn More <ion-icon name="arrow-forward-outline"></ion-icon></p>
+            </div>
           </div>
         {{/actions}}
         {{^actions}}

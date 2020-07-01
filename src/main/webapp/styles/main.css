@@ -1,17 +1,8 @@
-:root {
-  --upperColor: #333333;
-  --lowerColor: #F8F8F8;
-}
-
-body {
-  margin: 0 0;
-  padding: 0 0;
+.body {
   background: linear-gradient(var(--upperColor) 0, 
     var(--upperColor) 50vh, 
     var(--lowerColor) 50vh, 
     var(--lowerColor));
-  font-family: 'Oswald', sans-serif;
-  font-weight: 450;
   display: grid;
   grid: [row1-start] "header " 25vh [row1-end]
         [row2-start] "content" 65vh [row2-end]
@@ -20,38 +11,15 @@ body {
   place-items: center center;
 }
 
-body.focus {
+.body.focus {
   background: linear-gradient(var(--upperColor) 0, 
     var(--upperColor) 49.5vh, 
     var(--lowerColor) 50.5vh, 
     var(--lowerColor));
   grid: [row1-start] "content " 100vh [row1-end]
         / 1fr;
-  place-items: strech strech;
-}
-
-#header {
-  color: white;
-  font-size: 3em;
-  grid-area: header;
-  font-weight: bold;
-}
-
-#footer {
-  grid-area: footer;
-  background-color: rgba(0,0,0,0.1);
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-family: 'Open Sans', sans-serif;;
-}
-
-#content {
-  width: 100vw;
-  height: 100%;
-  grid-area: content;
+  place-items: strech;
+  transition: all 0.3s ease-in-out;
 }
 
 #keywords {
@@ -63,7 +31,7 @@ body.focus {
   align-items: start;
 }
 
-body.focus #keywords {
+.body.focus #keywords {
   align-items: center;
 }
 
@@ -90,10 +58,6 @@ body.focus #keywords {
   height: auto;
 }
 
-.hide {
-  display: none;
-}
-
 .keyword:hover { 
   width: 40vw;
   cursor: pointer;
@@ -102,7 +66,7 @@ body.focus #keywords {
 .active,
 .active:hover {
   position: absolute;
-  z-index: 100;
+  z-index: 5;
   width: 95vw;
   height: 90vh;
   background-color: white;
@@ -168,9 +132,10 @@ body.focus #keywords {
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 90%;
-  height: 98%;
-  padding: 0 1vw;
+  width: 100%;
+  height: 100%;
+  padding: 0 5vw;
+  box-sizing: border-box;
   overflow: hidden;
 }
 
@@ -181,10 +146,6 @@ body.focus #keywords {
   overflow: auto;
 }
 
-.news,
-.action {
-  width: 100%;
-}
 
 .keyword:hover > .news-section,
 .active > .news-section {
@@ -196,17 +157,57 @@ body.focus #keywords {
   grid-area: actions;
 }
 
-.active .news-title,
-.active .action-title {
+.item {
+  width: 100%;
+  margin: 0.5vh 0;
+  transition: all 0.3s ease-in-out;
+}
+
+.active .item {
+  position: relative;
+  display: inline-block;
+  border-radius: 0.5em;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.15);
+  margin: 1vh 0;
+  padding: 1vh 2vw;
+}
+
+.active .overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  border-radius: 5px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  transition: opacity 0.3s ease-in-out;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Oswald', sans-serif;
+  font-size: 200%;
   font-weight: bold;
 }
 
-.active-url {
+.active .item:hover {
   cursor: pointer;
 }
 
-.active-url:hover {
-  background-color: rgba(0,0,0,0.1);
+.active .item:hover > p {
+  color: transparent;
+  text-shadow: 0 0 5px rgba(0,0,0,0.7);
+  user-select: none;
+}
+
+.active .item:hover > .overlay {
+  opacity: 1;
+}
+
+.active .news-title,
+.active .action-title {
+  font-weight: bold;
 }
 
 .keyword:hover > .close {
