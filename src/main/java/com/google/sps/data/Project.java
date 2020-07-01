@@ -6,11 +6,13 @@ public final class Project {
   private final double id;
   private String title;
   private String summary;
+  private String url;
 
   private Project (ProjectBuilder builder) {
     this.id = builder.id;
     this.title = builder.title;
     this.summary = builder.summary;
+    this.url = builder.url;
   }
 
   public double getId() {
@@ -25,12 +27,17 @@ public final class Project {
     return summary;
   }
 
+  public String getUrl() {
+    return url;
+  }
+
   /** Class used to build projects*/
   public static class ProjectBuilder {
 
     private final double id;
     private String title;
     private String summary;
+    private String url;
 
     public ProjectBuilder(double id) {
       this.id = id;
@@ -43,6 +50,11 @@ public final class Project {
 
     public ProjectBuilder withSummary(String summary) {
       this.summary = summary;
+      return this;
+    }
+
+    public ProjectBuilder withUrl(String url) {
+      this.url = url;
       return this;
     }
 
