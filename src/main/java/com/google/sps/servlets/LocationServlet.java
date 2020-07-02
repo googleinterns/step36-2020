@@ -73,20 +73,27 @@ public class LocationServlet extends HttpServlet {
         JsonArray addressArray = resultsArray.get(0).getAsJsonObject().getAsJsonArray("address_components");
         JsonObject entry;
         String name, geoType;
+        // Extract useful location informatin from JSON array.
         for (int i = 0; i < addressArray.size(); i++){
           entry = addressArray.get(i).getAsJsonObject();
           name = entry.getAsJsonPrimitive("long_name").getAsString();
           geoType = entry.getAsJsonArray("types").get(0).getAsString();
-          if (geoType.equals("locality")) {
-            geoMap.put("City", name);
-          } else if (geoType.equals("administrative_area_level_1")) {
-            geoMap.put("State", name);
-          } else if (geoType.equals("postal_code")) {
-            geoMap.put("Zip Code", name);
-          } else if (geoType.equals("street_number")) {
-            geoMap.put("Street Number", name);
-          } else if (geoType.equals("route")) {
-            geoMap.put("Street Name", name);
+          switch (geoType) {
+            case "locality" :
+              geoMap.put("City", name);
+              break;
+            case "administrative_area_level_1" :
+              geoMap.put("State", name);
+              break;
+            case "postal_code" :
+              geoMap.put("Zip Code", name);
+              break;
+            case "street_number" :
+              geoMap.put("Street Number", name);
+              break;
+            case "route" :
+              geoMap.put("Street Name", name);
+              break;
           }
         }
       } catch(Exception e ){
