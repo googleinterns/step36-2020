@@ -45,7 +45,7 @@ public class ActionsServlet extends HttpServlet {
   }
 
   /**
-   * Extracts and returns a list of projects given a jsonStirng.
+   * Extracts and returns a list of projects given a JSON string.
    */
   private List<Project> extractProjectsList(String originalJsonString) {
     Gson gson = new Gson();
@@ -70,9 +70,9 @@ public class ActionsServlet extends HttpServlet {
     String title = (String) projectMap.get("title");
     String summary = (String) projectMap.get("summary");
     Project project = new Project.ProjectBuilder(id)
-                                .withTitle(title)
-                                .withSummary(summary)
-                                .build();
+        .withTitle(title)
+        .withSummary(summary)
+        .build();
     return project;
   }
 }
