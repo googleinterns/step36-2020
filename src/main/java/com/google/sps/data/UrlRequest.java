@@ -17,7 +17,7 @@ public final class UrlRequest {
   /**
    * Returns the a JSON string with the API response given an URL path and the query parameters.
    */
-  public static String urlQuery(String basePath, Map<String, String> params) {
+  public static String urlQuery(String basePath, Map<String, String> params) throws IOException {
     String path = String.format("%s?%s", basePath, getParamsString(params));
     URL url = new URL(path);
     HttpURLConnection connection = (HttpURLConnection) url.openConnection();
