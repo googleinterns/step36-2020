@@ -25,10 +25,10 @@ public class ActionsServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     Map<String, List<Project>> jsonResultMap = new HashMap<>();
+    Map<String, String> queryParameters = new HashMap<>();
+    queryParameters.put("api_key", API_KEY);
     for (String term : terms) {
-      Map<String, String> queryParameters = new HashMap<>();
-      queryParameters.put("api_key", API_KEY);
-      queryParameters.put("q", term);
+      queryParameters.replace("q", term);
       String jsonResult = UrlRequest.urlQuery(API_PATH, queryParameters);
       List<Project> projectsList = extractProjectsList(jsonResult);
       jsonResultMap.put(term, projectsList);
@@ -43,7 +43,7 @@ public class ActionsServlet extends HttpServlet {
   }
 
   /**
-   * Extracts and returns a list of projects given a jsonStirng.
+   * Extracts and returns a list of projects given a JSON string.
    */
   private List<Project> extractProjectsList(String originalJsonString) {
     Gson gson = new Gson();
