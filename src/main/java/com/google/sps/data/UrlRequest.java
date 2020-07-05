@@ -17,7 +17,7 @@ public final class UrlRequest {
   /**
    * Returns the a JSON string with the API response given an URL path and the query parameters.
    */
-  public static String urlQuery(String basePath, Map<String, String> params) throws IOException {
+  public static String urlQuery(String basePath, Map<String, String> params) {
     String path = String.format("%s?%s", basePath, getParamsString(params));
     URL url = new URL(path);
     HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -32,6 +32,9 @@ public final class UrlRequest {
       while ((inputLine = inputReader.readLine()) != null) {
         contentBuilder.append(inputLine);
       }
+    } catch(Exception e) {
+      System.out.println(e);
+      return "";
     } finally {
       connection.disconnect();
     }
@@ -54,7 +57,7 @@ public final class UrlRequest {
   * copies or substantial portions of the Software.
   */
 
-  public static String getParamsString(Map<String, String> params) throws UnsupportedEncodingException {
+  public static String getParamsString(Map<String, String> params) {
     List<String> paramsList = new ArrayList<>();
     for (Map.Entry<String, String> entry : params.entrySet()) {
         String encodedKey = encodeTerm(entry.getKey());
@@ -67,8 +70,9 @@ public final class UrlRequest {
   public static String encodeTerm(String term) {
     try {
       return URLEncoder.encode(term, StandardCharsets.UTF_8.toString());
-    } catch (UnsupportedEncodingException ex) {
-      throw new RuntimeException(ex.getCause());
+    } catch (UnsupportedEncodingException uee) {
+      System.out.println(uee);
+      return "";
     }
   }
 }
