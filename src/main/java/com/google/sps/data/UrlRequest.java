@@ -9,20 +9,22 @@ import java.net.URLEncoder;
 import java.net.URL;
 import java.net.HttpURLConnection;
 import java.util.Map;
+import java.util.List;
+import java.util.ArrayList;
 
 /* Class conatining helper methods to make url requests */
 public final class UrlRequest {
   /**
-   * Returns the a json string with the API response given an URL path and the query parameters.
+   * Returns the a JSON string with the API response given an URL path and the query parameters.
    */
-  public static String urlQuery(String basePath, Map<String, String> parameters) throws IOException {
-    String path = String.format("%s?%s", basePath, getParamsString(parameters));
+  public static String urlQuery(String basePath, Map<String, String> params) {
+    String path = String.format("%s?%s", basePath, getParamsString(params));
     URL url = new URL(path);
     HttpURLConnection connection = (HttpURLConnection) url.openConnection();
     connection.setRequestMethod("GET");
     connection.setRequestProperty("Accept", "application/json");
     connection.setRequestProperty("Content-Type", "application/json");
-    int responseCode = connection.getResponseCode();
+    int responseCode = connection.getResponseCode(); // TODO: Handle exceptions when reponse code is not 200.
     InputStreamReader inputStream = new InputStreamReader(connection.getInputStream());
     StringBuilder contentBuilder = new StringBuilder();
     try (BufferedReader inputReader = new BufferedReader(inputStream)) {
@@ -30,8 +32,12 @@ public final class UrlRequest {
       while ((inputLine = inputReader.readLine()) != null) {
         contentBuilder.append(inputLine);
       }
+    } catch(Exception e) {
+      System.out.println(e);
+      return "";
+    } finally {
+      connection.disconnect();
     }
-    connection.disconnect();
     return contentBuilder.toString();
   }
 
@@ -51,15 +57,22 @@ public final class UrlRequest {
   * copies or substantial portions of the Software.
   */
 
-  public static String getParamsString(Map<String, String> params) throws UnsupportedEncodingException {
-      StringBuilder result = new StringBuilder();
-      for (Map.Entry<String, String> entry : params.entrySet()) {
-          result.append(URLEncoder.encode(entry.getKey(), StandardCharsets.UTF_8.toString()));
-          result.append("=");
-          result.append(URLEncoder.encode(entry.getValue(), StandardCharsets.UTF_8.toString()));
-          result.append("&");
-      }
-      String resultString = result.toString();
-      return resultString.length() > 0 ? resultString.substring(0, resultString.length() - 1) : resultString;
+  public static String getParamsString(Map<String, String> params) {
+    List<String> paramsList = new ArrayList<>();
+    for (Map.Entry<String, String> entry : params.entrySet()) {
+        String encodedKey = encodeTerm(entry.getKey());
+        String encodedValue = encodeTerm(entry.getValue());
+        paramsList.add(String.format("%s=%s", encodedKey, encodedValue));
+    }
+    return String.join("&", paramsList);
+  }
+
+  public static String encodeTerm(String term) {
+    try {
+      return URLEncoder.encode(term, StandardCharsets.UTF_8.toString());
+    } catch (UnsupportedEncodingException uee) {
+      System.out.println(uee);
+      return "";
+    }
   }
 }

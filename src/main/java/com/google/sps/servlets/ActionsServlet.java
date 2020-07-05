@@ -10,7 +10,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.HashMap;
+import java.lang.reflect.Type;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.google.sps.data.Project;
 import com.google.sps.data.UrlRequest;
 
@@ -25,11 +27,11 @@ public class ActionsServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     Map<String, List<Project>> jsonResultMap = new HashMap<>();
-    Map<String, String> queryParameters = new HashMap<>();
-    queryParameters.put("api_key", API_KEY);
+    Map<String, String> queryParams = new HashMap<>();
+    queryParams.put("api_key", API_KEY);
     for (String term : terms) {
-      queryParameters.replace("q", term);
-      String jsonResult = UrlRequest.urlQuery(API_PATH, queryParameters);
+      queryParams.replace("q", term);
+      String jsonResult = UrlRequest.urlQuery(API_PATH, queryParams);
       List<Project> projectsList = extractProjectsList(jsonResult);
       jsonResultMap.put(term, projectsList);
     }
@@ -47,15 +49,16 @@ public class ActionsServlet extends HttpServlet {
    */
   private List<Project> extractProjectsList(String originalJsonString) {
     Gson gson = new Gson();
-    Map jsonMap = gson.fromJson(originalJsonString, Map.class);
+    Type mapType = new TypeToken<Map<String, Object>>() {}.getType();
+    Map<String, Object> jsonMap = gson.fromJson(originalJsonString, mapType);
     String[] jsonSections = {"search", "response", "projects"};
     for (String section : jsonSections) {
-      jsonMap = (Map) jsonMap.get(section);
+      jsonMap = (Map<String, Object>) jsonMap.get(section);
     }
-    List projectsListJson = (List) jsonMap.get("project");
+    List<Map<String, Object>> projectsListJson = (List<Map<String, Object>>) jsonMap.get("project");
     List<Project> projectsList = new ArrayList<>();
     for (int i = 0; i < projectsListJson.size(); i++) {
-      Map projectJson = (Map) projectsListJson.get(i);
+      Map<String, Object> projectJson = projectsListJson.get(i);
       Project project = getProjectFromMap(projectJson);
       projectsList.add(project);
     }
@@ -68,10 +71,9 @@ public class ActionsServlet extends HttpServlet {
     String summary = (String) projectMap.get("summary");
     String url  = (String) projectMap.get("projectLink");
     Project project = new Project.ProjectBuilder(id)
-                                .withTitle(title)
-                                .withSummary(summary)
-                                .withUrl(url)
-                                .build();
+        .withTitle(title)
+        .withSummary(summary)
+        .build();
     return project;
   }
 }
