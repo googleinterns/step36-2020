@@ -52,51 +52,51 @@
 
 .keyword > .title {
   margin: 0 0;
-	transform: rotate(180deg);
+  transform: rotate(180deg);
   writing-mode: vertical-rl;
-	transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
   height: auto;
 }
 
 .active {
-	position: absolute;
-	z-index: 5;
-	width: 95vw;
-	height: 90vh;
-	background-color: white;
-	cursor: auto;
+  position: absolute;
+  z-index: 5;
+  width: 95vw;
+  height: 90vh;
+  background-color: white;
+  cursor: auto;
   box-shadow: 0 5px 15px rgba(0,0,0,0.5);
-	display: grid;
+  display: grid;
   grid: [row1-start] "title   close  " auto [row1-end]
         [row2-start] "news    news   " 1fr  [row2-end]
         [row3-start] "line    line   " auto [row3-end]
         [row4-start] "actions actions" 1fr  [row4-end]
         / auto 3em;
-	place-items: center center;
-	transition: all 0.3s ease-in-out;
+  place-items: center center;
+  transition: all 0.3s ease-in-out;
   font-weight: normal;
 }
 
 .active > .title {
   padding: 3vh 0;
-	font-weight: bold;
-	font-size: 1.5em;
-	transform: rotate(0deg);
+  font-weight: bold;
+  font-size: 1.5em;
+  transform: rotate(0deg);
   writing-mode: horizontal-tb;
-	transition: all 0.5s ease-in-out;
-	grid-row: 1;
-	grid-column-start: 1;
-	grid-column-end: span 2;
+  transition: all 0.5s ease-in-out;
+  grid-row: 1;
+  grid-column-start: 1;
+  grid-column-end: span 2;
   font-family: 'Oswald', sans-serif;
 }
 
 .active .hide {
-	display: block;
-	transition: all 0.5s ease-in-out;
+  display: block;
+  transition: all 0.5s ease-in-out;
 }
 
 .section-header {
-	font-weight: bold;
+  font-weight: bold;
 }
 
 .active .section-header {
@@ -113,12 +113,12 @@
 
 .active > .news-section,
 .active > .actions-section {
-	transition: all 0.5s ease-in-out;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	width: 100%;
-	height: 100%;
+  transition: all 0.5s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 100%;
   padding: 0 5vw;
   box-sizing: border-box;
   overflow: hidden;
@@ -130,15 +130,15 @@
 }
 
 .active > .news-section {
-	grid-area: news;
+  grid-area: news;
 }
 
 .active > .actions-section {
-	grid-area: actions;
+  grid-area: actions;
 }
 
 .item {
-	width: 100%;
+  width: 100%;
   margin: 1vh 0;
   padding: 1vh 2vw;
   transition: all 0.3s ease-in-out;
@@ -176,11 +176,11 @@
 }
 
 .active > .close {
-	display: inline;
-	grid-area: close;
-	place-self: start center;
-	margin: 1em 0;
-	font-size: 1.5em;
+  display: inline;
+  grid-area: close;
+  place-self: start center;
+  margin: 1em 0;
+  font-size: 1.5em;
   cursor: pointer;
 }
 
