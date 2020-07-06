@@ -17,6 +17,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.HashMap;
+import com.google.gson.Gson;
+import com.google.sps.data.Project;
 
 /** Servlet that actions items.*/
 @WebServlet("/actions")
@@ -28,18 +30,21 @@ public class ActionsServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    List<String> jsonResultList = new ArrayList<>();
+    Map<String, List<Project>> jsonResultMap = new HashMap<>();
+    Map<String, String> queryParameters = new HashMap<>();
+    queryParameters.put("api_key", API_KEY);
     for (String term : terms) {
       String queryTerm = encodeTerm(term);
-      Map<String, String> queryParameters = new HashMap<>();
-      queryParameters.put("api_key", API_KEY);
-      queryParameters.put("q", queryTerm);
+      queryParameters.replace("q", queryTerm);
       String jsonResult = urlQuery(API_PATH, queryParameters);
-      jsonResultList.add(jsonResult);
+      List<Project> projectsList = extractProjectsList(jsonResult);
+      jsonResultMap.put(term, projectsList);
     }
-    
-    // TODO: Factor this out into an Action class that uses GSON.
-    String jsonResultString = String.format("{\"results\": [%s]}", String.join(",", jsonResultList));
+  
+    Gson gson = new Gson();
+    Map<String, Object> results = new HashMap<>();
+    results.put("results", jsonResultMap);
+    String jsonResultString = gson.toJson(results);
     response.setContentType("application/json;");
     response.getWriter().println(jsonResultString);
   }
@@ -53,7 +58,7 @@ public class ActionsServlet extends HttpServlet {
   }
   
   /**
-   * Returns the a json string with the API response given an URL path and the query parameters.
+   * Returns the a JSON string with the API response given an URL path and the query parameters.
    */
   private String urlQuery(String basePath, Map<String, String> parameters) throws IOException {
     String path = String.format("%s?%s", basePath, getParamsString(parameters));
@@ -74,6 +79,32 @@ public class ActionsServlet extends HttpServlet {
     }
     connection.disconnect();
     return contentBuilder.toString();
+  }
+
+  /**
+   * Extracts and returns a list of projects given a JSON string.
+   */
+  private List<Project> extractProjectsList(String originalJsonString) {
+    Gson gson = new Gson();
+    Map jsonMap = gson.fromJson(originalJsonString, Map.class);
+    String[] jsonSections = {"search", "response", "projects"};
+    for (String section : jsonSections) {
+      jsonMap = (Map) jsonMap.get(section);
+    }
+    List projectsListJson = (List) jsonMap.get("project");
+    List<Project> projectsList = new ArrayList<>();
+    for (int i = 0; i < projectsListJson.size(); i++) {
+      Map projectJson = (Map) projectsListJson.get(i);
+      double id = (double) projectJson.get("id");
+      String title = (String) projectJson.get("title");
+      String summary = (String) projectJson.get("summary");
+      Project project = new Project.ProjectBuilder(id)
+                                  .withTitle(title)
+                                  .withSummary(summary)
+                                  .build();
+      projectsList.add(project);
+    }
+    return projectsList;
   }
 
   /**
@@ -105,5 +136,4 @@ public class ActionsServlet extends HttpServlet {
       String resultString = result.toString();
       return resultString.length() > 0 ? resultString.substring(0, resultString.length() - 1) : resultString;
   }
-
 }

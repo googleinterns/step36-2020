@@ -1,80 +1,30 @@
-.hide {
-  display: none;
+body {
+  background: linear-gradient( to right,
+    var(--upperColor) 0, 
+    var(--upperColor) 50vw, 
+    var(--lowerColor) 50vw, 
+    var(--lowerColor));
+  display: grid;
+  grid: [row1-start] "header content" 90vh [row1-end]
+        [row2-start] "footer footer " 10vh [row2-end]
+        / 50vw 50vw;
+  place-items: center;
 }
 
 #content {
-  position: absolute;
-  width: 100vw;
-  height: 100vh;
-  display: grid;
-  grid: [row1-start] "header header" 1fr [row1-end]
-        [row2-start] "menu   result" 10fr [row2-end]
-        [row3-start] "footer footer" 1fr [row3-end]
-        / 1fr 2fr;
-}
-
-#header {
-  grid-area: header;
-  place-self: center center;
-}
-
-#menu {
-  grid-area: menu;
-  border-right: 1px solid black;
-  margin: auto 0;
-  display: grid;
-  grid: [row1-start] "keywords" 1fr [row1-end]
-        [row2-start] "news    " 1fr [row2-end]
-        [row3-start] "actions " 1fr [row3-end]
-        / 1fr;
-  place-items: center end;
-  padding: 4vh 4vw;
-}
-
-.menu-label {
-  padding: 1.5vh 0;
-}
-
-.menu-label:hover,
-#menu > input:checked + label {
-  font-weight: bold;
-}
-
-#keywords {
-  grid-area: keywords;
-}
-
-#new {
-  grid-area: news;
-}
-
-#actions {
-  grid-area: actions;
-}
-
-#selected-option {
-  overflow: hidden;
-  grid-area: result;
-  margin: 4vh 0;
-  padding: 0 4vw;
   display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
-#selected-option:hover {
-  overflow:auto;
+#form-title {
+  font-size: 2em;
+  font-weight: bolder;
 }
 
-#slogan {
-  width: 100%;
-  height: 100%;
-  display: flex;
-}
-
-#slogan > p {
-  margin: auto;
-}
-
-#footer {
-  grid-area: footer;
-  place-self: center center;
+#keyword-form > textarea {
+  resize: none;
+  width: 40vw;
+  height: 20vh;
 }

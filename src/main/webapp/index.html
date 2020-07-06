@@ -2,31 +2,28 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8">
-    <title>Main Page</title>
-    <link rel="stylesheet" type="text/css" href="/styles/index.css">
-    <link rel="stylesheet" type="text/css" href="/styles/keywords.css">
-    <link rel="stylesheet" type="text/css" href="/styles/actions.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src="https://unpkg.com/mustache@latest"></script>
-    <script src="/scripts/load.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=">
+    <link rel="stylesheet" href="/styles/base.css">
+    <link rel="stylesheet" href="/styles/index.css">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&family=Oswald&display=swap" rel="stylesheet">
+    <title>Input Tweet</title>
   </head>
   <body>
+    <header id="header" class="base">
+      <p id="title">This is the Web APP Name</p>
+    </header>
     <div id="content">
-      <header id="header">This is the header</header>
-      <div id="menu">
-        <input type="radio" name="option" id="keywords-radio" value="keywords" class="hide">
-        <label for="keywords-radio" id="keywords-label" class="menu-label">Keywords</label>
-        <input type="radio" name="option" id="news-radio" value="news" class="hide">
-        <label for="news-radio" id="news-label" class="menu-label">News</label>
-        <input type="radio" name="option" id="actions-radio" value="actions" class="hide">
-        <label for="actions-radio" id="actions-label" class="menu-label">Action</label>
+      <div id="form-title">
+        <p>Copy your Tweet here</p>
       </div>
-      <div id="selected-option">
-        <div id="slogan"><p>Slogan</p></div>
-      </div>
-      <footer id="footer">This is the footer</footer>
+      <form id="keyword-form" action="/keyword" method="POST">
+        <textarea name="keyword-sentence" placeholder="Enter your tweet or interests here">Black Lives Matter, COVID-19.</textarea>
+        <br/>
+        <input type="submit"/>
+      </form>
     </div>
-    <script src="/scripts/toggle.js"></script>
-    <script src="/scripts/listenersIndex.js"></script>
+    <footer id="footer" class="base">
+      <p>This is the footer</p>
+    </footer>
   </body>
 </html>

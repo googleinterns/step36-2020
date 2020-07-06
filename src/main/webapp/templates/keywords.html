@@ -1,15 +1,42 @@
-<h1>{{title}}</h1>
-<form id="keyword-form" action="/keyword" method="POST">
-  <textarea 
-    name="keyword-sentence" 
-    placeholder="Enter your tweet or interests here">Black Lives Matter and COVID-19.</textarea>
-  <br/>
-  <input type="submit" />
-</form>
-<div id="keyword">
-  <ul>
-    {{#keywords}}
-    <li>{{term}}</li>
-    {{/keywords}}
-  </ul>
+<div id="keywords"> 
+  {{#keywords}}
+    <div class="keyword">
+      <p class="title">{{term}}</p>
+      <ion-icon class="close hide" name="close-outline"></ion-icon>
+      <div class="news-section hide">
+        <div class="section-header">News</div>
+        {{#news}}
+          <div class="news item">
+            <p class="news-title element-title" data-url="{{link}}">{{title}}</p>
+            <p class="news-content hide">{{content}}</p>
+            <div class="overlay hide">
+              <p>Learn More <ion-icon name="arrow-forward-outline"></ion-icon></p>
+            </div>
+          </div>
+        {{/news}}
+        {{^news}}
+          <div class="news">Sorry, we couldn't find any news for you</div>  
+        {{/news}}
+      </div>
+      <hr class="hide"> 
+      <div class="actions-section hide">
+        <div class="section-header">Projects</div>
+        {{#actions}}
+          <div class="action item"> 
+            <p class="action-title element-title">{{title}}</p>
+            <p class="action-content hide summary">{{summary}}</p>
+            <div class="overlay hide">
+              <p>Learn More <ion-icon name="arrow-forward-outline"></ion-icon></p>
+            </div>
+          </div>
+        {{/actions}}
+        {{^actions}}
+          <div class="action">Sorry, we couldn't find any projects for you</div>
+        {{/actions}}
+      </div>
+    </div>
+  {{/keywords}}
+  {{^keywords}}
+    <div class="keyword">Sorry, we couldn't extract any key words</div>  
+  {{/keywords}}
 </div>
