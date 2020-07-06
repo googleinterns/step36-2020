@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=">
+    <title>Results</title>
+    <link rel="stylesheet" href="/styles/loader.css">
+    <link rel="stylesheet" href="/styles/base.css">
+    <link rel="stylesheet" href="/styles/main.css">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&family=Oswald&display=swap" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script type='module' src='https://unpkg.com/ionicons@5.1.1/dist/ionicons/ionicons.esm.js'></script>
+    <script nomodule='' src='https://unpkg.com/ionicons@5.1.1/dist/ionicons/ionicons.js'></script>
+    <script src="https://unpkg.com/mustache@latest"></script>
+  </head>
+  <body data-key="{{key}}">
+    <div id="loader"></div>
+    <div id="real-body" class="hide">
+      <header id="header" class="base">
+        <p id="title">This is the Web APP Name</p>
+      </header>
+      <div id="content">
+      </div>
+      <footer id="footer" class="base">
+        <p>This is the footer</p>
+      </footer>
+    </div>
+    <script src="/scripts/cookies.js"></script>
+    <script src="/scripts/load.js"></script>
+    <script src="/scripts/toggle.js"></script>
+    <script src="/scripts/main.js"></script>
+  </body>
+</html>
