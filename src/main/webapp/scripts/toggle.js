@@ -14,15 +14,15 @@ const HTML_SECTIONS_PROMISE = loadHtmlSections(KEYWORDS_TEMPLATE_URL, OBJECTS_UR
  * Returns a promise of the keywords array.
  */
 async function loadKeywords(keywordsUrl) {
-  const cookieName = 'keywords';
+  const key = $("body").attr("data-key");
   let keywords;
-  const cookie = getCookie(cookieName);
-  if (cookie === "") {
-    keywords = await loadObject(keywordsUrl);
+  const keywordsCookie = getCookie(key);
+  if (keywordsCookie === "") {
+    keywords = await loadObject(`${keywordsUrl}?k=${key}`);
     const keywordsJson = JSON.stringify(keywords);
-    setCookie(cookieName, keywordsJson, 7);
+    setCookie(key, keywordsJson, 1);
   } else {
-    keywords = JSON.parse(cookie);
+    keywords = JSON.parse(keywordsCookie);
   }
   return keywords;
 }
