@@ -1,4 +1,4 @@
-package com.google.sps;
+package com.google.sps.servlets;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -93,6 +93,8 @@ public class LocationServlet extends HttpServlet {
               break;
             case "route" :
               geoMap.put("Street Name", name);
+              break;
+            default:
               break;
           }
         }
