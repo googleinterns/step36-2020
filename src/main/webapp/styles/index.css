@@ -28,3 +28,18 @@ body {
   width: 40vw;
   height: 20vh;
 }
+
+@media (orientation: portrait) {
+  body {
+    background: linear-gradient(
+      var(--upperColor) 0, 
+      var(--upperColor) 33vh, 
+      var(--lowerColor) 33vh, 
+      var(--lowerColor));
+    display: grid;
+    grid: [row1-start] "header " 20vh [row1-end]
+          [row2-start] "content" 70vh [row2-end]
+          [row3-start] "footer " 10vh [row3-end]
+          / 100vw;
+  }
+}
