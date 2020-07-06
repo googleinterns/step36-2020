@@ -31,13 +31,12 @@ public class NewsServlet extends HttpServlet {
 
   private final String API_KEY = "test"; // Insert actual API key when testing.
   private final int NUM_ARTICLES_PER_KEYWORD = 3;
-  private List<String> keywords = new ArrayList<String>(
-    List.of("Black Lives Matter", "COVID-19")
-  );
+
   private HashMap<String, List<Article>> articleMap = new HashMap<>();
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    String[] keywords = request.getParameterValues("key");
     for (String keyword : keywords) {
       keyword = encodeTerm(keyword);
       addArticlesForTerm(keyword);
