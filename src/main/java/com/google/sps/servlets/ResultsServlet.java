@@ -11,7 +11,7 @@ import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheFactory;
 import com.github.mustachejava.DefaultMustacheFactory;
 
-/** Servlet that shows results. */
+/** Serves the html template used in the results page with a datastore key. */
 @WebServlet("/results")
 public class ResultsServlet extends HttpServlet {
 
