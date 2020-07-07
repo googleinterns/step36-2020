@@ -16,9 +16,9 @@ import com.google.gson.reflect.TypeToken;
 import com.google.sps.data.Project;
 import com.google.sps.data.UrlRequest;
 
-/** Servlet that gets actions items. */
-@WebServlet("/actions")
-public class ActionsServlet extends HttpServlet {
+/** Servlet that queries projects from the Global Giving API. */
+@WebServlet("/projects")
+public class ProjectsServlet extends HttpServlet {
 
   private static final List<String> terms = Arrays.asList("Black Lives Matter", "COVID-19");
   private static final String API_KEY = "API_KEY";  // Insert the API_KEY here for testing.

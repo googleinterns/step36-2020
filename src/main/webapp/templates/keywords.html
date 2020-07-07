@@ -21,7 +21,7 @@
       <hr class="hide"> 
       <div class="actions-section hide">
         <div class="section-header">Projects</div>
-        {{#actions}}
+        {{#projects}}
           <div class="action item" data-url="{{url}}">
             <p class="action-title element-title">{{title}}</p>
             <p class="action-content hide summary">{{summary}}</p>
@@ -29,10 +29,10 @@
               <p>Learn More <ion-icon name="arrow-forward-outline"></ion-icon></p>
             </div>
           </div>
-        {{/actions}}
-        {{^actions}}
+        {{/projects}}
+        {{^projects}}
           <div class="action">Sorry, we couldn't find any projects for you</div>
-        {{/actions}}
+        {{/projects}}
       </div>
     </div>
   {{/keywords}}

@@ -3,8 +3,8 @@ const TEMPLATES_URL = [KEYWORDS_TEMPLATE_URL];
 
 const KEYWORDS_OBJ_URL = '/keyword';
 const NEWS_OBJ_URL =  '/json/news.json';
-const ACTIONS_OBJ_URL = '/actions';
-const OBJECTS_URLS = [KEYWORDS_OBJ_URL, NEWS_OBJ_URL, ACTIONS_OBJ_URL];
+const PROJECTS_OBJ_URL = '/projects';
+const OBJECTS_URLS = [KEYWORDS_OBJ_URL, NEWS_OBJ_URL, PROJECTS_OBJ_URL];
 
 const HTML_SECTIONS_PROMISE = loadHtmlSections(TEMPLATES_URL, OBJECTS_URLS);
 
@@ -26,7 +26,7 @@ function renderTemplateObj(templates, objs) {
   for (let i = 0; i < result.keywords.length; i++) {
     let term = result.keywords[i].term;
     result.keywords[i].news = objs[1].articles[term];
-    result.keywords[i].actions = objs[2].results[term];
+    result.keywords[i].projects = objs[2].results[term];
   }
   let htmlSections = Mustache.render(templates[0], result);
   return htmlSections;
