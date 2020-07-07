@@ -50,7 +50,7 @@ function renderTemplateObj(template, objs, keywords) {
     let term = keywords[i];
     let keywordsObj = new Object();
     keywordsObj.term = term;
-    keywordsObj.news = objs[0].books[term];
+    keywordsObj.books = objs[0].books[term];
     keywordsObj.actions = objs[1].results[term];
     result.keywords[i] = keywordsObj;
 

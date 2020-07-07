@@ -30,18 +30,15 @@ import java.util.Map;
 @WebServlet("/books")
 public class BooksServlet extends HttpServlet {
 
-  private final int NUM_BOOKS_PER_KEYWORD = 3;
-  private List<String> keywords = new ArrayList<String>(
-    List.of("Black Lives Matter", "COVID-19")
-  );
+  private final int NUM_BOOKS_PER_KEYWORD = 5;
+  private String[] keywords;
   private LinkedHashMap<String, List<Book>> booksMap = new LinkedHashMap<>();
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    String encodedKeyword;
+    keywords = request.getParameterValues("key");
     for (String keyword : keywords) {
-      encodedKeyword = encodeTerm(keyword);
-      addBooksForTerm(keyword, encodedKeyword);
+      addBooksForTerm(keyword);
     }
     String json = makeBooksJson();
     response.getWriter().println(json);
@@ -128,9 +125,9 @@ public class BooksServlet extends HttpServlet {
  /**
   * Adds a Book object in books for a key term.
   */
-  private void addBooksForTerm(String keyTerm, String encodedKeyTerm) {
+  private void addBooksForTerm(String keyTerm) {
     String path = "https://www.googleapis.com/books/v1/volumes?";
-    String queryParam = "q=" + encodedKeyTerm; 
+    String queryParam = "q=" + encodeTerm(keyTerm); 
     String queryPath = path + queryParam;
     try {
       URL url = new URL(queryPath);
