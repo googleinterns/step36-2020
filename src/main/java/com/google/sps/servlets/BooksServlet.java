@@ -84,7 +84,7 @@ public class BooksServlet extends HttpServlet {
       }
     }
     JsonArray booksJsonArray = responseObject.getAsJsonArray("items");
-    List<Book> books = new ArrayList<Book>();
+    List<Book> books = new ArrayList<>();
     for (int i = 0; i < resultsToShow; i++) {
       JsonObject bookJson = booksJsonArray.get(i).getAsJsonObject().getAsJsonObject("volumeInfo"); 
       String title = bookJson.get("title").getAsString();
@@ -119,7 +119,7 @@ public class BooksServlet extends HttpServlet {
     String returnString = "";
     int length = writersArray.size();
     for (int i = 0; i < length - 1; i++){
-      returnString += writersArray.get(i).getAsString() + ", " ;
+      returnString += writersArray.get(i).getAsString() + ", ";
     }
     returnString += writersArray.get(length - 1).getAsString();
     return returnString;
