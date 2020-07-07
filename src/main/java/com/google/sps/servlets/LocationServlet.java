@@ -22,15 +22,14 @@ public class LocationServlet extends HttpServlet {
 
     private Map<String, String> geoMap = new HashMap<>();
 
-    // Coordinates hardcoded for testing purposes
-    private static double latitude = 44.9778;
-    private static double longitude = -93.2650;
     private static final String BASE_URL = "https://maps.googleapis.com/maps/api/geocode/json?";
-    private static final String API_KEY = "test"; // Insert actual API key to test.
+    private static final String API_KEY = "AIzaSyCug6dlEbSzp_M56-cU-h8Elbk1yPFNvLM"; // Insert actual API key to test.
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) {
-      String queryParam = String.format("latlng=%1$f,%2$f", latitude, longitude);
+      String latitude = request.getParameter("lat");
+      String longitude = request.getParameter("lng");
+      String queryParam = String.format("latlng=%s,%s", latitude, longitude);
       String apiKeyParam = String.format("&key=%s", API_KEY);
       String fullPath = BASE_URL + queryParam + apiKeyParam;
       try {
