@@ -6,7 +6,7 @@
       <div class="news-section hide">
         <div class="section-header">News</div>
         {{#news}}
-          <div class="news item" data-url="{{link}}"> 
+          <div class="news item" data-url="{{link}}">
             <p class="news-title element-title">{{title}}</p>
             <p class="news-content hide">{{content}}</p>
             <div class="overlay hide">
@@ -22,7 +22,7 @@
       <div class="actions-section hide">
         <div class="section-header">Projects</div>
         {{#actions}}
-          <div class="action item" data-url="/project?id={{id}}"> 
+          <div class="action item" data-url="{{url}}">
             <p class="action-title element-title">{{title}}</p>
             <p class="action-content hide summary">{{summary}}</p>
             <div class="overlay hide">
@@ -37,6 +37,6 @@
     </div>
   {{/keywords}}
   {{^keywords}}
-    <div class="keyword">Sorry, we couldn't extract any key words</div>  
+    <div class="keyword">Sorry, we couldn't extract any keywords</div>  
   {{/keywords}}
 </div>

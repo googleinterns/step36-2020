@@ -8,6 +8,11 @@ $().ready(() => {
       $(this).addClass("active");
       $(".base").hide(200);
       $("#real-body").addClass("focus");
+      $(".active .item").click(function() {
+        $(".item").off("click");
+        const url = $(this).attr("data-url");
+        window.location.href = url;
+      });
     });
 
     $(".close").click(function(event) {
@@ -15,12 +20,6 @@ $().ready(() => {
       $(this).parent().removeClass("active");
       $(".base").show(200);
       $("#real-body").removeClass("focus");
-    });
-
-    $(".active .item").click(function() {
-      $(".item").off("click");
-      const url = $(this).attr("data-url");
-      window.location.replace(url);
     });
   });
 });
