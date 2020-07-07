@@ -27,8 +27,8 @@ import java.util.Map;
 /**
  * Servlet for generating books from keywords.
  */
-@WebServlet("/news")
-public class NewsServlet extends HttpServlet {
+@WebServlet("/books")
+public class BooksServlet extends HttpServlet {
 
   private final int NUM_BOOKS_PER_KEYWORD = 3;
   private List<String> keywords = new ArrayList<String>(
@@ -43,8 +43,7 @@ public class NewsServlet extends HttpServlet {
       encodedKeyword = encodeTerm(keyword);
       addBooksForTerm(keyword, encodedKeyword);
     }
-    String json = makeNewsJson();
-    System.out.println(json); // test
+    String json = makeBooksJson();
     response.getWriter().println(json);
   }
 
@@ -60,10 +59,10 @@ public class NewsServlet extends HttpServlet {
     }
   }
 
-  private String makeNewsJson() {
+  private String makeBooksJson() {
     Gson gson = new Gson();
     Map<String, Object> books = new HashMap<>();
-    books.put("articles", booksMap);
+    books.put("books", booksMap);
     String json = gson.toJson(books); 
     return json;
   }
@@ -72,7 +71,6 @@ public class NewsServlet extends HttpServlet {
   * Adds Book object to books from JSON results of Guardian query.
   */
   private void jsonToBooks(String jsonString, String keyTerm) {
-    System.out.println("In jsonToBooks for " + keyTerm); // test
     JsonObject responseObject = new JsonParser().parse(jsonString).getAsJsonObject();
     // Check to see if json has enough entries.
     int numResults = responseObject.get("totalItems").getAsInt();
@@ -81,7 +79,7 @@ public class NewsServlet extends HttpServlet {
       if (numResults > 0) {
         resultsToShow = numResults;
       } else {
-        System.out.println("Error: no results found for query");
+        System.err.println("Error: no results found for query");
         return;
       }
     }
@@ -90,19 +88,13 @@ public class NewsServlet extends HttpServlet {
     for (int i = 0; i < resultsToShow; i++) {
       JsonObject bookJson = booksJsonArray.get(i).getAsJsonObject().getAsJsonObject("volumeInfo"); 
       String title = bookJson.get("title").getAsString();
-      System.out.println("title is " + title);
       String link = bookJson.get("infoLink").getAsString();
-      System.out.println("link is " + link);
-      //String date = bookJson.get("publishedDate").getAsString();
-      //String image = bookJson.getAsJsonObject("imageLinks").get("thumbnail").getAsString();
-      //String description = bookJson.get("description").getAsString();
-      //String writer = formatWriters(bookJson.getAsJsonArray("authors"));
-      //books.add(new Book.Builder(title, link).withDate(date).withImage(image).withDescription(description).withWriter(writer).build());
-      books.add(new Book.Builder(title,link).build());
-      System.out.println(books); // test
+      String image = bookJson.getAsJsonObject("imageLinks").get("thumbnail").getAsString();
+      String description = bookJson.get("description").getAsString();
+      String writer = formatWriters(bookJson.getAsJsonArray("authors"));
+      books.add(new Book.Builder(title, link).withImage(image).withDescription(description).withWriter(writer).build());
     }
     booksMap.put(keyTerm, books);
-    System.out.println(booksMap);
   }
 
  /**
@@ -140,7 +132,6 @@ public class NewsServlet extends HttpServlet {
     String path = "https://www.googleapis.com/books/v1/volumes?";
     String queryParam = "q=" + encodedKeyTerm; 
     String queryPath = path + queryParam;
-    System.out.println(queryPath);
     try {
       URL url = new URL(queryPath);
       HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -151,7 +142,7 @@ public class NewsServlet extends HttpServlet {
         String json = getJson(url);
         jsonToBooks(json, keyTerm);
       } else {
-        System.out.println("Error: connection response code is: " + responseCode);
+        System.err.println("Error: connection response code is: " + responseCode);
       }    
     } catch(Exception e) {
       e.printStackTrace();

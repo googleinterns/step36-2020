@@ -1,7 +1,7 @@
 const KEYWORDS_TEMPLATE_URL = '/templates/keywords.html';
 
 const KEYWORDS_OBJ_URL = '/json/keywords.json';
-const NEWS_OBJ_URL =  '/news';
+const NEWS_OBJ_URL =  '/books';
 const ACTIONS_OBJ_URL = '/actions';
 const OBJECTS_URLS = [NEWS_OBJ_URL, ACTIONS_OBJ_URL];
 
@@ -50,7 +50,7 @@ function renderTemplateObj(template, objs, keywords) {
     let term = keywords[i];
     let keywordsObj = new Object();
     keywordsObj.term = term;
-    keywordsObj.news = objs[0].articles[term];
+    keywordsObj.news = objs[0].books[term];
     keywordsObj.actions = objs[1].results[term];
     result.keywords[i] = keywordsObj;
 
