@@ -1,6 +1,6 @@
 package com.google.sps.data;
 
-/** Class containing projects*/
+/** Class represintenting a non-profit project initiative*/
 public final class Project {
 
   private final double id;
