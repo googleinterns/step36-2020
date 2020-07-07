@@ -9,7 +9,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import com.google.sps.data.Article;
+import com.google.sps.data.Book;
 import java.net.URL;
 import java.net.HttpURLConnection;
 import java.util.Scanner;
@@ -21,27 +21,30 @@ import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.net.URLEncoder;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * Servlet for generating news articles from keywords.
+ * Servlet for generating books from keywords.
  */
 @WebServlet("/news")
 public class NewsServlet extends HttpServlet {
 
-  private final String API_KEY = "test"; // Insert actual API key when testing.
-  private final int NUM_ARTICLES_PER_KEYWORD = 3;
-
-  private HashMap<String, List<Article>> articleMap = new HashMap<>();
+  private final int NUM_BOOKS_PER_KEYWORD = 3;
+  private List<String> keywords = new ArrayList<String>(
+    List.of("Black Lives Matter", "COVID-19")
+  );
+  private LinkedHashMap<String, List<Book>> booksMap = new LinkedHashMap<>();
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    String[] keywords = request.getParameterValues("key");
+    String encodedKeyword;
     for (String keyword : keywords) {
-      keyword = encodeTerm(keyword);
-      addArticlesForTerm(keyword);
+      encodedKeyword = encodeTerm(keyword);
+      addBooksForTerm(keyword, encodedKeyword);
     }
     String json = makeNewsJson();
+    System.out.println(json); // test
     response.getWriter().println(json);
   }
 
@@ -59,44 +62,47 @@ public class NewsServlet extends HttpServlet {
 
   private String makeNewsJson() {
     Gson gson = new Gson();
-    Map<String, Object> articles = new HashMap<>();
-    articles.put("articles", articleMap);
-    String json = gson.toJson(articles); 
+    Map<String, Object> books = new HashMap<>();
+    books.put("articles", booksMap);
+    String json = gson.toJson(books); 
     return json;
   }
 
  /**
-  * Adds Article object to articles from JSON results of Guardian query.
+  * Adds Book object to books from JSON results of Guardian query.
   */
-  private void jsonToArticles(String jsonString, String keyTerm) {
-    JsonObject responseObject = new JsonParser().parse(jsonString).getAsJsonObject().getAsJsonObject("response");
-    // Check to see if json has valid status and enough entries.
-    String status = responseObject.get("status").getAsString();
-    int numResults = responseObject.get("total").getAsInt();
-    int resultsToShow = NUM_ARTICLES_PER_KEYWORD;
-    if (!status.equals("ok")) {
-      System.out.println("Error: status of JSON returned from Guardian API is " + status);
-      return;
-    } else if (numResults < resultsToShow) {
+  private void jsonToBooks(String jsonString, String keyTerm) {
+    System.out.println("In jsonToBooks for " + keyTerm); // test
+    JsonObject responseObject = new JsonParser().parse(jsonString).getAsJsonObject();
+    // Check to see if json has enough entries.
+    int numResults = responseObject.get("totalItems").getAsInt();
+    int resultsToShow = NUM_BOOKS_PER_KEYWORD;
+    if (numResults < resultsToShow) {
       if (numResults > 0) {
         resultsToShow = numResults;
       } else {
         System.out.println("Error: no results found for query");
         return;
       }
-    } else {
-      JsonArray storiesJsonArray = responseObject.getAsJsonArray("results");
-      List<Article> articles = new ArrayList<Article>();
-      for (int i = 0; i < resultsToShow; i++) {
-        JsonObject firstStoryJson = storiesJsonArray.get(i).getAsJsonObject();
-        String title = firstStoryJson.get("webTitle").getAsString();
-        String link = firstStoryJson.get("webUrl").getAsString();
-        String date = firstStoryJson.get("webPublicationDate").getAsString();
-        date = date.substring(0, date.indexOf("T"));
-        articles.add(new Article.Builder(title, link).withDate(date).build());
-      }
-      articleMap.put(keyTerm, articles);
     }
+    JsonArray booksJsonArray = responseObject.getAsJsonArray("items");
+    List<Book> books = new ArrayList<Book>();
+    for (int i = 0; i < resultsToShow; i++) {
+      JsonObject bookJson = booksJsonArray.get(i).getAsJsonObject().getAsJsonObject("volumeInfo"); 
+      String title = bookJson.get("title").getAsString();
+      System.out.println("title is " + title);
+      String link = bookJson.get("infoLink").getAsString();
+      System.out.println("link is " + link);
+      //String date = bookJson.get("publishedDate").getAsString();
+      //String image = bookJson.getAsJsonObject("imageLinks").get("thumbnail").getAsString();
+      //String description = bookJson.get("description").getAsString();
+      //String writer = formatWriters(bookJson.getAsJsonArray("authors"));
+      //books.add(new Book.Builder(title, link).withDate(date).withImage(image).withDescription(description).withWriter(writer).build());
+      books.add(new Book.Builder(title,link).build());
+      System.out.println(books); // test
+    }
+    booksMap.put(keyTerm, books);
+    System.out.println(booksMap);
   }
 
  /**
@@ -114,13 +120,27 @@ public class NewsServlet extends HttpServlet {
   }
 
  /**
-  * Adds an Article object in articles for a key term.
+  * Formats writers into string from JSON array.
+  * @return writers in String fomat.
   */
-  private void addArticlesForTerm(String keyTerm) {
-    String path = "https://content.guardianapis.com/search";
-    String queryParam = "?q=" + keyTerm; 
-    String apiKeyParam = "&api-key=" + API_KEY;
-    String queryPath = path + queryParam + apiKeyParam;
+  private String formatWriters(JsonArray writersArray) {
+    String returnString = "";
+    int length = writersArray.size();
+    for (int i = 0; i < length - 1; i++){
+      returnString += writersArray.get(i).getAsString() + ", " ;
+    }
+    returnString += writersArray.get(length - 1).getAsString();
+    return returnString;
+  }
+
+ /**
+  * Adds a Book object in books for a key term.
+  */
+  private void addBooksForTerm(String keyTerm, String encodedKeyTerm) {
+    String path = "https://www.googleapis.com/books/v1/volumes?";
+    String queryParam = "q=" + encodedKeyTerm; 
+    String queryPath = path + queryParam;
+    System.out.println(queryPath);
     try {
       URL url = new URL(queryPath);
       HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -129,7 +149,7 @@ public class NewsServlet extends HttpServlet {
       int responseCode = connection.getResponseCode();
       if (responseCode == 200) {
         String json = getJson(url);
-        jsonToArticles(json, keyTerm);
+        jsonToBooks(json, keyTerm);
       } else {
         System.out.println("Error: connection response code is: " + responseCode);
       }    
