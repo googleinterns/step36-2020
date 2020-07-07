@@ -20,18 +20,19 @@ import com.google.sps.data.UrlRequest;
 @WebServlet("/actions")
 public class ActionsServlet extends HttpServlet {
 
-  private static final List<String> terms = Arrays.asList("Black Lives Matter", "COVID-19");
   private static final String API_KEY = "API_KEY";  // Insert the API_KEY here for testing.
   private static final String API_PATH = "https://api.globalgiving.org/api/public/services/search/projects";
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    String[] terms = request.getParameterValues("key");
     Map<String, List<Project>> jsonResultMap = new HashMap<>();
-    Map<String, String> queryParameters = new HashMap<>();
-    queryParameters.put("api_key", API_KEY);
+    Map<String, String> queryParams = new HashMap<>();
+    queryParams.put("api_key", API_KEY);
+    queryParams.put("q", "");
     for (String term : terms) {
-      queryParameters.replace("q", term);
-      String jsonResult = UrlRequest.urlQuery(API_PATH, queryParameters);
+      queryParams.replace("q", term);
+      String jsonResult = UrlRequest.urlQuery(API_PATH, queryParams);
       List<Project> projectsList = extractProjectsList(jsonResult);
       jsonResultMap.put(term, projectsList);
     }
