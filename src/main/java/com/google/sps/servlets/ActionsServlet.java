@@ -74,6 +74,7 @@ public class ActionsServlet extends HttpServlet {
     Project project = new Project.ProjectBuilder(id)
         .withTitle(title)
         .withSummary(summary)
+        .withUrl(url)
         .build();
     return project;
   }
