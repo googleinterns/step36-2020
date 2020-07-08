@@ -148,6 +148,7 @@
   display: inline-block;
   border-radius: 0.5em;
   box-shadow: 0 1px 2px rgba(0,0,0,0.15);
+  padding: 0 1vw;
 }
 
 .active .overlay {
@@ -184,13 +185,19 @@
 }
 
 @media (orientation: portrait) {
+  .body {
+    background: linear-gradient(var(--upperColor) 0, 
+      var(--upperColor) 33vh, 
+      var(--lowerColor) 33vh, 
+      var(--lowerColor));
+  }
+
   body.focus #keywords {
     justify-content: center;
   }
   
   #keywords {
     flex-direction: column;
-    justify-content: start;
     align-items: center;
   }
   
@@ -321,6 +328,7 @@
       width: 60vw;
       height: 40vh;
     }
+    
     .active:hover {
       width: 95vw;
       height: 95vh;
