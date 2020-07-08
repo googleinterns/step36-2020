@@ -48,10 +48,12 @@ function renderTemplateObj(template, objs, keywords) {
   result.keywords = new Array(keywords.length);
   for (let i = 0; i < keywords.length; i++) {
     let term = keywords[i];
-    result.keywords[i] = new Object();
-    result.keywords[i].term = term;
-    result.keywords[i].news = objs[0].articles[term];
-    result.keywords[i].actions = objs[1].results[term];
+    let keywordsObj = new Object();
+    keywordsObj.term = term;
+    keywordsObj.news = objs[0].articles[term];
+    keywordsObj.actions = objs[1].results[term];
+    result.keywords[i] = keywordsObj;
+
   }
   let htmlSections = Mustache.render(template, result);
   return htmlSections;

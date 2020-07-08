@@ -32,7 +32,7 @@ public final class UrlRequest {
       while ((inputLine = inputReader.readLine()) != null) {
         contentBuilder.append(inputLine);
       }
-    } catch(Exception e) {
+    } catch(IOException e) {
       System.out.println(e);
       return "";
     } finally {

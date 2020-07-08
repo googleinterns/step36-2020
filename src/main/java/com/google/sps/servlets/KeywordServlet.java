@@ -62,6 +62,7 @@ public class KeywordServlet extends HttpServlet {
       }
     }
     String json = keywordJsonBuilder(terms);
+    System.out.println(json);
     response.getWriter().println(json);
   }
 
@@ -81,7 +82,7 @@ public class KeywordServlet extends HttpServlet {
   private static String keywordJsonBuilder(Map<Entity, Float> toJson) {
     List<String> terms = new ArrayList<>();
     for (Entity term : toJson.keySet()) {
-      terms.add(String.format("{\"term\": \"%s\"}", term));
+      terms.add(String.format("{\"term\": \"%s\"}", term.getName()));
     }
 
     return String.format("{\"keywords\": [%s]}", String.join(",", terms));
