@@ -31,12 +31,12 @@ import java.util.Map;
 public class BooksServlet extends HttpServlet {
 
   private final int NUM_BOOKS_PER_KEYWORD = 5;
-  private List<String> keywords;
-  private LinkedHashMap<String, List<Book>> booksMap = new LinkedHashMap<>();
+  private LinkedHashMap<String, List<Book>> booksMap;
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    keywords = Arrays.asList(request.getParameterValues("key"));
+    List<String> keywords = Arrays.asList(request.getParameterValues("key"));
+    booksMap = new LinkedHashMap<>();
     keywords.forEach((keyword) -> addBooksForTerm(keyword));
     String json = encodeBookMapAsJson();
     response.getWriter().println(json);
