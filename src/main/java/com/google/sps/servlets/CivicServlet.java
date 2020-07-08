@@ -33,7 +33,7 @@ public class CivicServlet extends HttpServlet {
         request.getServerPort());
     String address = "";
     try {
-      // Location URL doesn't work on devserver, so isntead use hardcoded string.
+      // Location URL doesn't work on devserver, so instead use hardcoded string.
       String locationJsonResult = UrlRequest.urlQuery(locationUrl, locationQueryParams);
       Gson gson = new Gson();
       Type mapType = new TypeToken<Map<String, String>>() {}.getType();
@@ -45,7 +45,7 @@ public class CivicServlet extends HttpServlet {
           locationMap.get("State"),
           locationMap.get("Zip Code"));
     } catch (FileNotFoundException fnfe) {
-      System.out.println(fnfe);
+      System.out.println(fnfe.printStackTrace());
       address = "1 LMU Dr, Los Angeles, California";
     } finally {
       Map<String, String> apiQueryParams = new HashMap<>();
