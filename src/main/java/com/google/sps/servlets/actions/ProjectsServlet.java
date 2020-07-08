@@ -17,7 +17,7 @@ import com.google.sps.data.Project;
 import com.google.sps.data.UrlRequest;
 
 /** Servlet that queries projects from the Global Giving API. */
-@WebServlet("/projects")
+@WebServlet("/actions/projects")
 public class ProjectsServlet extends HttpServlet {
 
   private static final List<String> terms = Arrays.asList("Black Lives Matter", "COVID-19");
@@ -29,6 +29,7 @@ public class ProjectsServlet extends HttpServlet {
     Map<String, List<Project>> jsonResultMap = new HashMap<>();
     Map<String, String> queryParameters = new HashMap<>();
     queryParameters.put("api_key", API_KEY);
+    queryParameters.put("q", "");
     for (String term : terms) {
       queryParameters.replace("q", term);
       String jsonResult = UrlRequest.urlQuery(API_PATH, queryParameters);
