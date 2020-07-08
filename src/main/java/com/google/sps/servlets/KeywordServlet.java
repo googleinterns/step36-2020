@@ -39,6 +39,7 @@ public class KeywordServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    String key = request.getParameter("k"); // TODO: Use key to access datastore.
     for (String tweet : tweets) {
       AnalyzeEntitiesResponse entityResponse = analyzeEntity(tweet);
       List<Entity> entities = entityResponse.getEntitiesList();
@@ -71,7 +72,8 @@ public class KeywordServlet extends HttpServlet {
     if (tweet != null && !tweet.equals("")) {
       tweets.add(request.getParameter("keyword-sentence"));
     }
-    response.sendRedirect("/main.html");
+    String key = "12345"; // TODO: use the datastore key containing the keywords. 
+    response.sendRedirect(String.format("/results?k=%s", key));
   }
 
   /**

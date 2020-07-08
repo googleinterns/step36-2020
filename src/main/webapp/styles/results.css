@@ -58,13 +58,7 @@
   height: auto;
 }
 
-.keyword:hover { 
-  width: 40vw;
-  cursor: pointer;
-}
-
-.active,
-.active:hover {
+.active {
   position: absolute;
   z-index: 5;
   width: 95vw;
@@ -72,10 +66,6 @@
   background-color: white;
   cursor: auto;
   box-shadow: 0 5px 15px rgba(0,0,0,0.5);
-}
-
-.keyword:hover,
-.active {
   display: grid;
   grid: [row1-start] "title   close  " auto [row1-end]
         [row2-start] "news    news   " 1fr  [row2-end]
@@ -87,7 +77,6 @@
   font-weight: normal;
 }
 
-.keyword:hover > .title,
 .active > .title {
   padding: 3vh 0;
   font-weight: bold;
@@ -101,7 +90,6 @@
   font-family: 'Oswald', sans-serif;
 }
 
-.keyword:hover > .hide,
 .active .hide {
   display: block;
   transition: all 0.5s ease-in-out;
@@ -117,15 +105,12 @@
   font-size: 1.6em;
 }
 
-.keyword:hover > hr,
 .active > hr {
   display: block;
   grid-area: line;
   width: 70%;
 }
 
-.keyword:hover > .news-section,
-.keyword:hover > .actions-section,
 .active > .news-section,
 .active > .actions-section {
   transition: all 0.5s ease-in-out;
@@ -139,27 +124,22 @@
   overflow: hidden;
 }
 
-.keyword:hover > .news-section:hover,
-.keyword:hover > .actions-section:hover,
-.active > .news-section:hover,
-.active > .actions-section:hover {
+.active > .news-section,
+.active > .actions-section {
   overflow: auto;
 }
 
-
-.keyword:hover > .news-section,
 .active > .news-section {
   grid-area: news;
 }
 
-.keyword:hover > .actions-section,
 .active > .actions-section {
   grid-area: actions;
 }
 
 .item {
   width: 100%;
-  margin: 0.5vh 0;
+  margin: 0.5vh 0;	
   transition: all 0.3s ease-in-out;
 }
 
@@ -168,8 +148,6 @@
   display: inline-block;
   border-radius: 0.5em;
   box-shadow: 0 1px 2px rgba(0,0,0,0.15);
-  margin: 1vh 0;
-  padding: 1vh 2vw;
 }
 
 .active .overlay {
@@ -191,35 +169,161 @@
   font-weight: bold;
 }
 
-.active .item:hover {
-  cursor: pointer;
-}
-
-.active .item:hover > p {
-  color: transparent;
-  text-shadow: 0 0 5px rgba(0,0,0,0.7);
-  user-select: none;
-}
-
-.active .item:hover > .overlay {
-  opacity: 1;
-}
-
 .active .news-title,
 .active .action-title {
   font-weight: bold;
 }
 
-.keyword:hover > .close {
-  display: none;
-}
-
-.active > .close,
-.active:hover > .close {
+.active > .close {
   display: inline;
   grid-area: close;
   place-self: start center;
   margin: 1em 0;
   font-size: 1.5em;
   cursor: pointer;
+}
+
+@media (orientation: portrait) {
+  body.focus #keywords {
+    justify-content: center;
+  }
+  
+  #keywords {
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+  }
+  
+  .keyword {
+    margin: 0.5vh 0;
+    width: 50vw;
+    height: 4vh;
+  }
+
+  .keyword > .title {
+    transform: rotate(0deg);
+    writing-mode: horizontal-tb;
+    width: auto;
+  }
+  
+  .active {
+    width: 95vw;
+    height: 95vh;
+  }
+}
+
+@media (any-hover: hover) {
+  .keyword:hover { 
+    width: 40vw;
+    cursor: pointer;
+  }
+  
+  .active:hover {
+    position: absolute;
+    z-index: 5;
+    width: 95vw;
+    height: 90vh;
+    background-color: white;
+    cursor: auto;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+  }
+  
+  .keyword:hover {
+    display: grid;
+    grid: [row1-start] "title   close  " auto [row1-end]
+          [row2-start] "news    news   " 1fr  [row2-end]
+          [row3-start] "line    line   " auto [row3-end]
+          [row4-start] "actions actions" 1fr  [row4-end]
+          / auto 3em;
+    place-items: center center;
+    transition: all 0.3s ease-in-out;
+    font-weight: normal;
+  }
+  
+  .keyword:hover > .title {
+    padding: 3vh 0;
+    font-weight: bold;
+    font-size: 1.5em;
+    transform: rotate(0deg);
+    writing-mode: horizontal-tb;
+    transition: all 0.5s ease-in-out;
+    grid-row: 1;
+    grid-column-start: 1;
+    grid-column-end: span 2;
+    font-family: 'Oswald', sans-serif;
+  }
+
+  .keyword:hover > .hide {
+    display: block;
+    transition: all 0.5s ease-in-out;
+  }
+  
+  .keyword:hover > hr {
+    display: block;
+    grid-area: line;
+    width: 70%;
+  }
+
+  .keyword:hover > .news-section,
+  .keyword:hover > .actions-section {
+    transition: all 0.5s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    padding: 0 5vw;
+    box-sizing: border-box;
+    overflow: hidden;
+  }
+
+  .keyword:hover > .news-section:hover,
+  .keyword:hover > .actions-section:hover {
+    overflow: auto;
+  }
+
+
+  .keyword:hover > .news-section {
+    grid-area: news;
+  }
+
+  .keyword:hover > .actions-section {
+    grid-area: actions;
+  }
+  .active .item:hover {
+    cursor: pointer;
+  }
+
+  .active .item:hover > p {
+    color: transparent;
+    text-shadow: 0 0 5px rgba(0,0,0,0.7);
+    user-select: none;
+  }
+
+  .active .item:hover > .overlay {
+    opacity: 1;
+  }
+  .keyword:hover > .close {
+    display: none;
+  }
+
+  .active:hover > .close {
+    display: inline;
+    grid-area: close;
+    place-self: start center;
+    margin: 1em 0;
+    font-size: 1.5em;
+    cursor: pointer;
+  }
+
+  @media (orientation: portrait) {
+    .keyword:hover {
+      width: 60vw;
+      height: 40vh;
+    }
+    .active:hover {
+      width: 95vw;
+      height: 95vh;
+    }
+  }
 }

@@ -1,34 +1,60 @@
 const KEYWORDS_TEMPLATE_URL = '/templates/keywords.html';
-const TEMPLATES_URL = [KEYWORDS_TEMPLATE_URL];
 
-const KEYWORDS_OBJ_URL = '/keyword';
+const KEYWORDS_OBJ_URL = '/json/keywords.json';
 const NEWS_OBJ_URL =  '/json/news.json';
 const PROJECTS_OBJ_URL = '/actions/projects';
-const OBJECTS_URLS = [KEYWORDS_OBJ_URL, NEWS_OBJ_URL, PROJECTS_OBJ_URL];
+const OBJECTS_URLS = [NEWS_OBJ_URL, PROJECTS_OBJ_URL];
 
-const HTML_SECTIONS_PROMISE = loadHtmlSections(TEMPLATES_URL, OBJECTS_URLS);
+const KEYWORDS_PROMISE = loadKeywords(KEYWORDS_OBJ_URL);
+
+const HTML_SECTIONS_PROMISE = loadHtmlSections(KEYWORDS_TEMPLATE_URL, OBJECTS_URLS, KEYWORDS_PROMISE);
+
+/**
+ * Loads the keywords array from a servlet or from cookies.
+ * Returns a promise of the keywords array.
+ */
+async function loadKeywords(keywordsUrl) {
+  const key = $("body").attr("data-key");
+  let keywords;
+  const keywordsCookie = getCookie(key);
+  if (keywordsCookie === "") {
+    keywords = await loadObject(`${keywordsUrl}?k=${key}`);
+    const keywordsJson = JSON.stringify(keywords);
+    setCookie(key, keywordsJson, 1);
+  } else {
+    keywords = JSON.parse(keywordsCookie);
+  }
+  return keywords;
+}
 
 /**
  * Loads an array of html templates, an array of json objects, and renders them using mustache.
  * Returns a promise.all of all the render html sections.
  */
-async function loadHtmlSections(templatesUrls, objsUrls) {
-  const htmlTemplatesPromises = loadUrls(templatesUrls, loadTemplate);
+async function loadHtmlSections(templateUrl, objsUrls, keywordsPromise) {
+  const htmlTemplatePromise = loadTemplate(templateUrl);
+  const keywords = await keywordsPromise;
+  const queryString = `?key=${keywords.join('&key=')}`;
+  objsUrls = objsUrls.map(url => `${url}${queryString}`);
   const objsPromises = loadUrls(objsUrls, loadObject);
-  const values =  await Promise.all([htmlTemplatesPromises, objsPromises]);
-  const templates = values[0];
+  const values =  await Promise.all([htmlTemplatePromise, objsPromises]);
+  const template = values[0];
   const objs = values[1];
-  return renderTemplateObj(templates, objs);
+  return renderTemplateObj(template, objs, keywords);
 }
 
-function renderTemplateObj(templates, objs) {
-  let result = objs[0];
-  for (let i = 0; i < result.keywords.length; i++) {
-    let term = result.keywords[i].term;
-    result.keywords[i].news = objs[1].articles[term];
-    result.keywords[i].projects = objs[2].results[term];
+function renderTemplateObj(template, objs, keywords) {
+  let result = new Object();
+  result.keywords = new Array(keywords.length);
+  for (let i = 0; i < keywords.length; i++) {
+    let term = keywords[i];
+    let keywordsObj = new Object();
+    keywordsObj.term = term;
+    keywordsObj.news = objs[0].articles[term];
+    keywordsObj.actions = objs[1].results[term];
+    result.keywords[i] = keywordsObj;
   }
-  let htmlSections = Mustache.render(templates[0], result);
+  let htmlSections = Mustache.render(template, result);
   return htmlSections;
 }
 
