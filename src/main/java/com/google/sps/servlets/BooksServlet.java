@@ -38,7 +38,7 @@ public class BooksServlet extends HttpServlet {
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     keywords = Arrays.asList(request.getParameterValues("key"));
     keywords.forEach((keyword) -> addBooksForTerm(keyword));
-    String json = makeBooksJson();
+    String json = encodeBookMapAsJson();
     response.getWriter().println(json);
   }
 
@@ -54,7 +54,7 @@ public class BooksServlet extends HttpServlet {
     }
   }
 
-  private String makeBooksJson() {
+  private String encodeBookMapAsJson() {
     Gson gson = new Gson();
     Map<String, Object> books = new HashMap<>();
     books.put("books", booksMap);
@@ -65,22 +65,18 @@ public class BooksServlet extends HttpServlet {
  /**
   * Adds Book object to books from JSON results of Google Books query.
   */
-  private void jsonToBooks(String jsonString, String keyTerm) {
+  private void addBooksToMap(String jsonString, String keyTerm) {
     JsonObject responseObject = new JsonParser().parse(jsonString).getAsJsonObject();
     // Check to see if json has enough entries.
     int numResults = responseObject.get("totalItems").getAsInt();
-    int resultsToShow = NUM_BOOKS_PER_KEYWORD;
-    if (numResults < resultsToShow) {
-      if (numResults > 0) {
-        resultsToShow = numResults;
-      } else {
-        System.err.println("Error: no results found for query");
-        return;
-      }
+    numResults = Math.min(numResults, NUM_BOOKS_PER_KEYWORD);
+    if (numResults <= 0) {
+      System.err.println("Error: no results found for query");
+      return;
     }
     JsonArray booksJsonArray = responseObject.getAsJsonArray("items");
     List<Book> books = new ArrayList<>();
-    for (int i = 0; i < resultsToShow; i++) {
+    for (int i = 0; i < numResults; i++) {
       JsonObject bookJson = booksJsonArray.get(i).getAsJsonObject().getAsJsonObject("volumeInfo"); 
       String title = bookJson.get("title").getAsString();
       String link = bookJson.get("infoLink").getAsString();
@@ -135,7 +131,7 @@ public class BooksServlet extends HttpServlet {
       int responseCode = connection.getResponseCode();
       if (responseCode == 200) {
         String jsonString = readJsonFile(url);
-        jsonToBooks(jsonString, keyTerm);
+        addBooksToMap(jsonString, keyTerm);
       } else {
         System.err.println("Error: connection response code is: " + responseCode);
       }    
