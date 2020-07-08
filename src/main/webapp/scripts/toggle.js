@@ -51,7 +51,7 @@ function renderTemplateObj(template, objs, keywords) {
     let keywordsObj = new Object();
     keywordsObj.term = term;
     keywordsObj.news = objs[0].articles[term];
-    keywordsObj.actions = objs[1].results[term];
+    keywordsObj.projects = objs[1].results[term];
     result.keywords[i] = keywordsObj;
   }
   let htmlSections = Mustache.render(template, result);
