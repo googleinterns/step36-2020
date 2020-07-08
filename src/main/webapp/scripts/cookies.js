@@ -1,14 +1,22 @@
 const HOURS_PER_DAY = 24;
 const MINUTES_PER_HOUR = 60;
 const SECONDS_PER_MINUTE = 60;
-const SECONDS_PER_DAY = HOURS_PER_DAY*MINUTES_PER_HOUR*SECONDS_PER_MINUTE;
+const SECONDS_PER_DAY = HOURS_PER_DAY * MINUTES_PER_HOUR * SECONDS_PER_MINUTE;
 const MILLISECONDS_PER_SECOND = 1000;
 
 /**
- * Erase a cookie based on name.
+ * Get the value of a cookie.
  */
-function eraseCookie(name) {
-  document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+function getCookie(name) {
+  let decodedCookie = decodeURIComponent(document.cookie);
+  let cookies = decodedCookie.split(';');
+  for (let i = 0; i < cookies.length; i++) {
+    cookieParts = cookies[i].trim().split("=");
+    if (cookieParts[0] === name) {
+      return cookieParts[1];
+    }
+  }
+  return "";
 }
 
 /**
@@ -38,20 +46,11 @@ function setCheckboxCookie(event) {
   setCookie(name, value, 1);
 }
 
-
 /**
- * Get the value of a cookie.
+ * Erase a cookie based on name.
  */
-function getCookie(name) {
-  let decodedCookie = decodeURIComponent(document.cookie);
-  let cookies = decodedCookie.split(';');
-  for (let i = 0; i < cookies.length; i++) {
-    cookieParts = cookies[i].trim().split("=");
-    if (cookieParts[0] === name) {
-      return cookieParts[1];
-    }
-  }
-  return "";
+function eraseCookie(name) {
+  document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
 }
 
 /**
