@@ -63,7 +63,7 @@ public class BooksServlet extends HttpServlet {
   }
 
  /**
-  * Adds Book object to books from JSON results of Guardian query.
+  * Adds Book object to books from JSON results of Google Books query.
   */
   private void jsonToBooks(String jsonString, String keyTerm) {
     JsonObject responseObject = new JsonParser().parse(jsonString).getAsJsonObject();
@@ -90,14 +90,13 @@ public class BooksServlet extends HttpServlet {
       books.add(new Book.Builder(title, link).withImage(image).withDescription(description).withWriter(writer).build());
     }
     booksMap.put(keyTerm, books);
-    System.out.println(booksMap); // test
   }
 
  /**
   * Reads in JSON from an open URL.
   * @return JSON in String format.
   */
-  private String getJson(URL url) throws IOException {
+  private String readJsonFile(URL url) throws IOException {
     Scanner jsonReader = new Scanner(url.openStream());
     String data = "";
     while(jsonReader.hasNext()) {
@@ -122,7 +121,7 @@ public class BooksServlet extends HttpServlet {
   }
 
  /**
-  * Adds a Book object in books for a key term.
+  * Adds books objects for a key term.
   */
   private void addBooksForTerm(String keyTerm) {
     String path = "https://www.googleapis.com/books/v1/volumes?";
@@ -135,8 +134,8 @@ public class BooksServlet extends HttpServlet {
       connection.connect();
       int responseCode = connection.getResponseCode();
       if (responseCode == 200) {
-        String json = getJson(url);
-        jsonToBooks(json, keyTerm);
+        String jsonString = readJsonFile(url);
+        jsonToBooks(jsonString, keyTerm);
       } else {
         System.err.println("Error: connection response code is: " + responseCode);
       }    
