@@ -24,7 +24,7 @@ function getCookie(name) {
  */
 function setCookie(name, value, expirationDays) {
   let date = new Date();
-  date.setTime(date.getTime+(expirationDays*SECONDS_PER_DAY*MILLISECONDS_PER_SECOND));
+  date.setTime(date.getTime + expirationDays * SECONDS_PER_DAY * MILLISECONDS_PER_SECOND);
   document.cookie = `${name}=${value};expires=${expirationDays}`;
 }
 
