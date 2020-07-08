@@ -1,6 +1,9 @@
 const KEYWORDS_TEMPLATE_URL = '/templates/keywords.html';
 
 const KEYWORDS_OBJ_URL = '/json/keywords.json';
+
+const CIVIC_OBJ_URL = '/json/civic.json'
+
 const NEWS_OBJ_URL =  '/json/news.json';
 const PROJECTS_OBJ_URL = '/actions/projects';
 const OBJECTS_URLS = [NEWS_OBJ_URL, PROJECTS_OBJ_URL];
@@ -40,19 +43,24 @@ async function loadHtmlSections(templateUrl, objsUrls, keywordsPromise) {
   const values =  await Promise.all([htmlTemplatePromise, objsPromises]);
   const template = values[0];
   const objs = values[1];
-  return renderTemplateObj(template, objs, keywords);
+  return await renderTemplateObj(template, objs, keywords);
 }
 
-function renderTemplateObj(template, objs, keywords) {
+async function renderTemplateObj(template, objs, keywords) {
   let result = new Object();
   result.keywords = new Array(keywords.length);
   for (let i = 0; i < keywords.length; i++) {
     let term = keywords[i];
-    let keywordsObj = new Object();
-    keywordsObj.term = term;
-    keywordsObj.news = objs[0].articles[term];
-    keywordsObj.projects = objs[1].results[term];
-    result.keywords[i] = keywordsObj;
+    let keywordObj = new Object();
+    keywordObj.term = term;
+    keywordObj.news = objs[0].articles[term];
+    keywordObj.projects = objs[1].results[term];
+    result.keywords[i] = keywordObj;
+  }
+  if (true) { // TODO: Change true to if the user gave their location.
+    let locationObj = new Object();
+    locationObj.civic = await loadObject(CIVIC_OBJ_URL);
+    result.location = locationObj;
   }
   let htmlSections = Mustache.render(template, result);
   return htmlSections;
