@@ -45,7 +45,7 @@ public class CivicServlet extends HttpServlet {
           locationMap.get("State"),
           locationMap.get("Zip Code"));
     } catch (FileNotFoundException fnfe) {
-      System.out.println(fnfe.printStackTrace());
+      fnfe.printStackTrace();
       address = "1 LMU Dr, Los Angeles, California";
     } finally {
       Map<String, String> apiQueryParams = new HashMap<>();
