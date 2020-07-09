@@ -25,14 +25,17 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * Servlet for generating an array of book objects for each term.
- * The get function writes a mapping of terms to lists of book objects in the response.
+ * Servlet for generating a map of each term to a 
+ * list of the corresponding related books.
  */
 @WebServlet("/books")
 public class BooksServlet extends HttpServlet {
 
   private final int NUM_BOOKS_PER_TERM = 5;
 
+  /*
+  * Writes a mapping of terms to lists of book objects in the servlet response.
+  */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     List<String> terms = Arrays.asList(request.getParameterValues("key"));
@@ -112,17 +115,13 @@ public class BooksServlet extends HttpServlet {
   * @return authors in String fomat.
   */
   private String formatAuthors(JsonArray authorsArray) {
-    String returnString = "";
-    int length = authorsArray.size();
-    for (int i = 0; i < length - 1; i++){
-      returnString += authorsArray.get(i).getAsString() + ", ";
-    }
-    returnString += authorsArray.get(length - 1).getAsString();
-    return returnString;
+    Gson gson = new Gson();
+    ArrayList jsonObjList = gson.fromJson(authorsArray, ArrayList.class);
+    return String.join(",", jsonObjList);
   }
 
  /**
-  * Gets string of JSON of Google Books API's response to a query including the term.
+  * Makes request to Google Books API's for books relating to a term and gets JSON response.
   * @return String of Google Books API JSON response. 
   */
   private String getJsonStringForTerm(String term) {
@@ -135,11 +134,10 @@ public class BooksServlet extends HttpServlet {
       connection.setRequestMethod("GET");
       connection.connect();
       int responseCode = connection.getResponseCode();
-      if (responseCode == 200) {
-        return readJsonFile(url);
-      } else {
+      if (responseCode != 200) {
         System.err.println("Error: connection response code is: " + responseCode);
-      }    
+      }
+      return readJsonFile(url);   
     } catch(Exception e) {
       e.printStackTrace();
     }
