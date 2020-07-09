@@ -3,10 +3,6 @@ const KEYWORDS_TEMPLATE_URL = '/templates/keywords.html';
 const KEYWORDS_OBJ_URL = '/json/keywords.json';
 const NEWS_OBJ_URL =  '/json/news.json';
 const ACTIONS_OBJ_URL = '/actions';
-const lat = getCookie("latitude");
-const lng = getCookie("longitude");
-const CIVIC_URL = `/civic?lat=${lat}&lng=${lng}`;
-console.log(CIVIC_URL); //test
 const OBJECTS_URLS = [NEWS_OBJ_URL, ACTIONS_OBJ_URL];
 
 const KEYWORDS_PROMISE = loadKeywords(KEYWORDS_OBJ_URL);

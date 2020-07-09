@@ -17,8 +17,8 @@
       <div id="form-title">
         <p>Copy your Tweet here</p>
       </div>
-      <input type="checkbox" onclick = "setLocationCookie()" name = "location"> 
-      <label for "location">Use location</input>
+      <label><input type="checkbox" onclick="setLocationCookie()" /> Use Location</label>
+      <p id="location-warning"></p>
       <br/>
       <form id="keyword-form" action="/keyword" method="POST">
         <textarea name="keyword-sentence" placeholder="Enter your tweet or interests here">Black Lives Matter, COVID-19.</textarea>

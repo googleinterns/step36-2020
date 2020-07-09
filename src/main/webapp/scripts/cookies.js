@@ -84,7 +84,7 @@ function loadCheckboxStateCookie(cookieName) {
 }
 
 /**
- * Makes a cookie for the user's coordinates.
+ * Makes cookies for the user's latitude and longitude coordinates.
  */
 function setLocationCookie() {
   if (navigator.geolocation) {
@@ -93,6 +93,8 @@ function setLocationCookie() {
         setCookie("longitude", position.coords.longitude, 1);
       }, function(err) {
         console.warn(`ERROR(${err.code}): ${err.message}`);
+        document.getElementById("location-warning")
+            .innerHTML = "We cannot access your location. Try checking your browswer settings";
       })
     };
 }
