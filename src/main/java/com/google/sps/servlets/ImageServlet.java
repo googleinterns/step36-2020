@@ -33,6 +33,10 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/user-image")
 public class ImageServlet extends HttpServlet {
   
+  // TODO: Handle keywords in a datastore, and handle the adding and replacing of keywords within
+  // the datastore in a separate class in the data package.
+  private static final int MAX_NUM_KEYWORDS = 10;
+
   /**
    * Writes an upload URL for file uploads to the servlet
    */
@@ -49,23 +53,25 @@ public class ImageServlet extends HttpServlet {
     PrintWriter writer = response.getWriter();
     BlobKey blobKey = getBlobKey(request, "image");
     if (blobKey == null) {
-      writer.println("Please upload an image file.");
+      response.sendRedirect("/index.html");
       return;
     }
-    // TODO: Do something with the URL -- either add it to the writer output to the servlet, 
-    // and make use of it on the website, or remove and ignore.
-    String imageUrl = getUploadedFileUrl(request, "user-image");
 
     byte[] blobBytes = getBlobBytes(blobKey);
     List<EntityAnnotation> annotations = getImageLabels(blobBytes);
-    
-    List<String> imageLabels = new ArrayList<>();
-    for (EntityAnnotation annotation : annotations) {
-      imageLabels.add(annotation.getDescription());
+    writer.println("Annotations size: " + annotations.size());
+    writer.println("Blob Key: " + blobKey);
+    writer.println("Number of bytes: " + blobBytes.length);
+   
+    // Create an array of labels for printing the appropriate JSON 
+    List<String> imageLabels = new ArrayList<>();;
+    for (int i = 0; i < imageLabels.size() && i < MAX_NUM_KEYWORDS; i++) {
+      imageLabels.add(annotations.get(i).getDescription());
     }
     Gson gson = new Gson();
     String json = gson.toJson(imageLabels);
     writer.println(json);
+    response.sendRedirect("/main.html");
   }
 
   /**
@@ -84,6 +90,7 @@ public class ImageServlet extends HttpServlet {
 
     // Our form only contains a single file input, so get the first index.
     BlobKey blobKey = blobKeys.get(0);
+    System.out.println(blobKey.getKeyString());
 
     // User submitted form without selecting a file, so the BlobKey is empty.
     BlobInfo blobInfo = new BlobInfoFactory().loadBlobInfo(blobKey);
@@ -123,14 +130,14 @@ public class ImageServlet extends HttpServlet {
   }
 
   /**
-   * Generates a list of labels that apply to the image
+   * Creates a list of  that apply to the image
    * represented by the binary data stored in imgBytes.
    */
   private List<EntityAnnotation> getImageLabels(byte[] imgBytes) throws IOException {
     ByteString byteString = ByteString.copyFrom(imgBytes);
     Image image = Image.newBuilder().setContent(byteString).build();
 
-    Feature feature = Feature.newBuilder().setType(Feature.Type.LABEL_DETECTION).build();
+    Feature feature = Feature.newBuilder().setType(Feature.Type.TEXT_DETECTION).build();
     AnnotateImageRequest request =
         AnnotateImageRequest.newBuilder().addFeatures(feature).setImage(image).build();
     List<AnnotateImageRequest> requests = new ArrayList<>();
