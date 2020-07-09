@@ -2,7 +2,7 @@ const KEYWORDS_TEMPLATE_URL = '/templates/keywords.html';
 
 const KEYWORDS_OBJ_URL = '/json/keywords.json';
 
-const CIVIC_OBJ_URL = '/json/civic.json'
+const CIVIC_OBJ_URL = '/actions/civic'
 
 const NEWS_OBJ_URL =  '/json/news.json';
 const PROJECTS_OBJ_URL = '/actions/projects';
@@ -57,13 +57,39 @@ async function renderTemplateObj(template, objs, keywords) {
     keywordObj.projects = objs[1].results[term];
     result.keywords[i] = keywordObj;
   }
-  if (true) { // TODO: Change true to if the user gave their location.
+
+  // TODO: Change true to if the user gave their location, and get real coordinates.
+  if (true) {
+    let lat = 33.969058;
+    let lng = -118.422146;
+    let civicObj = await loadObject(`${CIVIC_OBJ_URL}?lat=${lat}&lng=${lng}`);
     let locationObj = new Object();
-    locationObj.civic = await loadObject(CIVIC_OBJ_URL);
+    locationObj.address = civicObj.normalizedInput;
+    locationObj.officials = extractOfficials(civicObj);
     result.location = locationObj;
   }
   let htmlSections = Mustache.render(template, result);
   return htmlSections;
+}
+
+/**
+ * Extract the government officials from the civic API response.
+ */
+function extractOfficials(civicObj) {
+  let officials = new Object();
+  let levels = ["administrativeArea1", "administrativeArea2", "country", "international", "locality", "regional", "special", "subLocality1", "subLocality2"];
+  levels.forEach((level) => {
+    officials[level] = new Array();
+  });
+  civicObj.offices.forEach((officeObj) => {
+    let level = officeObj.levels[0];
+    officeObj.officialIndices.forEach((officialIndex) => {
+      let official = civicObj.officials[officialIndex];
+      official.title = officeObj.name;
+      officials[level].push(official);
+    });
+  });
+  return officials;
 }
 
 /**
