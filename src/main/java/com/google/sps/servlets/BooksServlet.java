@@ -25,20 +25,24 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * Servlet for generating books from keywords.
+ * Servlet for generating an array of book objects for each term.
+ * The get function writes a mapping of terms to lists of book objects in the response.
  */
 @WebServlet("/books")
 public class BooksServlet extends HttpServlet {
 
-  private final int NUM_BOOKS_PER_KEYWORD = 5;
-  private LinkedHashMap<String, List<Book>> booksMap;
+  private final int NUM_BOOKS_PER_TERM = 5;
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    List<String> keywords = Arrays.asList(request.getParameterValues("key"));
-    booksMap = new LinkedHashMap<>();
-    keywords.forEach((keyword) -> addBooksForTerm(keyword));
-    String json = encodeBookMapAsJson();
+    List<String> terms = Arrays.asList(request.getParameterValues("key"));
+    LinkedHashMap<String, List<Book>> booksMap = new LinkedHashMap<>();
+    terms.forEach((term) -> {
+      String jsonString = getJsonStringForTerm(term);
+      List<Book> books = makeBooksList(jsonString);
+      booksMap.put(term, books);
+    });
+    String json = encodeBookMapAsJson(booksMap);
     response.getWriter().println(json);
   }
 
@@ -54,7 +58,11 @@ public class BooksServlet extends HttpServlet {
     }
   }
 
-  private String encodeBookMapAsJson() {
+ /**
+  * Encodes a hashmap to a string format which can be easily processed by Mustache.
+  * @return An encoded hashmap in string format.
+  */
+  private String encodeBookMapAsJson(LinkedHashMap<String, List<Book>> booksMap) {
     Gson gson = new Gson();
     Map<String, Object> books = new HashMap<>();
     books.put("books", booksMap);
@@ -63,18 +71,15 @@ public class BooksServlet extends HttpServlet {
   }
 
  /**
-  * Adds Book object to books from JSON results of Google Books query.
+  * Creates list of Book objects from JSON results of Google Books query.
+  * @return list of book objects.
   */
-  private void addBooksToMap(String jsonString, String keyTerm) {
+  private List<Book> makeBooksList(String jsonString) {
     JsonObject responseObject = new JsonParser().parse(jsonString).getAsJsonObject();
-    // Check to see if json has enough entries.
-    int numResults = responseObject.get("totalItems").getAsInt();
-    numResults = Math.min(numResults, NUM_BOOKS_PER_KEYWORD);
-    if (numResults <= 0) {
-      System.err.println("Error: no results found for query");
-      return;
-    }
     JsonArray booksJsonArray = responseObject.getAsJsonArray("items");
+    // Reduce number of books displayed if there less books in the json array than as default.
+    int numResults = booksJsonArray.size();
+    numResults = Math.min(numResults, NUM_BOOKS_PER_TERM);
     List<Book> books = new ArrayList<>();
     for (int i = 0; i < numResults; i++) {
       JsonObject bookJson = booksJsonArray.get(i).getAsJsonObject().getAsJsonObject("volumeInfo"); 
@@ -82,10 +87,10 @@ public class BooksServlet extends HttpServlet {
       String link = bookJson.get("infoLink").getAsString();
       String image = bookJson.getAsJsonObject("imageLinks").get("thumbnail").getAsString();
       String description = bookJson.get("description").getAsString();
-      String writer = formatWriters(bookJson.getAsJsonArray("authors"));
-      books.add(new Book.Builder(title, link).withImage(image).withDescription(description).withWriter(writer).build());
+      String author = formatAuthors(bookJson.getAsJsonArray("authors"));
+      books.add(new Book.Builder(title, link).withImage(image).withDescription(description).withAuthor(author).build());
     }
-    booksMap.put(keyTerm, books);
+    return books;
   }
 
  /**
@@ -103,25 +108,26 @@ public class BooksServlet extends HttpServlet {
   }
 
  /**
-  * Formats writers into string from JSON array.
-  * @return writers in String fomat.
+  * Formats authors into string from JSON array.
+  * @return authors in String fomat.
   */
-  private String formatWriters(JsonArray writersArray) {
+  private String formatAuthors(JsonArray authorsArray) {
     String returnString = "";
-    int length = writersArray.size();
+    int length = authorsArray.size();
     for (int i = 0; i < length - 1; i++){
-      returnString += writersArray.get(i).getAsString() + ", ";
+      returnString += authorsArray.get(i).getAsString() + ", ";
     }
-    returnString += writersArray.get(length - 1).getAsString();
+    returnString += authorsArray.get(length - 1).getAsString();
     return returnString;
   }
 
  /**
-  * Adds books objects for a key term.
+  * Gets string of JSON of Google Books API's response to a query including the term.
+  * @return String of Google Books API JSON response. 
   */
-  private void addBooksForTerm(String keyTerm) {
+  private String getJsonStringForTerm(String term) {
     String path = "https://www.googleapis.com/books/v1/volumes?";
-    String queryParam = "q=" + encodeTerm(keyTerm); 
+    String queryParam = "q=" + encodeTerm(term); 
     String queryPath = path + queryParam;
     try {
       URL url = new URL(queryPath);
@@ -130,13 +136,13 @@ public class BooksServlet extends HttpServlet {
       connection.connect();
       int responseCode = connection.getResponseCode();
       if (responseCode == 200) {
-        String jsonString = readJsonFile(url);
-        addBooksToMap(jsonString, keyTerm);
+        return readJsonFile(url);
       } else {
         System.err.println("Error: connection response code is: " + responseCode);
       }    
     } catch(Exception e) {
       e.printStackTrace();
     }
+    return "";
   }
 }

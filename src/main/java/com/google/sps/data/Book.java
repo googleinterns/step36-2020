@@ -6,7 +6,7 @@ public class Book {
   private String date;
   private String image;
   private String description;
-  private String writer;
+  private String author;
 
   private Book(Builder b) {
     this.title = b.title;
@@ -14,7 +14,7 @@ public class Book {
     this.date = b.date;
     this.image = b.image;
     this.description = b.description;
-    this.writer = b.writer;
+    this.author = b.author;
   }
 
   public static class Builder {
@@ -23,7 +23,7 @@ public class Book {
     private String date;
     private String image;
     private String description;
-    private String writer;
+    private String author;
 
     public Builder(String title, String link) {
       this.title = title;
@@ -45,8 +45,8 @@ public class Book {
        return this;
     }
 
-    public Builder withWriter(String writer) {
-       this.writer = writer;
+    public Builder withAuthor(String author) {
+       this.author = author;
        return this;
     }
   
