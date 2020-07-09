@@ -7,6 +7,7 @@ import com.google.cloud.language.v1.AnalyzeEntitiesRequest;
 import com.google.cloud.language.v1.AnalyzeEntitiesResponse;
 import com.google.cloud.language.v1.EncodingType;
 import com.google.cloud.language.v1.Entity;
+import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -61,8 +62,14 @@ public class KeywordServlet extends HttpServlet {
         } else {}
       }
     }
-    String json = keywordJsonBuilder(terms);
-    System.out.println(json);
+    
+    // TODO: Retrieve tweets from datastore.
+    List<String> keywords = new ArrayList<>();
+    for (Entity entity : terms.keySet()) {
+      keywords.add(entity.getName());
+    }
+    Gson gson = new Gson();
+    String json = gson.toJson(keywords);
     response.getWriter().println(json);
   }
 
@@ -70,22 +77,11 @@ public class KeywordServlet extends HttpServlet {
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     final String tweet = request.getParameter("keyword-sentence");
     if (tweet != null && !tweet.equals("")) {
+      // TODO: Add tweets to a datastore.
       tweets.add(request.getParameter("keyword-sentence"));
     }
     String key = "12345"; // TODO: use the datastore key containing the keywords. 
     response.sendRedirect(String.format("/results?k=%s", key));
-  }
-
-  /**
-   * Generates and returns a JSON usable by Mustache.
-   */
-  private static String keywordJsonBuilder(Map<Entity, Float> toJson) {
-    List<String> terms = new ArrayList<>();
-    for (Entity term : toJson.keySet()) {
-      terms.add(String.format("{\"term\": \"%s\"}", term.getName()));
-    }
-
-    return String.format("{\"keywords\": [%s]}", String.join(",", terms));
   }
 
   /**
@@ -99,8 +95,10 @@ public class KeywordServlet extends HttpServlet {
           .setEncodingType(EncodingType.UTF16)
           .build();
       AnalyzeEntitiesResponse response = language.analyzeEntities(request);
-      language.close();
       return response;
+    } catch (Exception ex) {
+      ex.printStackTrace();
+      return null;
     }
   }
 }
