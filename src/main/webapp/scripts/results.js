@@ -24,3 +24,11 @@ $("body").on('click', ".active .item", function() {
   const url = $(this).attr("data-url");
   window.location.href = url;
 });
+
+$(".level").on('click', function() {
+  const isThisExtended = $(this).hasClass("extended");
+  $(".extended").removeClass("extended");
+  if (!isThisExtended) {
+    $(this).addClass("extended");
+  }
+});
