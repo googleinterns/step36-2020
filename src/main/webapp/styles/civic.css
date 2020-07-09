@@ -1,0 +1,57 @@
+.levels {
+  background-color: lightgray;
+}
+
+.levels > .level:not(:last-child) {
+  border-bottom: 1px solid darkgray;
+}
+
+.level {
+  margin: 0;
+  padding: 0.3vh 1vw;
+  text-align: center;
+  cursor: pointer;
+}
+
+.extended {
+  cursor: auto;
+}
+
+ion-icon {
+  transform: rotate(0deg);
+  transition: transform 0.2s ease-in-out;
+}
+
+.extended > p > ion-icon {
+  transform: rotate(90deg);
+}
+
+.profiles {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-around;
+  align-content: center;
+  height: 0;
+  opacity: 0;
+  transition: height 0.5s ease-in-out, opacity 0.2s linear;
+}
+
+.extended > .profiles {
+  opacity: 1;
+  height: 50vh;
+  overflow: auto;
+}
+
+.profile {
+  width: 350px;
+}
+
+.extended .profile {
+  display: block;
+}
+
+@media (any-hover: hover) {
+  .levels > .level:hover {
+    border-bottom-color: gray;
+  }
+}
