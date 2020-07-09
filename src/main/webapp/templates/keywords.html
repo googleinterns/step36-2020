@@ -42,4 +42,18 @@
       <ion-icon class="close hide" name="close-outline"></ion-icon>
     </div> 
   {{/keywords}}
+  {{#location}}
+    <div class="keyword location">
+      <p class="title">Government Officials</p>
+      {{#address}}
+        <p class="subtitle hide"><ion-icon name="location-outline"></ion-icon>{{city}}, {{state}}</p>
+      {{/address}}
+      <ion-icon class="close hide" name="close-outline"></ion-icon>
+      <div class="officials-section hide">
+
+      <!-- TODO: Add civic html here. -->
+
+      </div>
+    </div> 
+  {{/location}}
 </div>
