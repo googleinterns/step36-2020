@@ -65,7 +65,7 @@ async function renderTemplateObj(template, objs, keywords) {
     let civicObj = await loadObject(`${CIVIC_OBJ_URL}?lat=${lat}&lng=${lng}`);
     let locationObj = new Object();
     locationObj.address = civicObj.normalizedInput;
-    locationObj.officials = extractOfficials(civicObj);
+    locationObj.levels = extractOfficials(civicObj);
     result.location = locationObj;
   }
   let htmlSections = Mustache.render(template, result);
@@ -76,20 +76,32 @@ async function renderTemplateObj(template, objs, keywords) {
  * Extract the government officials from the civic API response.
  */
 function extractOfficials(civicObj) {
-  let officials = new Object();
-  let levels = ["administrativeArea1", "administrativeArea2", "country", "international", "locality", "regional", "special", "subLocality1", "subLocality2"];
-  levels.forEach((level) => {
-    officials[level] = new Array();
-  });
+  let levelsArray = new Array();
+  const levels = {"international" : "International",
+                  "country" : "Country",
+                  "regional" : "Regional",
+                  "administrativeArea2" : "Administrative Area 2",
+                  "administrativeArea1" : "Administrative Area 1",
+                  "locality" : "Locality",
+                  "subLocality2" : "Sublocality 2",
+                  "subLocality1" : "Sublocality 1",
+                  "special" : "Special",};
+  for (const level in levels) {
+    let levelsObj = new Object();
+    levelsObj.levelType = level;
+    levelsObj.levelName = levels[level]
+    levelsObj.officials = new Array();
+    levelsArray.push(levelsObj);
+  }
   civicObj.offices.forEach((officeObj) => {
-    let level = officeObj.levels[0];
+    const level = officeObj.levels[0];
     officeObj.officialIndices.forEach((officialIndex) => {
       let official = civicObj.officials[officialIndex];
       official.title = officeObj.name;
-      officials[level].push(official);
+      levelsArray.find(obj => obj.levelType === level).officials.push(official);
     });
   });
-  return officials;
+  return levelsArray.filter(obj => obj.officials.length > 0);
 }
 
 /**
