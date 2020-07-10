@@ -23,8 +23,6 @@ import java.util.List;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.stream.Stream;
-import java.util.stream.Collectors;
 
 /**
  * Provide methods for the storage, extraction, and retrieval of keywords.
@@ -36,27 +34,23 @@ public final class Keywords {
   /**
    * @return a list of the 10 most salient keywords
    */
-  public static List<String> getKeywords(String key) {
-    try {
-      Key datastoreKey = KeyFactory.stringToKey(key);
-      DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-      Entity result = datastore.get(datastoreKey);
+  public static List<String> getKeywords(String key) throws EntityNotFoundException {
+    Key datastoreKey = KeyFactory.stringToKey(key);
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    Entity result = datastore.get(datastoreKey);
     
-      Collection<String> keywordCollection = (Collection<String>) (result.getProperty("keywords"));
-      List<String> keywordList = new ArrayList<>();
-      int index = 0;
-      for (String keyword : keywordCollection) {
-        keywordList.add(keyword);
+    Collection<String> keywordCollection = (Collection<String>) result.getProperty("keywords");
+    List<String> keywordList = new ArrayList<>();
+    int index = 0;
+    for (String keyword : keywordCollection) {
+      keywordList.add(keyword);
     
-        index++;
-        if (index >= MAX_NUM_KEYWORDS) {
-          break;
-        }
+      index++;
+      if (index >= MAX_NUM_KEYWORDS) {
+        break;
       }
-      return keywordList;
-    } catch (Exception ex) {
-      return new ArrayList<>();
     }
+    return keywordList;
   }
 
   /**
@@ -65,8 +59,8 @@ public final class Keywords {
    */
   public static String addKeywords(List<EntityAnnotation> blobAnalysis) throws IOException {
     String labels = "";
-    for (EntityAnnotation annotation : blobAnalysis) {
-      labels += annotation.getDescription() + ", ";
+    for (EntityAnnotation label : blobAnalysis) {
+      labels += label.getDescription() + ", ";
     }
     return addToDatastore(labels);
   }
