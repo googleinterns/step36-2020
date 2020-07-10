@@ -14,6 +14,7 @@ $("body").on('click', '.keyword', function() {
 
 $("body").on('click', ".close", function(event) {
   event.stopPropagation();
+  $(".extended").removeClass("extended");
   $(this).parent().removeClass("active");
   $(".base").show(200);
   $("#real-body").removeClass("focus");
@@ -25,10 +26,10 @@ $("body").on('click', ".active .item", function() {
   window.location.href = url;
 });
 
-$(".level").on('click', function() {
-  const isThisExtended = $(this).hasClass("extended");
+$("body").on('click', '.level-name', function() {
+  const isThisExtended = $(this).parent().hasClass("extended");
   $(".extended").removeClass("extended");
   if (!isThisExtended) {
-    $(this).addClass("extended");
+    $(this).parent().addClass("extended");
   }
 });
