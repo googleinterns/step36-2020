@@ -25,7 +25,6 @@ public class ActionsServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    // TODO: Use key to grab keywords from datastore, or use Keywords class.
     String[] terms = request.getParameterValues("key");
     Map<String, List<Project>> jsonResultMap = new HashMap<>();
     Map<String, String> queryParams = new HashMap<>();
