@@ -68,7 +68,7 @@
   box-shadow: 0 5px 15px rgba(0,0,0,0.5);
   display: grid;
   grid: [row1-start] "title   close  " auto [row1-end]
-        [row2-start] "news    news   " 1fr  [row2-end]
+        [row2-start] "books    books   " 1fr  [row2-end]
         [row3-start] "line    line   " auto [row3-end]
         [row4-start] "actions actions" 1fr  [row4-end]
         / auto 3em;
@@ -111,7 +111,7 @@
   width: 70%;
 }
 
-.active > .news-section,
+.active > .books-section,
 .active > .actions-section {
   transition: all 0.5s ease-in-out;
   display: flex;
@@ -124,13 +124,13 @@
   overflow: hidden;
 }
 
-.active > .news-section,
+.active > .books-section,
 .active > .actions-section {
   overflow: auto;
 }
 
-.active > .news-section {
-  grid-area: news;
+.active > .books-section {
+  grid-area: books;
 }
 
 .active > .actions-section {
@@ -169,7 +169,7 @@
   font-weight: bold;
 }
 
-.active .news-title,
+.active .books-title,
 .active .action-title {
   font-weight: bold;
 }
@@ -231,7 +231,7 @@
   .keyword:hover {
     display: grid;
     grid: [row1-start] "title   close  " auto [row1-end]
-          [row2-start] "news    news   " 1fr  [row2-end]
+          [row2-start] "books   books   " 1fr  [row2-end]
           [row3-start] "line    line   " auto [row3-end]
           [row4-start] "actions actions" 1fr  [row4-end]
           / auto 3em;
@@ -264,7 +264,7 @@
     width: 70%;
   }
 
-  .keyword:hover > .news-section,
+  .keyword:hover > .books-section,
   .keyword:hover > .actions-section {
     transition: all 0.5s ease-in-out;
     display: flex;
@@ -277,14 +277,14 @@
     overflow: hidden;
   }
 
-  .keyword:hover > .news-section:hover,
+  .keyword:hover > .books-section:hover,
   .keyword:hover > .actions-section:hover {
     overflow: auto;
   }
 
 
-  .keyword:hover > .news-section {
-    grid-area: news;
+  .keyword:hover > .books-section {
+    grid-area: books;
   }
 
   .keyword:hover > .actions-section {
