@@ -8,6 +8,8 @@ const NEWS_OBJ_URL =  '/json/news.json';
 const PROJECTS_OBJ_URL = '/actions/projects';
 const OBJECTS_URLS = [NEWS_OBJ_URL, PROJECTS_OBJ_URL];
 
+const LOADING_TEXT = $("#loading-text");
+
 const KEYWORDS_PROMISE = loadKeywords(KEYWORDS_OBJ_URL);
 
 const HTML_SECTIONS_PROMISE = loadHtmlSections(KEYWORDS_TEMPLATE_URL, OBJECTS_URLS, KEYWORDS_PROMISE);
@@ -17,6 +19,7 @@ const HTML_SECTIONS_PROMISE = loadHtmlSections(KEYWORDS_TEMPLATE_URL, OBJECTS_UR
  * Returns a promise of the keywords array.
  */
 async function loadKeywords(keywordsUrl) {
+  LOADING_TEXT.text("Loading your keywords...");
   const key = $("body").attr("data-key");
   let keywords;
   const keywordsCookie = getCookie(key);
@@ -40,6 +43,7 @@ async function loadHtmlSections(templateUrl, objsUrls, keywordsPromise) {
   const queryString = `?key=${keywords.join('&key=')}`;
   objsUrls = objsUrls.map(url => `${url}${queryString}`);
   const objsPromises = loadUrls(objsUrls, loadObject);
+  LOADING_TEXT.text("Looking up books and projects...")
   const values =  await Promise.all([htmlTemplatePromise, objsPromises]);
   const template = values[0];
   const objs = values[1];
@@ -62,6 +66,7 @@ async function renderTemplateObj(template, objs, keywords) {
   if (true) {
     let lat = 33.969058;
     let lng = -118.422146;
+    LOADING_TEXT.text("Getting your government officiasl...");
     let civicObj = await loadObject(`${CIVIC_OBJ_URL}?lat=${lat}&lng=${lng}`);
     let locationObj = new Object();
     locationObj.address = civicObj.normalizedInput;
