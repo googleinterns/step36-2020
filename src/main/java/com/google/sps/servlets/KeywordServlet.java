@@ -30,15 +30,11 @@ public class KeywordServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    try {
-      String key = request.getParameter("k");
-      List<String> keywords = Keywords.getKeywords(key);
-      Gson gson = new Gson();
-      String json = gson.toJson(keywords);
-      response.getWriter().println(json);
-    } catch (EntityNotFoundException enfe) {
-      enfe.printStackTrace();
-    }
+    String key = request.getParameter("k");
+    List<String> keywords = Keywords.getKeywords(key);
+    Gson gson = new Gson();
+    String json = gson.toJson(keywords);
+    response.getWriter().println(json);
   }
 
   @Override

@@ -35,22 +35,26 @@ public final class Keywords {
    * @return a list of the 10 most salient keywords
    */
   public static List<String> getKeywords(String key) throws EntityNotFoundException {
-    Key datastoreKey = KeyFactory.stringToKey(key);
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    Entity result = datastore.get(datastoreKey);
+    try {
+      Key datastoreKey = KeyFactory.stringToKey(key);
+      DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+      Entity result = datastore.get(datastoreKey);
     
-    Collection<String> keywordCollection = (Collection<String>) result.getProperty("keywords");
-    List<String> keywordList = new ArrayList<>();
-    int index = 0;
-    for (String keyword : keywordCollection) {
-      keywordList.add(keyword);
+      Collection<String> keywordCollection = (Collection<String>) result.getProperty("keywords");
+      List<String> keywordList = new ArrayList<>();
+      int index = 0;
+      for (String keyword : keywordCollection) {
+        keywordList.add(keyword);
     
-      index++;
-      if (index >= MAX_NUM_KEYWORDS) {
-        break;
+        index++;
+        if (index >= MAX_NUM_KEYWORDS) {
+          break;
+        }
       }
+      return keywordList;
+    } catch (EntityNotFoundException ex) {
+      return new ArrayList<>();
     }
-    return keywordList;
   }
 
   /**
