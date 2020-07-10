@@ -50,7 +50,7 @@ public class ImageServlet extends HttpServlet {
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     PrintWriter writer = response.getWriter();
     BlobKey blobKey = getBlobKey(request, "image");
-    if (blobKey == null) {
+    if (blobKey == null) {  // Not an image file
       response.sendRedirect("/index.html");
       return;
     }
