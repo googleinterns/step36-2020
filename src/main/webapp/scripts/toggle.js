@@ -1,8 +1,8 @@
 const KEYWORDS_TEMPLATE_URL = '/templates/keywords.html';
 
-const KEYWORDS_OBJ_URL = '/json/keywords.json';
+const KEYWORDS_OBJ_URL = '/keyword';
 const NEWS_OBJ_URL =  '/json/news.json';
-const ACTIONS_OBJ_URL = '/actions';
+const ACTIONS_OBJ_URL = '/action';
 const OBJECTS_URLS = [NEWS_OBJ_URL, ACTIONS_OBJ_URL];
 
 const KEYWORDS_PROMISE = loadKeywords(KEYWORDS_OBJ_URL);
