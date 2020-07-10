@@ -22,11 +22,11 @@
         <button id="select-text">Text</button>
         <button id="select-blob">Upload Image</button>
       </div>
-      <form id="keyword-form" class="hide" action="/keyword" method="POST" enctype="multipart/form-data">
-        <textarea id="text-input" name="keyword-sentence" placeholder="Enter your tweet or interests here">Black Lives Matter, COVID-19</textarea>
+      <form id="keyword-form" class="hide" action="/keyword" method="post" enctype="multipart/form-data">
+        <textarea id="text-input" name="keyword-sentence" placeholder="Enter your tweet or interests here"></textarea>
         <input id="blob-input" type="file" name="image" accept="image/*" />
         <br/>
-        <input type="submit"/>
+        <input type="submit" />
       </form>
     </div>
     <footer id="footer" class="base">

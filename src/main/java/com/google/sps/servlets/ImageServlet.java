@@ -19,12 +19,14 @@ import com.google.cloud.vision.v1.Image;
 import com.google.cloud.vision.v1.ImageAnnotatorClient;
 import com.google.protobuf.ByteString;
 import com.google.gson.Gson;
+import com.google.sps.data.Keywords;
 import java.io.ByteArrayOutputStream;
 import java.net.URL;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -32,10 +34,6 @@ import javax.servlet.http.HttpServletResponse;
 
 @WebServlet("/user-image")
 public class ImageServlet extends HttpServlet {
-  
-  // TODO: Handle keywords in a datastore, and handle the adding and replacing of keywords within
-  // the datastore in a separate class in the data package.
-  private static final int MAX_NUM_KEYWORDS = 10;
 
   /**
    * Writes an upload URL for file uploads to the servlet
@@ -59,19 +57,12 @@ public class ImageServlet extends HttpServlet {
 
     byte[] blobBytes = getBlobBytes(blobKey);
     List<EntityAnnotation> annotations = getImageLabels(blobBytes);
-    writer.println("Annotations size: " + annotations.size());
-    writer.println("Blob Key: " + blobKey);
-    writer.println("Number of bytes: " + blobBytes.length);
-   
-    // Create an array of labels for printing the appropriate JSON 
-    List<String> imageLabels = new ArrayList<>();;
-    for (int i = 0; i < imageLabels.size() && i < MAX_NUM_KEYWORDS; i++) {
-      imageLabels.add(annotations.get(i).getDescription());
-    }
+    Keywords.addKeywords(annotations);
+
+    Set<String> keywords = Keywords.getKeywords();
     Gson gson = new Gson();
-    String json = gson.toJson(imageLabels);
-    writer.println(json);
-    response.sendRedirect("/main.html");
+    String json = gson.toJson(keywords);
+    response.sendRedirect(String.format("/results?k=%s", Keywords.KEY));
   }
 
   /**
