@@ -6,17 +6,24 @@ import com.google.cloud.language.v1.LanguageServiceClient;
 import com.google.cloud.language.v1.AnalyzeEntitiesRequest;
 import com.google.cloud.language.v1.AnalyzeEntitiesResponse;
 import com.google.cloud.language.v1.EncodingType;
-import com.google.cloud.language.v1.Entity;
+//import com.google.cloud.language.v1.Entity;
 import com.google.cloud.vision.v1.EntityAnnotation;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.EntityNotFoundException;
+import com.google.appengine.api.datastore.FetchOptions;
+import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query.SortDirection;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * Provide methods for the storage, extraction, and retrieval of keywords.
@@ -24,67 +31,81 @@ import java.util.Set;
 public final class Keywords {
 
   private static final int MAX_NUM_KEYWORDS = 10;
-  public static final String KEY = "keywords";
 
   /**
    * @return a list of the 10 most salient keywords
    */
-  public static Set<String> getKeywords() {
-    Query query = new Query(KEY).addSort("salience", SortDirection.DESCENDING);
+  public static List<String> getKeywords(String key) throws EntityNotFoundException {
+    Key datastoreKey = KeyFactory.stringToKey(key);
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    PreparedQuery results = datastore.prepare(query);
+    Entity result = datastore.get(datastoreKey);
     
-    HashSet<String> keywordSet = new HashSet<>();
+    Collection<String> keywordCollection = (Collection<String>) result.getProperty("keywords");
+    List<String> keywordList = new ArrayList<>();
     int index = 0;
-    for (com.google.appengine.api.datastore.Entity entity : results.asIterable()) {
-      keywordSet.add((String) entity.getProperty("keyword"));
-
+    for (String keyword : keywordCollection) {
+      keywordList.add(keyword);
+    
       index++;
       if (index >= MAX_NUM_KEYWORDS) {
         break;
       }
     }
-    return keywordSet;
+    return keywordList;
   }
 
   /**
    * Adds the labels from the analysis of an image into the datastore.
+   * @return the key pointing to the newly added datastore entity.
    */
-  public static void addKeywords(List<EntityAnnotation> blobAnalysis) throws IOException {
+  public static String addKeywords(List<EntityAnnotation> blobAnalysis) throws IOException {
     String labels = "";
     for (EntityAnnotation label : blobAnalysis) {
       labels += label.getDescription() + ", ";
     }
-    addToDatastore(labels);
+    return addToDatastore(labels);
   }
 
   /**
    * Adds the salient keywords from the analysis of a textual user input into the datastore.
+   * @return the key pointing to the newly added datastore entity.
    */
-  public static void addKeywords(String message) throws IOException {
-    addToDatastore(message);
+  public static String addKeywords(String message) throws IOException {
+    return addToDatastore(message);
   }
   
   /**
    * Adds salient keywords from the message into the datastore.
    */
-  private static void addToDatastore(String message) throws IOException {
+  private static String addToDatastore(String message) throws IOException {
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-
     AnalyzeEntitiesResponse entityResponse = analyzeEntity(message);
-    List<Entity> entities = entityResponse.getEntitiesList();
-    System.out.println(entities.size());
-    for (Entity entity : entities) {
+    List<com.google.cloud.language.v1.Entity> entities = entityResponse.getEntitiesList();
+    TreeSet<com.google.cloud.language.v1.Entity> orderSet = 
+        new TreeSet<>((com.google.cloud.language.v1.Entity o1, com.google.cloud.language.v1.Entity o2) -> {
+      if (o1.getSalience() < o2.getSalience()) {
+        return 1;
+      } else if (o1.getSalience() > o2.getSalience()) {
+        return -1;
+      } else {
+        return 0;
+      }
+    });
+    for (com.google.cloud.language.v1.Entity entity : entities) {
       if (entity.getSalience() == 0) {
         continue;
       }
- 
-      com.google.appengine.api.datastore.Entity datastoreEntity = 
-          new com.google.appengine.api.datastore.Entity(KEY);
-      datastoreEntity.setProperty("keyword", entity.getName());
-      datastoreEntity.setProperty("salience", entity.getSalience());
-      datastore.put(datastoreEntity);
+      orderSet.add(entity);
     }
+    // We must create a new list of Strings as a collection of NLP Entities is not supported by datastore.
+    List<String> keywordList = new ArrayList<>();
+    for (com.google.cloud.language.v1.Entity entity : orderSet) {
+      keywordList.add(entity.getName());
+    }
+    Entity datastoreEntity = new Entity("Keyword");
+    datastoreEntity.setProperty("keywords", keywordList);
+    datastore.put(datastoreEntity);
+    return KeyFactory.keyToString(datastoreEntity.getKey());
   }
 
   /**
@@ -99,7 +120,10 @@ public final class Keywords {
           .build();
       AnalyzeEntitiesResponse response = language.analyzeEntities(request);
       return response;
+    } catch (Exception ex) {
+      ex.printStackTrace();
+      return null;
     }
-  }
+  }  
 }
 

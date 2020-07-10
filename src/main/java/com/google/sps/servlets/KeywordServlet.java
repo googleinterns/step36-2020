@@ -7,9 +7,11 @@ import com.google.cloud.language.v1.AnalyzeEntitiesRequest;
 import com.google.cloud.language.v1.AnalyzeEntitiesResponse;
 import com.google.cloud.language.v1.EncodingType;
 import com.google.cloud.language.v1.Entity;
+import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.gson.Gson;
 import com.google.sps.data.Keywords;
 import java.util.Set;
+import java.util.List;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -24,19 +26,25 @@ public class KeywordServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    Set<String> keywords = Keywords.getKeywords();
-    Gson gson = new Gson();
-    String json = gson.toJson(keywords);
-    response.getWriter().println(json);
+    try {
+      String key = request.getParameter("k");
+      List<String> keywords = Keywords.getKeywords(key);
+      Gson gson = new Gson();
+      String json = gson.toJson(keywords);
+      response.getWriter().println(json);
+    } catch (EntityNotFoundException enfe) {
+      enfe.printStackTrace();
+    }
   }
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     String tweet = request.getParameter("keyword-sentence");
+    String key = "";
     if (tweet != null && !tweet.equals("")) {
-      Keywords.addKeywords(tweet);
+      key = Keywords.addKeywords(tweet);
     }
-    response.sendRedirect(String.format("/results?k=%s", Keywords.KEY));
+    response.sendRedirect(String.format("/results?k=%s", key));
   }
 }
 

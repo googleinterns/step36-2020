@@ -57,12 +57,8 @@ public class ImageServlet extends HttpServlet {
 
     byte[] blobBytes = getBlobBytes(blobKey);
     List<EntityAnnotation> annotations = getImageLabels(blobBytes);
-    Keywords.addKeywords(annotations);
-
-    Set<String> keywords = Keywords.getKeywords();
-    Gson gson = new Gson();
-    String json = gson.toJson(keywords);
-    response.sendRedirect(String.format("/results?k=%s", Keywords.KEY));
+    String key = Keywords.addKeywords(annotations);
+    response.sendRedirect(String.format("/results?k=%s", key));
   }
 
   /**
