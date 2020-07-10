@@ -21,6 +21,7 @@ function extractOfficials(civicObj) {
   }
   civicObj.offices.forEach((officeObj) => {
     const level = officeObj.levels[0];
+    // Loop through the officials Indices that work at the current office, and add them to their coresponding level.
     officeObj.officialIndices.forEach((officialIndex) => {
       let official = civicObj.officials[officialIndex];
       official.title = officeObj.name;
