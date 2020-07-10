@@ -56,20 +56,17 @@
             <div class="profiles">
               {{#officials}}
                 <div class="profile">
-                  <p class="profile-name">{{name}}</p>
+                  <p><a href="{{urls.0}}" class="profile-name">{{name}}</a></p>
                   <p class="profile-title">{{title}}</p>
                   <img src="{{photoUrl}}" class="profile-img">
-                  {{#emails}}
-                    <p class-"profile-email">{{.}}</p>
-                  {{/emails}}
                   {{#phones}}
                     <p class-"profile-phone">{{.}}</p>
                   {{/phones}}
-                  {{#urls}}
-                    <p class-"profile-url">{{.}}</p>
-                  {{/urls}}
+                  {{#emails}}
+                    <p class-"profile-email">{{.}}</p>
+                  {{/emails}}
                   {{#channels}}
-                    <p clas="profile-channel">{{type}}: {{id}}</p>
+                    <p clas="profile-channel"><b>{{type}}:</b> {{id}}</p>
                   {{/channels}}
                 </div>
               {{/officials}}
