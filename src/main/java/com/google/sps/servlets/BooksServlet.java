@@ -24,6 +24,10 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import com.google.sps.data.UrlRequest;
+import java.util.Collections;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 
 /**
  * Servlet for generating a map of each term to a 
@@ -34,19 +38,28 @@ public class BooksServlet extends HttpServlet {
 
   private final int NUM_BOOKS_PER_TERM = 5;
   private static final String API_KEY = "AIzaSyD7NSsRElnqx6MTVSIq0-lRYe2sl2nosAk";
+  private static final String API_PATH = "https://www.googleapis.com/books/v1/volumes";
 
   /*
   * Writes a mapping of terms to lists of book objects in the servlet response.
   */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    List<String> terms = Arrays.asList(request.getParameterValues("key"));
+    String[] terms = request.getParameterValues("key");
     LinkedHashMap<String, List<Book>> booksMap = new LinkedHashMap<>();
-    terms.forEach((term) -> {
-      String jsonString = getJsonStringForTerm(term);
-      List<Book> books = makeBooksList(jsonString);
-      booksMap.put(term, books);
-    });
+    Map<String, String> queryParams = new HashMap<>();
+    queryParams.put("key", API_KEY);
+    queryParams.put("q", "");
+    for (String term : terms) {
+      queryParams.replace("q", term);
+      String jsonString = UrlRequest.urlQuery(API_PATH, queryParams);
+      if(jsonString.equals("")){
+        booksMap.put(term, Collections.emptyList());
+      } else {
+        List<Book> books = makeBooksList(jsonString);
+        booksMap.put(term, books);
+      }
+    }
     String json = encodeBookMapAsJson(booksMap);
     response.getWriter().println(json);
   }
@@ -127,31 +140,37 @@ public class BooksServlet extends HttpServlet {
   * @return String of Google Books API JSON response. 
   */
   private String getJsonStringForTerm(String term) {
+    String path = "https://www.googleapis.com/books/v1/volumes?";
+    String queryParam = "q=" + encodeTerm(term)+"&key="+API_KEY; 
+    String queryPath = path + queryParam;
     try {
-      String path = "https://www.googleapis.com/books/v1/volumes?";
-      Map<String, String> params = new HashMap<>();
-      params.put("key", API_KEY);
-      params.put("q", term);
-      return UrlRequest.urlQuery(path, params);
-    } catch (Exception e) {
+      URL url = new URL(queryPath);
+      HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+      connection.addRequestProperty("User-Agent", "Mozilla/5.0 (X11; CrOS x86_64 13020.87.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.119 Safari/537.36");
+      connection.setRequestProperty("Content-Type", "application/json");
+      connection.setRequestMethod("GET");
+      connection.connect();
+      int responseCode = connection.getResponseCode();
+      if (responseCode != 200) {
+        System.err.println("Error: connection response code is: " + responseCode);
+      }
+      InputStreamReader inputStream = new InputStreamReader(connection.getInputStream());
+      StringBuilder contentBuilder = new StringBuilder();
+      try (BufferedReader inputReader = new BufferedReader(inputStream)) {
+        String inputLine;
+        while ((inputLine = inputReader.readLine()) != null) {
+          contentBuilder.append(inputLine);
+        }
+      } catch(IOException e) {
+        System.out.println(e);
+        return "";
+      } finally {
+        connection.disconnect();
+      }
+      return contentBuilder.toString(); 
+    } catch(Exception e) {
       e.printStackTrace();
     }
     return "";
-    // String queryParam = "q=" + encodeTerm(term)+"&key="+API_KEY; 
-    // String queryPath = path + queryParam;
-    // try {
-    //   URL url = new URL(queryPath);
-    //   HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-    //   connection.setRequestMethod("GET");
-    //   connection.connect();
-    //   int responseCode = connection.getResponseCode();
-    //   if (responseCode != 200) {
-    //     System.err.println("Error: connection response code is: " + responseCode);
-    //   }
-    //   return readJsonFile(url);   
-    // } catch(Exception e) {
-    //   e.printStackTrace();
-    // }
-    // return "";
   }
 }
