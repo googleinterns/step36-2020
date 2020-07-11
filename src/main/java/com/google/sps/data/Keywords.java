@@ -34,7 +34,7 @@ public final class Keywords {
   /**
    * @return a list of the 10 most salient keywords
    */
-  public static List<String> getKeywords(String key) throws EntityNotFoundException {
+  public static List<String> getKeywords(String key) {
     try {
       Key datastoreKey = KeyFactory.stringToKey(key);
       DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
