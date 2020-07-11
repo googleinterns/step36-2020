@@ -82,3 +82,19 @@ function loadCheckboxStateCookie(cookieName) {
       document.getElementById(cookieName).checked = (cookieValue === "true");
   }
 }
+
+/**
+ * Makes cookies for the user's latitude and longitude coordinates.
+ */
+function setLocationCookie() {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function(position) {
+        setCookie("latitude", position.coords.latitude, 1);
+        setCookie("longitude", position.coords.longitude, 1);
+      }, function(err) {
+        console.warn(`ERROR(${err.code}): ${err.message}`);
+        document.getElementById("location-warning")
+            .innerHTML = "We cannot access your location. Try checking your browswer settings";
+      })
+    };
+}
