@@ -62,10 +62,9 @@ async function renderTemplateObj(template, objs, keywords) {
     result.keywords[i] = keywordsObj;
   }
 
-  // TODO: Change true to if the user gave their location, and get real coordinates.
-  if (true) {
-    let lat = 33.969058;
-    let lng = -118.422146;
+  const lat = getCookie("latitude");
+  const lng = getCookie("longitude");
+  if (lat != "" && lng != "") {
     LOADING_TEXT.text("Getting your government officiasl...");
     let civicObj = await loadObject(`${CIVIC_OBJ_URL}?lat=${lat}&lng=${lng}`);
     let locationObj = new Object();
