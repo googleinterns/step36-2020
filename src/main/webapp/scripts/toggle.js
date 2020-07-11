@@ -1,6 +1,6 @@
 const KEYWORDS_TEMPLATE_URL = '/templates/keywords.html';
 
-const KEYWORDS_OBJ_URL = '/json/keywords.json';
+const KEYWORDS_OBJ_URL = '/keyword';
 
 const CIVIC_OBJ_URL = '/actions/civic'
 
