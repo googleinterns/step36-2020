@@ -23,6 +23,7 @@ import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import com.google.sps.data.UrlRequest;
 
 /**
  * Servlet for generating a map of each term to a 
@@ -32,6 +33,7 @@ import java.util.Map;
 public class BooksServlet extends HttpServlet {
 
   private final int NUM_BOOKS_PER_TERM = 5;
+  private static final String API_KEY = "AIzaSyD7NSsRElnqx6MTVSIq0-lRYe2sl2nosAk";
 
   /*
   * Writes a mapping of terms to lists of book objects in the servlet response.
@@ -125,22 +127,31 @@ public class BooksServlet extends HttpServlet {
   * @return String of Google Books API JSON response. 
   */
   private String getJsonStringForTerm(String term) {
-    String path = "https://www.googleapis.com/books/v1/volumes?";
-    String queryParam = "q=" + encodeTerm(term); 
-    String queryPath = path + queryParam;
     try {
-      URL url = new URL(queryPath);
-      HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-      connection.setRequestMethod("GET");
-      connection.connect();
-      int responseCode = connection.getResponseCode();
-      if (responseCode != 200) {
-        System.err.println("Error: connection response code is: " + responseCode);
-      }
-      return readJsonFile(url);   
-    } catch(Exception e) {
+      String path = "https://www.googleapis.com/books/v1/volumes?";
+      Map<String, String> params = new HashMap<>();
+      params.put("key", API_KEY);
+      params.put("q", term);
+      return UrlRequest.urlQuery(path, params);
+    } catch (Exception e) {
       e.printStackTrace();
     }
     return "";
+    // String queryParam = "q=" + encodeTerm(term)+"&key="+API_KEY; 
+    // String queryPath = path + queryParam;
+    // try {
+    //   URL url = new URL(queryPath);
+    //   HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+    //   connection.setRequestMethod("GET");
+    //   connection.connect();
+    //   int responseCode = connection.getResponseCode();
+    //   if (responseCode != 200) {
+    //     System.err.println("Error: connection response code is: " + responseCode);
+    //   }
+    //   return readJsonFile(url);   
+    // } catch(Exception e) {
+    //   e.printStackTrace();
+    // }
+    // return "";
   }
 }

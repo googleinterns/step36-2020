@@ -23,7 +23,7 @@ public class LocationServlet extends HttpServlet {
     private Map<String, String> geoMap = new HashMap<>();
 
     private static final String BASE_URL = "https://maps.googleapis.com/maps/api/geocode/json?";
-    private static final String API_KEY = "API_KEY"; // Insert actual API key to test.
+    private static final String API_KEY = "AIzaSyCug6dlEbSzp_M56-cU-h8Elbk1yPFNvLM"; // Insert actual API key to test.
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) {

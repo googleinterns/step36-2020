@@ -29,7 +29,7 @@ import java.util.TreeSet;
  */
 public final class Keywords {
 
-  private static final int MAX_NUM_KEYWORDS = 10;
+  private static final int MAX_NUM_KEYWORDS = 5;
 
   /**
    * @return a list of the 10 most salient keywords
@@ -129,4 +129,3 @@ public final class Keywords {
     }
   }  
 }
-
