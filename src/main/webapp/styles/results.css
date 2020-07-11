@@ -235,7 +235,7 @@
     box-shadow: 0 5px 15px rgba(0,0,0,0.5);
   }
   
-  .keyword:hover {
+  .keyword:hover:not(.location) {
     display: grid;
     grid: [row1-start] "title   close  " auto [row1-end]
           [row2-start] "books   books   " 1fr  [row2-end]

@@ -65,7 +65,7 @@ async function renderTemplateObj(template, objs, keywords) {
     let civicObj = await loadObject(`${CIVIC_OBJ_URL}?lat=${lat}&lng=${lng}`);
     let locationObj = new Object();
     locationObj.address = civicObj.normalizedInput;
-    locationObj.officials = extractOfficials(civicObj);
+    locationObj.levels = extractOfficials(civicObj);
     result.location = locationObj;
   }
   let htmlSections = Mustache.render(template, result);
