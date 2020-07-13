@@ -33,7 +33,7 @@ import java.util.Collections;
 public class BooksServlet extends HttpServlet {
 
   private final int NUM_BOOKS_PER_TERM = 5;
-  private static final String API_KEY = "API_KEY";  // Insert the API_KEY here for testing.
+  private static final String API_KEY = "AIzaSyD7NSsRElnqx6MTVSIq0-lRYe2sl2nosAk";  // Insert the API_KEY here for testing.
 
 
   /*
@@ -91,10 +91,29 @@ public class BooksServlet extends HttpServlet {
       JsonObject bookJson = booksJsonArray.get(i).getAsJsonObject().getAsJsonObject("volumeInfo"); 
       String title = bookJson.get("title").getAsString();
       String link = bookJson.get("infoLink").getAsString();
-      String image = bookJson.getAsJsonObject("imageLinks").get("thumbnail").getAsString();
-      String description = bookJson.get("description").getAsString();
-      String author = formatAuthors(bookJson.getAsJsonArray("authors"));
-      books.add(new Book.Builder(title, link).withImage(image).withDescription(description).withAuthor(author).build());
+      Book.Builder bookBuilder = new Book.Builder(title, link);
+      try {
+        String image = bookJson.getAsJsonObject("imageLinks").get("thumbnail").getAsString();
+        bookBuilder.withImage(image);
+      }
+      catch (NullPointerException e) {
+        e.printStackTrace();
+      }
+      try {
+        String description = bookJson.get("description").getAsString();
+        bookBuilder.withDescription(description);
+      }
+      catch (NullPointerException e) {
+        e.printStackTrace();
+      }
+      try {
+        String author = formatAuthors(bookJson.getAsJsonArray("authors"));
+        bookBuilder.withAuthor(author);
+      }
+      catch (NullPointerException e) {
+        e.printStackTrace();
+      }
+      books.add(bookBuilder.build());
     }
     return books;
   }
