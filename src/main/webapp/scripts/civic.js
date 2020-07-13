@@ -3,7 +3,17 @@
  */
 function extractOfficials(civicObj) {
   let officials = new Object();
-  const levels = ["administrativeArea1", "administrativeArea2", "country", "international", "locality", "regional", "special", "subLocality1", "subLocality2"];
+  const levels = [
+    "administrativeArea1",
+    "administrativeArea2",
+    "country",
+    "international",
+    "locality",
+    "regional",
+    "special",
+    "subLocality1",
+    "subLocality2",
+  ];
   levels.forEach((level) => {
     officials[level] = new Array();
   });
