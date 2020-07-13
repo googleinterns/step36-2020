@@ -49,7 +49,6 @@ public class BooksServlet extends HttpServlet {
       booksMap.put(term, books);
     });
     String json = encodeBookMapAsJson(booksMap);
-    System.out.println(json); // test
     response.getWriter().println(json);
   }
 
@@ -97,7 +96,6 @@ public class BooksServlet extends HttpServlet {
       String author = formatAuthors(bookJson.getAsJsonArray("authors"));
       books.add(new Book.Builder(title, link).withImage(image).withDescription(description).withAuthor(author).build());
     }
-    System.out.println(books);
     return books;
   }
 
@@ -133,7 +131,6 @@ public class BooksServlet extends HttpServlet {
     String path = "https://www.googleapis.com/books/v1/volumes?";
     String queryParam = "q=" + encodeTerm(term)+"&key="+API_KEY+"&country=US"; 
     String queryPath = path + queryParam;
-    System.out.println(queryPath); // test
     try {
       URL url = new URL(queryPath);
       HttpURLConnection connection = (HttpURLConnection) url.openConnection();
