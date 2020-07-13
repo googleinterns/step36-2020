@@ -49,10 +49,20 @@
         <p class="subtitle hide"><ion-icon name="location-outline"></ion-icon>{{city}}, {{state}}</p>
       {{/address}}
       <ion-icon class="close hide" name="close-outline"></ion-icon>
-      <div class="officials-section hide">
-
-      <!-- TODO: Add civic html here. -->
-
+      <div class="levels hide">
+        {{#levels}}
+          <div class="level">
+            <p class="level-name"><ion-icon name="chevron-forward-outline"></ion-icon>{{levelName}}</p>
+            <div class="profiles">
+              {{#officials}}
+                <div class="profile">
+                  <p>{{name}}</p>
+                  <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo, nemo! Atque excepturi asperiores quasi dolores suscipit qui exercitationem! Dicta quis illo dolorem voluptatem aliquam eius ipsum nostrum voluptatibus quam. Perspiciatis?</p>
+                </div>
+              {{/officials}}
+            </div>
+          </div>
+        {{/levels}}
       </div>
     </div> 
   {{/location}}

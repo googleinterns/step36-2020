@@ -1,30 +1,35 @@
 /**
  * Extract the government officials from the civic API response.
+ * Returns an array of objects. Each object has the following structure:
+ *   {levelType: level string as it appears in the API.
+ *    levelName: Readable level string,
+ *    officials: Officials object returned by the Google Civic API plus the title of the office they hold}
  */
-function extractOfficials(civicObj) {
-  let officials = new Object();
-  const levels = [
-    "administrativeArea1",
-    "administrativeArea2",
-    "country",
-    "international",
-    "locality",
-    "regional",
-    "special",
-    "subLocality1",
-    "subLocality2",
-  ];
-  levels.forEach((level) => {
-    officials[level] = new Array();
-  });
+function officialsByLevel(civicObj) {
+  let levelsArray = new Array();
+  const levels = {"international" : "International",
+                  "country" : "Country",
+                  "regional" : "Regional",
+                  "administrativeArea2" : "Administrative Area 2",
+                  "administrativeArea1" : "Administrative Area 1",
+                  "locality" : "Locality",
+                  "subLocality2" : "Sublocality 2",
+                  "subLocality1" : "Sublocality 1",
+                  "special" : "Special",};
+  for (const level in levels) {
+    let levelsObj = new Object();
+    levelsObj.levelType = level;
+    levelsObj.levelName = levels[level]
+    levelsObj.officials = new Array();
+    levelsArray.push(levelsObj);
+  }
   civicObj.offices.forEach((officeObj) => {
     const level = officeObj.levels[0];
-    // Loop through the officials Indices that work at the current office, and add them to their coresponding level.
     officeObj.officialIndices.forEach((officialIndex) => {
       let official = civicObj.officials[officialIndex];
       official.title = officeObj.name;
-      officials[level].push(official);
+      levelsArray.find(obj => obj.levelType === level).officials.push(official);
     });
   });
-  return officials;
+  return levelsArray.filter(obj => obj.officials.length > 0);
 }
