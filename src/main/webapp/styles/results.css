@@ -41,7 +41,7 @@
   height: 50vh;
   background-color: white;
   box-shadow: 0 1px 2px rgba(0,0,0,0.25);
-  border-radius: 3em;
+  border-radius: 3vh;
   display: flex;
   transition: all 0.3s ease-in-out;
   justify-content: center;
@@ -56,6 +56,7 @@
   writing-mode: vertical-rl;
   transition: all 0.3s ease-in-out;
   height: auto;
+  font-size: 1.2vw;
 }
 
 .active {
@@ -71,7 +72,7 @@
         [row2-start] "books    books   " 1fr  [row2-end]
         [row3-start] "line    line   " auto [row3-end]
         [row4-start] "actions actions" 1fr  [row4-end]
-        / auto 3em;
+        / 96% 4%;
   place-items: center center;
   transition: all 0.3s ease-in-out;
   font-weight: normal;
@@ -80,7 +81,7 @@
 .active > .title {
   padding: 3vh 0;
   font-weight: bold;
-  font-size: 1.5em;
+  font-size: 2.5vh;
   transform: rotate(0deg);
   writing-mode: horizontal-tb;
   transition: all 0.5s ease-in-out;
@@ -102,7 +103,7 @@
 .active .section-header {
   font-family: 'Oswald', sans-serif;
   font-weight: normal;
-  font-size: 1.6em;
+  font-size: 2.3vh;
 }
 
 .active > hr {
@@ -137,17 +138,22 @@
   grid-area: actions;
 }
 
+.error {
+  font-size: 1.5vh;
+}
+
 .item {
   width: 100%;
   margin: 0.5vh 0;	
   transition: all 0.3s ease-in-out;
+  font-size: 1.3vh;
 }
 
 .active .item {
   position: relative;
   display: inline-block;
-  border-radius: 0.5em;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.15);
+  border-radius: 1vh;
+  box-shadow: 0 0.1vh 0.2vw rgba(0,0,0,0.15);
   padding: 0 1vw;
 }
 
@@ -159,8 +165,8 @@
   width: 100%;
   height: 100%;
   opacity: 0;
-  border-radius: 5px;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  border-radius: 1vh;
+  box-shadow: 0 0.5vh 1.5vw rgba(0,0,0,0.3);
   transition: opacity 0.3s ease-in-out;
   display: flex;
   justify-content: center;
@@ -179,8 +185,8 @@
   display: inline;
   grid-area: close;
   place-self: start center;
-  margin: 1em 0;
-  font-size: 1.5em;
+  margin: 1vh;
+  font-size: 2.5vh;
   cursor: pointer;
 }
 
@@ -211,11 +217,16 @@
     transform: rotate(0deg);
     writing-mode: horizontal-tb;
     width: auto;
+    font-size: 1.5vh;
   }
   
   .active {
     width: 95vw;
     height: 95vh;
+  }
+
+  .active > .title {
+    font-size: 2.5vh;
   }
 }
 
@@ -241,7 +252,7 @@
           [row2-start] "books   books   " 1fr  [row2-end]
           [row3-start] "line    line   " auto [row3-end]
           [row4-start] "actions actions" 1fr  [row4-end]
-          / auto 3em;
+          / 96% 4%;
     place-items: center center;
     transition: all 0.3s ease-in-out;
     font-weight: normal;
@@ -250,7 +261,7 @@
   .keyword:hover > .title {
     padding: 3vh 0;
     font-weight: bold;
-    font-size: 1.5em;
+    font-size: 2.5vh;
     transform: rotate(0deg);
     writing-mode: horizontal-tb;
     transition: all 0.5s ease-in-out;
@@ -318,8 +329,8 @@
     display: inline;
     grid-area: close;
     place-self: start center;
-    margin: 1em 0;
-    font-size: 1.5em;
+    margin: 1vh;
+    font-size: 2.5vh;
     cursor: pointer;
   }
 
