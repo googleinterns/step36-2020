@@ -5,7 +5,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-// import java.io.NullPointerException;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -38,7 +37,7 @@ public class ProjectsServlet extends HttpServlet {
         String jsonResult = UrlRequest.urlQuery(API_PATH, queryParams);
         List<Project> projectsList = extractProjectsList(jsonResult);
         jsonResultMap.put(term, projectsList);
-      } catch (NullPointerException npe) {
+      } catch(NullPointerException npe) {
         npe.printStackTrace();
         jsonResultMap.put(term, Collections.emptyList());
       }

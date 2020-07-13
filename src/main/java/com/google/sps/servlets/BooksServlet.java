@@ -48,7 +48,8 @@ public class BooksServlet extends HttpServlet {
         String jsonString = getJsonStringForTerm(term);
         List<Book> books = makeBooksList(jsonString);
         booksMap.put(term, books);
-      } catch(Exception e) {
+      } catch(NullPointerException npe) {
+        npe.printStackTrace();
         booksMap.put(term, Collections.emptyList());
       }
     });
