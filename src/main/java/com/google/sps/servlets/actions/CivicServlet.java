@@ -17,7 +17,7 @@ import com.google.sps.data.UrlRequest;
 @WebServlet("/actions/civic")
 public class CivicServlet extends HttpServlet {
 
-  private static final String API_KEY = "AIzaSyBo7lPkMm8f8dlxCmWL0Udc88P5vflBXr0";  // Insert the API_KEY here for testing.
+  private static final String API_KEY = "API_KEY";  // Insert the API_KEY here for testing.
   private static final String API_PATH = "https://www.googleapis.com/civicinfo/v2/representatives";
 
   @Override

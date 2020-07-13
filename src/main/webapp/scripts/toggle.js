@@ -65,12 +65,16 @@ async function renderTemplateObj(template, objs, keywords) {
   const lat = getCookie("latitude");
   const lng = getCookie("longitude");
   if (lat != "" && lng != "") {
-    LOADING_TEXT.text("Getting your government officiasl...");
-    let civicObj = await loadObject(`${CIVIC_OBJ_URL}?lat=${lat}&lng=${lng}`);
-    let locationObj = new Object();
-    locationObj.address = civicObj.normalizedInput;
-    locationObj.levels = extractOfficials(civicObj);
-    result.location = locationObj;
+    LOADING_TEXT.text("Getting your government officials...");
+    try{
+      let civicObj = await loadObject(`${CIVIC_OBJ_URL}?lat=${lat}&lng=${lng}`);
+      let locationObj = new Object();
+      locationObj.address = civicObj.normalizedInput;
+      locationObj.levels = extractOfficials(civicObj);
+      result.location = locationObj;
+    } catch(err) {
+      alert("We couldn't find any civic information for your location.");
+    }
   }
   let htmlSections = Mustache.render(template, result);
   return htmlSections;
