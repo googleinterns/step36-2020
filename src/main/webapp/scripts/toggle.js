@@ -92,7 +92,7 @@ async function loadCivicSection() {
 }
 
 /**
- * Builds a keyword object given a civic object return by the civic API.
+ * Builds a keyword object given a civic object returned by the civic API.
  */
 function buildLocationObj(civicObj) {
   let locationObj = new Object();
