@@ -44,10 +44,13 @@ public class BooksServlet extends HttpServlet {
     List<String> terms = Arrays.asList(request.getParameterValues("key"));
     LinkedHashMap<String, List<Book>> booksMap = new LinkedHashMap<>();
     terms.forEach((term) -> {
-      // String jsonString = getJsonStringForTerm(term);
-      // List<Book> books = makeBooksList(jsonString);
-      // booksMap.put(term, books);
-      booksMap.put(term, Collections.emptyList());
+      try {
+        String jsonString = getJsonStringForTerm(term);
+        List<Book> books = makeBooksList(jsonString);
+        booksMap.put(term, books);
+      } catch(Exception e) {
+        booksMap.put(term, Collections.emptyList());
+      }
     });
     String json = encodeBookMapAsJson(booksMap);
     response.getWriter().println(json);
