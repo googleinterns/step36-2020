@@ -14,7 +14,7 @@ import com.google.gson.reflect.TypeToken;
 import com.google.sps.data.UrlRequest;
 
 /** Servlet that gets civic information. */
-@WebServlet("/civic")
+@WebServlet("/actions/civic")
 public class CivicServlet extends HttpServlet {
 
   private static final String API_KEY = "API_KEY";  // Insert the API_KEY here for testing.
@@ -51,6 +51,7 @@ public class CivicServlet extends HttpServlet {
       Map<String, String> apiQueryParams = new HashMap<>();
       apiQueryParams.put("key", API_KEY);
       apiQueryParams.put("address", address);
+      apiQueryParams.put("prettyPrint", "false");
       String jsonResult = UrlRequest.urlQuery(API_PATH, apiQueryParams);
       response.setContentType("application/json;");
       response.getWriter().println(jsonResult);

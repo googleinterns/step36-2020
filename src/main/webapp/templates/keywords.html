@@ -21,7 +21,7 @@
       <hr class="hide"> 
       <div class="actions-section hide">
         <div class="section-header">Projects</div>
-        {{#actions}}
+        {{#projects}}
           <div class="action item" data-url="{{url}}">
             <p class="action-title element-title">{{title}}</p>
             <p class="action-content hide summary">{{summary}}</p>
@@ -29,14 +29,31 @@
               <p>Learn More <ion-icon name="arrow-forward-outline"></ion-icon></p>
             </div>
           </div>
-        {{/actions}}
-        {{^actions}}
+        {{/projects}}
+        {{^projects}}
           <div class="action">Sorry, we couldn't find any projects for you</div>
-        {{/actions}}
+        {{/projects}}
       </div>
     </div>
   {{/keywords}}
   {{^keywords}}
-    <div class="keyword">Sorry, we couldn't extract any keywords</div>  
+    <div class="keyword">
+      <p class="title">Sorry, we couldn't extract any keywords</p>
+      <ion-icon class="close hide" name="close-outline"></ion-icon>
+    </div> 
   {{/keywords}}
+  {{#location}}
+    <div class="keyword location">
+      <p class="title">Government Officials</p>
+      {{#address}}
+        <p class="subtitle hide"><ion-icon name="location-outline"></ion-icon>{{city}}, {{state}}</p>
+      {{/address}}
+      <ion-icon class="close hide" name="close-outline"></ion-icon>
+      <div class="officials-section hide">
+
+      <!-- TODO: Add civic html here. -->
+
+      </div>
+    </div> 
+  {{/location}}
 </div>
