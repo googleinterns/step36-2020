@@ -12,7 +12,7 @@ $().ready(function() {
     $("#keyword-form, #text-input").removeClass("hide");
     $("#keyword-form").attr("action", "/keyword");
     $("#blob-input").addClass("hide");
-    $("#form-title *").text("Copy Your Tweet Tere");
+    $("#form-title *").text("Copy Your Tweet Here");
   });
 });
 
