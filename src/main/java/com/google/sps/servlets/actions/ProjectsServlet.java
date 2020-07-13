@@ -16,9 +16,9 @@ import com.google.gson.reflect.TypeToken;
 import com.google.sps.data.Project;
 import com.google.sps.data.UrlRequest;
 
-/** Servlet that gets actions items. */
-@WebServlet("/actions")
-public class ActionsServlet extends HttpServlet {
+/** Servlet that queries projects from the Global Giving API. */
+@WebServlet("/actions/projects")
+public class ProjectsServlet extends HttpServlet {
 
   private static final String API_KEY = "API_KEY";  // Insert the API_KEY here for testing.
   private static final String API_PATH = "https://api.globalgiving.org/api/public/services/search/projects";
