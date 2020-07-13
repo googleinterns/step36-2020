@@ -2,6 +2,11 @@
   background-color: rgba(255, 255, 255, 0.2);
   box-shadow: 0 1px 2px rgba(0,0,0,0.15);
   margin: 2vh 1vw;
+  padding: 0 1vw;
+  min-width: 350px;
+  width: auto;
+  max-width: 35vw;
+  display: none;
 }
 
 .profile-name {
@@ -18,6 +23,7 @@
   height: auto;
   max-height: 15vh;
   max-width: 50%;
+  min-width: 35%;
 }
 
 @media (any-hover:hover) {

@@ -15,6 +15,8 @@
 
 .subtitle {
   grid-area: location;
+  font-size: 2vh;
+  margin: 0 0 auto;
 }
 
 .levels {
@@ -30,6 +32,7 @@
   margin: 0;
   padding: 0;
   text-align: center;
+  font-size: 1.1vh;
 }
 
 ion-icon {
@@ -43,12 +46,13 @@ ion-icon {
   cursor: pointer;
   background-color: rgba(0, 0, 0, 0);
   transition: background-color 0.2s ease-in-out;
+  font-size: 1.5vh;
 }
 
 .extended > .level-name {
   font-family: 'Oswald', sans-serif;
   font-weight: bold;
-  font-size: 130%;
+  font-size: 1.7vh;
   letter-spacing: 110%;
   background-color: rgba(0, 0, 0, 0.1);
 }
@@ -70,11 +74,6 @@ ion-icon {
   opacity: 1;
   height: 50vh;
   overflow: auto;
-}
-
-.profile {
-  width: 350px;
-  display: none;
 }
 
 .extended .profile {
