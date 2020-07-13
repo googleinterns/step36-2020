@@ -28,6 +28,7 @@ import java.util.stream.Collectors;
 
 /**
  * Provide methods for the storage, extraction, and retrieval of keywords.
+ * TODO: Change to more object-oriented design (Abstract class or Interface)
  */
 public final class Keywords {
 
@@ -54,17 +55,18 @@ public final class Keywords {
    * @return the key pointing to the newly added datastore entity.
    */
   public static String addKeywords(List<EntityAnnotation> blobAnalysis) throws IOException {
-    String labels = "";
+    List<String> labelList = new ArrayList<>();
     for (EntityAnnotation label : blobAnalysis) {
-      labels += label.getDescription() + ", ";
+      labelList.add(label.getDescription());
     }
-    return addToDatastore(labels);
+    String labelSentence = String.join(", ", labelList);
+    return addToDatastore(labelSentence);
   }
 
   /**
    * Adds the salient keywords from the analysis of a textual user input into the datastore.
    * This method overloads addKeywords() mainly to streamline how keywords are extracted
-   * and added into the keyword. Instead of having to call addToDatastore(message) for one
+   * and added into the datastore. Instead of having to call addToDatastore(message) for one
    * class, and addKeywords(blobAnalysis) for another, it makes more sense and is easier to 
    * call just addKeywords(parameter) in both classes.
    * @return the key pointing to the newly added datastore entity.
