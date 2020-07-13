@@ -107,7 +107,7 @@ public class ImageServlet extends HttpServlet {
           blobstoreService.fetchData(blobKey, currentByteIndex, currentByteIndex + fetchSize - 1);
       outputBytes.write(b);
 
-      // if we read fewer bytes than we requested, then we reached the end.
+      // If we read fewer bytes than we requested, then we reached the end.
       continueReading = b.length >= fetchSize;
       currentByteIndex += fetchSize;
     }
