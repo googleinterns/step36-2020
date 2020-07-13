@@ -38,7 +38,7 @@ public class ImageServlet extends HttpServlet {
   private static final int MAX_NUM_KEYWORDS = 10;
 
   /**
-   * Writes an upload URL for file uploads to the servlet
+   * Writes an upload URL for file uploads to the servlet.
    */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -58,7 +58,7 @@ public class ImageServlet extends HttpServlet {
     byte[] blobBytes = getBlobBytes(blobKey);
     List<EntityAnnotation> annotations = getImageLabels(blobBytes);
    
-    // Create an array of labels for printing the appropriate JSON 
+    // Create an array of labels for printing the appropriate JSON.
     List<String> imageLabels = new ArrayList<>();;
     for (int i = 0; i < imageLabels.size() && i < MAX_NUM_KEYWORDS; i++) {
       imageLabels.add(annotations.get(i).getDescription());
@@ -78,16 +78,11 @@ public class ImageServlet extends HttpServlet {
     Map<String, List<BlobKey>> blobs = blobstoreService.getUploads(request);
     List<BlobKey> blobKeys = blobs.get(formInputElementName);
 
-    // User submitted form without selecting a file, so we can't get a BlobKey.
-    if (blobKeys == null || blobKeys.isEmpty()) {
-      return null;
-    }
-
     // Our form only contains a single file input, so get the first index.
     BlobKey blobKey = blobKeys.get(0);
     System.out.println(blobKey.getKeyString());
 
-    // User submitted form without selecting a file, so the BlobKey is empty.
+    // User submitted form without selecting a file, so the BlobKey is empty (live).
     BlobInfo blobInfo = new BlobInfoFactory().loadBlobInfo(blobKey);
     if (blobInfo.getSize() == 0) {
       blobstoreService.delete(blobKey);
@@ -107,12 +102,12 @@ public class ImageServlet extends HttpServlet {
     long currentByteIndex = 0;
     boolean continueReading = true;
     while (continueReading) {
-      // end index is inclusive, so we have to subtract 1 to get fetchSize bytes
+      // End index is inclusive, so we have to subtract 1 to get fetchSize bytes.
       byte[] b =
           blobstoreService.fetchData(blobKey, currentByteIndex, currentByteIndex + fetchSize - 1);
       outputBytes.write(b);
 
-      // if we read fewer bytes than we requested, then we reached the end
+      // if we read fewer bytes than we requested, then we reached the end.
       continueReading = b.length >= fetchSize;
       currentByteIndex += fetchSize;
     }
@@ -120,7 +115,7 @@ public class ImageServlet extends HttpServlet {
   }
 
   /**
-   * Creates a list of  that apply to the image
+   * Creates a list of  that apply to the image, which is
    * represented by the binary data stored in imgBytes.
    */
   private List<EntityAnnotation> getImageLabels(byte[] imgBytes) throws IOException {
