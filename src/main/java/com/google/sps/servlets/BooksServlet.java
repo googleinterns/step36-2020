@@ -33,7 +33,7 @@ import java.util.Collections;
 public class BooksServlet extends HttpServlet {
 
   private final int NUM_BOOKS_PER_TERM = 5;
-  private static final String API_KEY = "AIzaSyD7NSsRElnqx6MTVSIq0-lRYe2sl2nosAk";  // Insert the API_KEY here for testing.
+  private static final String API_KEY = "API_KEY";  // Insert the API_KEY here for testing.
 
 
   /*
@@ -157,7 +157,7 @@ public class BooksServlet extends HttpServlet {
       connection.connect();
       int responseCode = connection.getResponseCode();
       if (responseCode != 200) {
-        System.err.println("Error: connection response code for books is: " + responseCode);
+        System.err.println("Error: connection response code for Books API is: " + responseCode);
       }
       return readJsonFile(url);   
     } catch(Exception e) {
