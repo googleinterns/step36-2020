@@ -1,4 +1,6 @@
-const KEYWORDS_TEMPLATE_URL = '/templates/keywords.html';
+const KEYWORD_TEMPLATE_PROMISE = loadTemplate('/templates/keyword.html');
+const LOCATION_TEMPLATE_PROMISE = loadTemplate('/templates/location.html');
+const NO_KEYWORDS_HTML = loadTemplate('/templates/noKeywords.html')
 
 const KEYWORDS_OBJ_URL = '/keyword';
 
@@ -8,18 +10,25 @@ const BOOKS_OBJ_URL =  '/books';
 const PROJECTS_OBJ_URL = '/actions/projects';
 const OBJECTS_URLS = [BOOKS_OBJ_URL, PROJECTS_OBJ_URL];
 
-const LOADING_TEXT = $("#loading-text");
-
-const KEYWORDS_PROMISE = loadKeywords(KEYWORDS_OBJ_URL);
-
-const HTML_SECTIONS_PROMISE = loadHtmlSections(KEYWORDS_TEMPLATE_URL, OBJECTS_URLS, KEYWORDS_PROMISE);
+/**
+ * Loads the content section.
+ */
+async function loadContentSection() {
+  const keywords = await loadKeywords(KEYWORDS_OBJ_URL);
+  if (keywords.length === 0) {
+    loadNoKewyords();
+  } else {
+    keywords.forEach(loadKeywordSection);
+  }
+  loadCivicSection();
+  return;
+}
 
 /**
  * Loads the keywords array from a servlet or from cookies.
  * Returns a promise of the keywords array.
  */
 async function loadKeywords(keywordsUrl) {
-  LOADING_TEXT.text("Loading your keywords...");
   const key = $("body").attr("data-key");
   let keywords;
   const keywordsCookie = getCookie(key);
@@ -33,67 +42,69 @@ async function loadKeywords(keywordsUrl) {
   return keywords;
 }
 
-/**
- * Loads an array of html templates, an array of json objects, and renders them using mustache.
- * Returns a promise.all of all the render html sections.
- */
-async function loadHtmlSections(templateUrl, objsUrls, keywordsPromise) {
-  const htmlTemplatePromise = loadTemplate(templateUrl);
-  const keywords = await keywordsPromise;
-  const queryString = `?key=${keywords.join('&key=')}`;
-  objsUrls = objsUrls.map(url => `${url}${queryString}`);
-  const objsPromises = loadUrls(objsUrls, loadObject);
-  LOADING_TEXT.text("Looking up books and projects...")
-  const values =  await Promise.all([htmlTemplatePromise, objsPromises]);
-  const template = values[0];
-  const objs = values[1];
-  return await renderTemplateObj(template, objs, keywords);
+async function loadNoKewyords() {
+  const noKeywordsHTML = await NO_KEYWORDS_HTML;
+  $('#keywords').append(noKeywordsHTML);
 }
 
-async function renderTemplateObj(template, objs, keywords) {
-  let result = new Object();
-  result.keywords = new Array(keywords.length);
-  for (let i = 0; i < keywords.length; i++) {
-    let term = keywords[i];
-    let keywordsObj = new Object();
-    keywordsObj.term = term;
-    keywordsObj.books = objs[0].books[term];
-    keywordsObj.projects = objs[1].results[term];
-    result.keywords[i] = keywordsObj;
-  }
+/**
+ * Loads a keyword section to the DOM.
+ */
+async function loadKeywordSection(keyword) {
+  const queryString = `?key=${keyword}`;
+  const objsUrls = OBJECTS_URLS.map(url => `${url}${queryString}`);
+  const objs = await loadUrls(objsUrls, loadObject);
+  const keywordObj = buildKeywordObj(objs[0], objs[1], keyword);
+  const template = await KEYWORD_TEMPLATE_PROMISE;
+  renderKeyword(template, keywordObj);
+  return;
+}
 
+/**
+ * Builds a keyword object given a keyword, books, and projects.
+ */
+function buildKeywordObj(booksObj, projectsObj, keyword) {
+  let keywordObj = new Object();
+  keywordObj.term = keyword;
+  keywordObj.books = booksObj.books[keyword];
+  keywordObj.projects = projectsObj.results[keyword];
+  return keywordObj;
+}
+
+function renderKeyword(template, keywordObj) {
+  const keywordHTML = Mustache.render(template, keywordObj);
+  $('#keywords').prepend(keywordHTML);
+}
+
+/**
+ * Loads the civic section to the DOM, or alerts the user if there aren't any results for their location.
+ */
+async function loadCivicSection() {
   const lat = getCookie("latitude");
   const lng = getCookie("longitude");
   if (lat != "" && lng != "") {
-    LOADING_TEXT.text("Getting your government officials...");
     try{
-      let civicObj = await loadObject(`${CIVIC_OBJ_URL}?lat=${lat}&lng=${lng}`);
-      let locationObj = new Object();
-      locationObj.address = civicObj.normalizedInput;
-      locationObj.levels = extractOfficials(civicObj);
-      result.location = locationObj;
+      const civicObj = await loadObject(`${CIVIC_OBJ_URL}?lat=${lat}&lng=${lng}`);
+      const locationObj = buildLocationObj(civicObj);
+      const locationTemplate = await LOCATION_TEMPLATE_PROMISE;
+      renderLocation(locationTemplate, locationObj);
     } catch(err) {
       alert("We couldn't find any civic information for your location.");
     }
   }
-  let htmlSections = Mustache.render(template, result);
-  return htmlSections;
 }
 
 /**
- * Activates the section that triggered the event.
+ * Builds a keyword object given a civic object return by the civic API.
  */
-function activateSection(event) {
-  const selectedOption = event.currentTarget.value;
-  loadSection(selectedOption);
-  return;
+function buildLocationObj(civicObj) {
+  let locationObj = new Object();
+  locationObj.address = civicObj.normalizedInput;
+  locationObj.levels = extractOfficials(civicObj);
+  return locationObj;
 }
 
-/**
- * Loads the content section.
- */
-async function loadContentSection() {
-  const htmlSection = await HTML_SECTIONS_PROMISE;
-  $("#content").html(htmlSection);
-  return;
+function renderLocation(template, locationObj) {
+  const locationHTML = Mustache.render(template, locationObj);
+  $('#keywords').append(locationHTML);
 }
