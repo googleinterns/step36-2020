@@ -44,12 +44,12 @@ public class BooksServlet extends HttpServlet {
     List<String> terms = Arrays.asList(request.getParameterValues("key"));
     LinkedHashMap<String, List<Book>> booksMap = new LinkedHashMap<>();
     terms.forEach((term) -> {
-      // String jsonString = getJsonStringForTerm(term);
-      // List<Book> books = makeBooksList(jsonString);
-      // booksMap.put(term, books);
-      booksMap.put(term, Collections.emptyList());
+      String jsonString = getJsonStringForTerm(term);
+      List<Book> books = makeBooksList(jsonString);
+      booksMap.put(term, books);
     });
     String json = encodeBookMapAsJson(booksMap);
+    System.out.println(json); // test
     response.getWriter().println(json);
   }
 
@@ -97,6 +97,7 @@ public class BooksServlet extends HttpServlet {
       String author = formatAuthors(bookJson.getAsJsonArray("authors"));
       books.add(new Book.Builder(title, link).withImage(image).withDescription(description).withAuthor(author).build());
     }
+    System.out.println(books);
     return books;
   }
 
@@ -130,8 +131,9 @@ public class BooksServlet extends HttpServlet {
   */
   private String getJsonStringForTerm(String term) {
     String path = "https://www.googleapis.com/books/v1/volumes?";
-    String queryParam = "q=" + encodeTerm(term)+"&key="+API_KEY; 
+    String queryParam = "q=" + encodeTerm(term)+"&key="+API_KEY+"&country=US"; 
     String queryPath = path + queryParam;
+    System.out.println(queryPath); // test
     try {
       URL url = new URL(queryPath);
       HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -139,7 +141,7 @@ public class BooksServlet extends HttpServlet {
       connection.connect();
       int responseCode = connection.getResponseCode();
       if (responseCode != 200) {
-        System.err.println("Error: connection response code is: " + responseCode);
+        System.err.println("Error: connection response code for books is: " + responseCode);
       }
       return readJsonFile(url);   
     } catch(Exception e) {
