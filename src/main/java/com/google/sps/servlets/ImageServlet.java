@@ -42,7 +42,6 @@ public class ImageServlet extends HttpServlet {
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     BlobstoreService blobstore = BlobstoreServiceFactory.getBlobstoreService();
     String uploadUrl = blobstore.createUploadUrl("/user-image");
-
     response.getWriter().println(uploadUrl);
   }
 
@@ -54,7 +53,6 @@ public class ImageServlet extends HttpServlet {
       response.sendRedirect("/index.html");
       return;
     }
-
     byte[] blobBytes = getBlobBytes(blobKey);
     List<EntityAnnotation> annotations = getImageLabels(blobBytes);
     String key = Keywords.addKeywords(annotations);
@@ -95,7 +93,6 @@ public class ImageServlet extends HttpServlet {
   private byte[] getBlobBytes(BlobKey blobKey) throws IOException {
     BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
     ByteArrayOutputStream outputBytes = new ByteArrayOutputStream();
-
     int fetchSize = BlobstoreService.MAX_BLOB_FETCH_SIZE;
     long currentByteIndex = 0;
     boolean continueReading = true;
@@ -106,13 +103,9 @@ public class ImageServlet extends HttpServlet {
       outputBytes.write(b);
 
       // if we read fewer bytes than we requested, then we reached the end
-      if (b.length < fetchSize) {
-        continueReading = false;
-      }
-
+      continueReading = b.length >= fetchSize;
       currentByteIndex += fetchSize;
     }
-
     return outputBytes.toByteArray();
   }
 
