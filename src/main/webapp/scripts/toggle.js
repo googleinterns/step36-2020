@@ -3,9 +3,9 @@ const KEYWORDS_TEMPLATE_URL = '/templates/keywords.html';
 const KEYWORDS_OBJ_URL = '/json/keywords.json';
 const CIVIC_OBJ_URL = '/actions/civic'
 
-const NEWS_OBJ_URL =  '/json/news.json';
+const BOOKS_OBJ_URL =  '/books';
 const PROJECTS_OBJ_URL = '/actions/projects';
-const OBJECTS_URLS = [NEWS_OBJ_URL, PROJECTS_OBJ_URL];
+const OBJECTS_URLS = [BOOKS_OBJ_URL, PROJECTS_OBJ_URL];
 
 const KEYWORDS_PROMISE = loadKeywords(KEYWORDS_OBJ_URL);
 
