@@ -3,7 +3,6 @@ const LOCATION_TEMPLATE_PROMISE = loadTemplate('/templates/location.html');
 const NO_KEYWORDS_HTML = loadTemplate('/templates/noKeywords.html')
 
 const KEYWORDS_OBJ_URL = '/keyword';
-
 const CIVIC_OBJ_URL = '/actions/civic'
 
 const BOOKS_OBJ_URL =  '/books';
@@ -16,12 +15,11 @@ const OBJECTS_URLS = [BOOKS_OBJ_URL, PROJECTS_OBJ_URL];
 async function loadContentSection() {
   const keywords = await loadKeywords(KEYWORDS_OBJ_URL);
   if (keywords.length === 0) {
-    loadNoKewyords();
+    loadNoKeywords();
   } else {
     keywords.forEach(loadKeywordSection);
   }
   loadCivicSection();
-  return;
 }
 
 /**
@@ -42,7 +40,7 @@ async function loadKeywords(keywordsUrl) {
   return keywords;
 }
 
-async function loadNoKewyords() {
+async function loadNoKeywords() {
   const noKeywordsHTML = await NO_KEYWORDS_HTML;
   $('#keywords').append(noKeywordsHTML);
 }
@@ -57,7 +55,6 @@ async function loadKeywordSection(keyword) {
   const keywordObj = buildKeywordObj(objs[0], objs[1], keyword);
   const template = await KEYWORD_TEMPLATE_PROMISE;
   renderKeyword(template, keywordObj);
-  return;
 }
 
 /**
@@ -83,12 +80,12 @@ async function loadCivicSection() {
   const lat = getCookie("latitude");
   const lng = getCookie("longitude");
   if (lat != "" && lng != "") {
-    try{
+    try {
       const civicObj = await loadObject(`${CIVIC_OBJ_URL}?lat=${lat}&lng=${lng}`);
       const locationObj = buildLocationObj(civicObj);
       const locationTemplate = await LOCATION_TEMPLATE_PROMISE;
       renderLocation(locationTemplate, locationObj);
-    } catch(err) {
+    } catch (err) {
       alert("We couldn't find any civic information for your location.");
     }
   }
