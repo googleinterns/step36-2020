@@ -1,0 +1,32 @@
+<div class="keyword location">
+  <p class="title">Government Officials</p>
+  {{#address}}
+    <p class="subtitle hide"><ion-icon name="location-outline"></ion-icon>{{city}}, {{state}}</p>
+  {{/address}}
+  <ion-icon class="close hide" name="close-outline"></ion-icon>
+  <div class="levels hide">
+    {{#levels}}
+      <div class="level">
+        <p class="level-name"><ion-icon name="chevron-forward-outline"></ion-icon>{{levelName}}</p>
+        <div class="profiles">
+          {{#officials}}
+            <div class="profile">
+              <p><a href="{{urls.0}}" class="profile-name">{{name}}</a></p>
+              <p class="profile-title">{{title}}</p>
+              <img src="{{photoUrl}}" class="profile-img">
+              {{#phones}}
+                <p class-"profile-phone">{{.}}</p>
+              {{/phones}}
+              {{#emails}}
+                <p class-"profile-email">{{.}}</p>
+              {{/emails}}
+              {{#channels}}
+                <p clas="profile-channel"><b>{{type}}:</b> {{id}}</p>
+              {{/channels}}
+            </div>
+          {{/officials}}
+        </div>
+      </div>
+    {{/levels}}
+  </div>
+</div> 

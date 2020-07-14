@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Map;
 import java.util.HashMap;
 import java.lang.reflect.Type;
@@ -31,10 +32,15 @@ public class ProjectsServlet extends HttpServlet {
     queryParams.put("api_key", API_KEY);
     queryParams.put("q", "");
     for (String term : terms) {
-      queryParams.replace("q", term);
-      String jsonResult = UrlRequest.urlQuery(API_PATH, queryParams);
-      List<Project> projectsList = extractProjectsList(jsonResult);
-      jsonResultMap.put(term, projectsList);
+      try {
+        queryParams.replace("q", term);
+        String jsonResult = UrlRequest.urlQuery(API_PATH, queryParams);
+        List<Project> projectsList = extractProjectsList(jsonResult);
+        jsonResultMap.put(term, projectsList);
+      } catch(NullPointerException npe) {
+        npe.printStackTrace();
+        jsonResultMap.put(term, Collections.emptyList());
+      }
     }
   
     Gson gson = new Gson();
