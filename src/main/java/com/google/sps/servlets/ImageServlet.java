@@ -36,13 +36,12 @@ import javax.servlet.http.HttpServletResponse;
 public class ImageServlet extends HttpServlet {
 
   /**
-   * Writes an upload URL for file uploads to the servlet
+   * Writes an upload URL for file uploads to the servlet.
    */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     BlobstoreService blobstore = BlobstoreServiceFactory.getBlobstoreService();
     String uploadUrl = blobstore.createUploadUrl("/user-image");
-
     response.getWriter().println(uploadUrl);
   }
 
@@ -54,11 +53,18 @@ public class ImageServlet extends HttpServlet {
       response.sendRedirect("/index.html");
       return;
     }
-
     byte[] blobBytes = getBlobBytes(blobKey);
     List<EntityAnnotation> annotations = getImageLabels(blobBytes);
-    String key = Keywords.addKeywords(annotations);
-    response.sendRedirect(String.format("/results?k=%s", key));
+   
+    // Create an array of labels for printing the appropriate JSON.
+    List<String> imageLabels = new ArrayList<>();;
+    for (int i = 0; i < imageLabels.size() && i < MAX_NUM_KEYWORDS; i++) {
+      imageLabels.add(annotations.get(i).getDescription());
+    }
+    Gson gson = new Gson();
+    String json = gson.toJson(imageLabels);
+    writer.println(json);
+    response.sendRedirect("/main.html");
   }
 
   /**
@@ -70,16 +76,11 @@ public class ImageServlet extends HttpServlet {
     Map<String, List<BlobKey>> blobs = blobstoreService.getUploads(request);
     List<BlobKey> blobKeys = blobs.get(formInputElementName);
 
-    // User submitted form without selecting a file, so we can't get a BlobKey.
-    if (blobKeys == null || blobKeys.isEmpty()) {
-      return null;
-    }
-
     // Our form only contains a single file input, so get the first index.
     BlobKey blobKey = blobKeys.get(0);
     System.out.println(blobKey.getKeyString());
 
-    // User submitted form without selecting a file, so the BlobKey is empty.
+    // User submitted form without selecting a file, so the BlobKey is empty (live).
     BlobInfo blobInfo = new BlobInfoFactory().loadBlobInfo(blobKey);
     if (blobInfo.getSize() == 0) {
       blobstoreService.delete(blobKey);
@@ -95,29 +96,24 @@ public class ImageServlet extends HttpServlet {
   private byte[] getBlobBytes(BlobKey blobKey) throws IOException {
     BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
     ByteArrayOutputStream outputBytes = new ByteArrayOutputStream();
-
     int fetchSize = BlobstoreService.MAX_BLOB_FETCH_SIZE;
     long currentByteIndex = 0;
     boolean continueReading = true;
     while (continueReading) {
-      // end index is inclusive, so we have to subtract 1 to get fetchSize bytes
+      // End index is inclusive, so we have to subtract 1 to get fetchSize bytes.
       byte[] b =
           blobstoreService.fetchData(blobKey, currentByteIndex, currentByteIndex + fetchSize - 1);
       outputBytes.write(b);
 
-      // if we read fewer bytes than we requested, then we reached the end
-      if (b.length < fetchSize) {
-        continueReading = false;
-      }
-
+      // If we read fewer bytes than we requested, then we reached the end.
+      continueReading = b.length >= fetchSize;
       currentByteIndex += fetchSize;
     }
-
     return outputBytes.toByteArray();
   }
 
   /**
-   * Creates a list of  that apply to the image
+   * Creates a list of  that apply to the image, which is
    * represented by the binary data stored in imgBytes.
    */
   private List<EntityAnnotation> getImageLabels(byte[] imgBytes) throws IOException {
@@ -144,4 +140,3 @@ public class ImageServlet extends HttpServlet {
     return imageResponse.getLabelAnnotationsList();
   }
 }
-

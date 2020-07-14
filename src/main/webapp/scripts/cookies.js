@@ -93,8 +93,7 @@ function setLocationCookie() {
         setCookie("longitude", position.coords.longitude, 1);
       }, function(err) {
         console.warn(`ERROR(${err.code}): ${err.message}`);
-        document.getElementById("location-warning")
-            .innerHTML = "We cannot access your location. Try checking your browswer settings";
+        alert("We cannot access your location. Try checking your browswer settings");
       })
     };
 }

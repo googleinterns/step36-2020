@@ -23,36 +23,29 @@ import java.util.List;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.stream.Stream;
+import java.util.stream.Collectors;
 
 /**
  * Provide methods for the storage, extraction, and retrieval of keywords.
+ * TODO: Change to more object-oriented design (Abstract class or Interface)
  */
 public final class Keywords {
 
-  private static final int MAX_NUM_KEYWORDS = 5;
+  private static final int MAX_NUM_KEYWORDS = 10;
 
   /**
-   * @return a list of the 10 most salient keywords
+   * @return a list of the 5 most salient keywords
    */
-  public static List<String> getKeywords(String key) {
+  public static List<String> getKeywords(String keyString) {
     try {
-      Key datastoreKey = KeyFactory.stringToKey(key);
       DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-      Entity result = datastore.get(datastoreKey);
+      Entity result = datastore.get(KeyFactory.stringToKey(keyString));
     
       Collection<String> keywordCollection = (Collection<String>) result.getProperty("keywords");
-      List<String> keywordList = new ArrayList<>();
-      int index = 0;
-      for (String keyword : keywordCollection) {
-        keywordList.add(keyword);
-    
-        index++;
-        if (index >= MAX_NUM_KEYWORDS) {
-          break;
-        }
-      }
+      List<String> keywordList = keywordCollection.stream().limit(MAX_NUM_KEYWORDS).collect(Collectors.toList());
       return keywordList;
-    } catch (EntityNotFoundException ex) {
+    } catch (Exception ex) {
       return new ArrayList<>();
     }
   }
@@ -62,15 +55,20 @@ public final class Keywords {
    * @return the key pointing to the newly added datastore entity.
    */
   public static String addKeywords(List<EntityAnnotation> blobAnalysis) throws IOException {
-    String labels = "";
+    List<String> labelList = new ArrayList<>();
     for (EntityAnnotation label : blobAnalysis) {
-      labels += label.getDescription() + ", ";
+      labelList.add(label.getDescription());
     }
-    return addToDatastore(labels);
+    String labelSentence = String.join(", ", labelList);
+    return addToDatastore(labelSentence);
   }
 
   /**
    * Adds the salient keywords from the analysis of a textual user input into the datastore.
+   * This method overloads addKeywords() mainly to streamline how keywords are extracted
+   * and added into the datastore. Instead of having to call addToDatastore(message) for one
+   * class, and addKeywords(blobAnalysis) for another, it makes more sense and is easier to 
+   * call just addKeywords(parameter) in both classes.
    * @return the key pointing to the newly added datastore entity.
    */
   public static String addKeywords(String message) throws IOException {
@@ -112,7 +110,7 @@ public final class Keywords {
   }
 
   /**
-   * @return a response to the analyze-entity request
+   * @return a response to the analyze-entity request.
    */ 
   private static AnalyzeEntitiesResponse analyzeEntity(String message) throws IOException {
     try (LanguageServiceClient language = LanguageServiceClient.create()) {
