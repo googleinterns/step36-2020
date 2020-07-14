@@ -24,7 +24,7 @@ public final class UrlRequest {
     connection.setRequestMethod("GET");
     connection.setRequestProperty("Accept", "application/json");
     connection.setRequestProperty("Content-Type", "application/json");
-    int responseCode = connection.getResponseCode(); // TODO: Handle exceptions when reponse code is not 200.
+    int responseCode = connection.getResponseCode();
     if (responseCode != 200) {
       System.err.println("Error: connection response code is: " + responseCode);
     }
