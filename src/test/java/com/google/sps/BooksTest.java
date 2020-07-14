@@ -32,9 +32,7 @@ public final class BooksTest {
     booksServlet.doGet(booksGet.getRequest(), booksGet.getResponse());
     String output = booksGet.getWriter().toString();
     output = TestingUtil.getInnerMap(output);
-    System.out.println("noOutputTest() actual output is " + output);
-    System.out.println("noOutputTest() expected output is " + EMPTY_MAP_STRING);
-    Assert.assertTrue(output.equals(EMPTY_MAP_STRING));
+    Assert.assertEquals(output, EMPTY_MAP_STRING);
   }
 
  /**
@@ -50,7 +48,6 @@ public final class BooksTest {
     booksServlet.doGet(booksGet.getRequest(), booksGet.getResponse());
     String output = booksGet.getWriter().toString();
     output = TestingUtil.getInnerMap(output);
-    System.out.println("someOutputTest() output is " + output);
     Assert.assertNotEquals(output, EMPTY_MAP_STRING);
   }
   
