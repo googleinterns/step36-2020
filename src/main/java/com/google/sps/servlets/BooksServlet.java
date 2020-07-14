@@ -23,7 +23,6 @@ import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Collections;
 
 /**
  * Servlet for generating a map of each term to a 
@@ -34,7 +33,6 @@ public class BooksServlet extends HttpServlet {
 
   private final int NUM_BOOKS_PER_TERM = 5;
   private static final String API_KEY = "API_KEY";  // Insert the API_KEY here for testing.
-
 
   /*
   * Writes a mapping of terms to lists of book objects in the servlet response.

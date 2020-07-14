@@ -3,10 +3,10 @@ $().ready(function() {
   // TODO: Fix blobstore integration
   $('#select-blob').on('click', function() {
     fetch('/user-image').then(response => response.text()).then((blobURL) => {
-      $('#keyword-form').removeClass('hide').attr('action', blobURL).attr('enctype', 'multipart/form-data');
-      $('#blob-input').removeClass('hide');
-      $('#text-input').addClass('hide').val(null);
-      $('#form-title *').text('Upload an Image Here');
+      $("#keyword-form").removeClass("hide").attr("action", blobURL);
+      $("#blob-input").removeClass("hide");
+      $("#text-input").addClass("hide");
+      $("#form-title *").text("Upload an Image Here");
     });
   });*/
 
@@ -17,4 +17,3 @@ $().ready(function() {
     $("#form-title *").text("Copy Your Tweet Here");
   });
 });
-

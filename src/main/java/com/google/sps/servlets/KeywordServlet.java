@@ -47,4 +47,3 @@ public class KeywordServlet extends HttpServlet {
     response.sendRedirect(String.format("/results?k=%s", key));
   }
 }
-
