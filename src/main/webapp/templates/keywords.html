@@ -3,25 +3,25 @@
     <div class="keyword">
       <p class="title">{{term}}</p>
       <ion-icon class="close hide" name="close-outline"></ion-icon>
-      <div class="news-section hide">
-        <div class="section-header">News</div>
-        {{#news}}
-          <div class="news item" data-url="{{link}}">
-            <p class="news-title element-title">{{title}}</p>
-            <p class="news-content hide">{{content}}</p>
+      <div class="books-section hide">
+        <div class="section-header">Books</div>
+        {{#books}}
+          <div class="books item" data-url="{{link}}">
+            <p class="books-title element-title">{{title}} - {{author}}</p>
+            <p class="books-content hide">{{description}}</p>
             <div class="overlay hide">
               <p>Learn More <ion-icon name="arrow-forward-outline"></ion-icon></p>
             </div>
           </div>
-        {{/news}}
-        {{^news}}
-          <div class="news">Sorry, we couldn't find any news for you</div>  
-        {{/news}}
+        {{/books}}
+        {{^books}}
+          <div class="books">Sorry, we couldn't find any books for you</div>  
+        {{/books}}
       </div>
       <hr class="hide"> 
       <div class="actions-section hide">
         <div class="section-header">Projects</div>
-        {{#actions}}
+        {{#projects}}
           <div class="action item" data-url="{{url}}">
             <p class="action-title element-title">{{title}}</p>
             <p class="action-content hide summary">{{summary}}</p>
@@ -29,14 +29,51 @@
               <p>Learn More <ion-icon name="arrow-forward-outline"></ion-icon></p>
             </div>
           </div>
-        {{/actions}}
-        {{^actions}}
+        {{/projects}}
+        {{^projects}}
           <div class="action">Sorry, we couldn't find any projects for you</div>
-        {{/actions}}
+        {{/projects}}
       </div>
     </div>
   {{/keywords}}
   {{^keywords}}
-    <div class="keyword">Sorry, we couldn't extract any keywords</div>  
+    <div class="keyword">
+      <p class="title">Sorry, we couldn't extract any keywords</p>
+      <ion-icon class="close hide" name="close-outline"></ion-icon>
+    </div> 
   {{/keywords}}
+  {{#location}}
+    <div class="keyword location">
+      <p class="title">Government Officials</p>
+      {{#address}}
+        <p class="subtitle hide"><ion-icon name="location-outline"></ion-icon>{{city}}, {{state}}</p>
+      {{/address}}
+      <ion-icon class="close hide" name="close-outline"></ion-icon>
+      <div class="levels hide">
+        {{#levels}}
+          <div class="level">
+            <p class="level-name"><ion-icon name="chevron-forward-outline"></ion-icon>{{levelName}}</p>
+            <div class="profiles">
+              {{#officials}}
+                <div class="profile">
+                  <p><a href="{{urls.0}}" class="profile-name">{{name}}</a></p>
+                  <p class="profile-title">{{title}}</p>
+                  <img src="{{photoUrl}}" class="profile-img">
+                  {{#phones}}
+                    <p class-"profile-phone">{{.}}</p>
+                  {{/phones}}
+                  {{#emails}}
+                    <p class-"profile-email">{{.}}</p>
+                  {{/emails}}
+                  {{#channels}}
+                    <p clas="profile-channel"><b>{{type}}:</b> {{id}}</p>
+                  {{/channels}}
+                </div>
+              {{/officials}}
+            </div>
+          </div>
+        {{/levels}}
+      </div>
+    </div> 
+  {{/location}}
 </div>
