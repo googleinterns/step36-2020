@@ -6,6 +6,8 @@
     <link rel="stylesheet" href="/styles/base.css">
     <link rel="stylesheet" href="/styles/index.css">
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans&family=Oswald&display=swap" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="/scripts/keywords.js"></script>
     <title>Input Tweet</title>
   </head>
   <body>
@@ -14,10 +16,15 @@
     </header>
     <div id="content">
       <div id="form-title">
-        <p>Copy your Tweet here</p>
+        <p>Choose Type of Input</p>
       </div>
-      <form id="keyword-form" action="/keyword" method="POST">
-        <textarea name="keyword-sentence" placeholder="Enter your tweet or interests here">Black Lives Matter, COVID-19.</textarea>
+      <div id="input-select">
+        <button id="select-text">Text</button>
+        <button id="select-blob">Upload Image</button>
+      </div>
+      <form id="keyword-form" class="hide" action="/keyword" method="POST" enctype="multipart/form-data">
+        <textarea id="text-input" name="keyword-sentence" placeholder="Enter your tweet or interests here">Black Lives Matter, COVID-19</textarea>
+        <input id="blob-input" type="file" name="image" accept="image/*" />
         <br/>
         <input type="submit"/>
       </form>
