@@ -32,6 +32,7 @@ import java.util.Map;
 public class BooksServlet extends HttpServlet {
 
   private final int NUM_BOOKS_PER_TERM = 5;
+  private static final String API_KEY = "API_KEY";  // Insert the API_KEY here for testing.
 
   /*
   * Writes a mapping of terms to lists of book objects in the servlet response.
@@ -88,10 +89,29 @@ public class BooksServlet extends HttpServlet {
       JsonObject bookJson = booksJsonArray.get(i).getAsJsonObject().getAsJsonObject("volumeInfo"); 
       String title = bookJson.get("title").getAsString();
       String link = bookJson.get("infoLink").getAsString();
-      String image = bookJson.getAsJsonObject("imageLinks").get("thumbnail").getAsString();
-      String description = bookJson.get("description").getAsString();
-      String author = formatAuthors(bookJson.getAsJsonArray("authors"));
-      books.add(new Book.Builder(title, link).withImage(image).withDescription(description).withAuthor(author).build());
+      Book.Builder bookBuilder = new Book.Builder(title, link);
+      try {
+        String image = bookJson.getAsJsonObject("imageLinks").get("thumbnail").getAsString();
+        bookBuilder.withImage(image);
+      }
+      catch (NullPointerException e) {
+        e.printStackTrace();
+      }
+      try {
+        String description = bookJson.get("description").getAsString();
+        bookBuilder.withDescription(description);
+      }
+      catch (NullPointerException e) {
+        e.printStackTrace();
+      }
+      try {
+        String author = formatAuthors(bookJson.getAsJsonArray("authors"));
+        bookBuilder.withAuthor(author);
+      }
+      catch (NullPointerException e) {
+        e.printStackTrace();
+      }
+      books.add(bookBuilder.build());
     }
     return books;
   }
@@ -126,7 +146,7 @@ public class BooksServlet extends HttpServlet {
   */
   private String getJsonStringForTerm(String term) {
     String path = "https://www.googleapis.com/books/v1/volumes?";
-    String queryParam = "q=" + encodeTerm(term); 
+    String queryParam = "q=" + encodeTerm(term)+"&key="+API_KEY+"&country=US"; 
     String queryPath = path + queryParam;
     try {
       URL url = new URL(queryPath);
@@ -135,7 +155,7 @@ public class BooksServlet extends HttpServlet {
       connection.connect();
       int responseCode = connection.getResponseCode();
       if (responseCode != 200) {
-        System.err.println("Error: connection response code is: " + responseCode);
+        System.err.println("Error: connection response code for Books API is: " + responseCode);
       }
       return readJsonFile(url);   
     } catch(Exception e) {

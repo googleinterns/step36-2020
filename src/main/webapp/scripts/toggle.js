@@ -1,6 +1,6 @@
 const KEYWORDS_TEMPLATE_URL = '/templates/keywords.html';
 
-const KEYWORDS_OBJ_URL = '/json/keywords.json';
+const KEYWORDS_OBJ_URL = '/keyword';
 const CIVIC_OBJ_URL = '/actions/civic'
 
 const BOOKS_OBJ_URL =  '/books';
@@ -52,20 +52,23 @@ async function renderTemplateObj(template, objs, keywords) {
     let term = keywords[i];
     let keywordObj = new Object();
     keywordObj.term = term;
-    keywordObj.news = objs[0].articles[term];
+    keywordObj.books = objs[0].books[term];
     keywordObj.projects = objs[1].results[term];
     result.keywords[i] = keywordObj;
   }
 
-  // TODO: Change true to if the user gave their location, and get real coordinates.
-  if (true) {
-    let lat = 33.969058;
-    let lng = -118.422146;
-    let civicObj = await loadObject(`${CIVIC_OBJ_URL}?lat=${lat}&lng=${lng}`);
-    let locationObj = new Object();
-    locationObj.address = civicObj.normalizedInput;
-    locationObj.levels = officialsByLevel(civicObj);
-    result.location = locationObj;
+  const lat = getCookie("latitude");
+  const lng = getCookie("longitude");
+  if (lat != "" && lng != "") {
+    try{
+      let civicObj = await loadObject(`${CIVIC_OBJ_URL}?lat=${lat}&lng=${lng}`);
+      let locationObj = new Object();
+      locationObj.address = civicObj.normalizedInput;
+      locationObj.levels = extractOfficials(civicObj);
+      result.location = locationObj;
+    } catch(err) {
+      alert("We couldn't find any civic information for your location.");
+    }
   }
   let htmlSections = Mustache.render(template, result);
   return htmlSections;

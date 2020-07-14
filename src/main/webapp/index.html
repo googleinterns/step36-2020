@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="/styles/base.css">
     <link rel="stylesheet" href="/styles/index.css">
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans&family=Oswald&display=swap" rel="stylesheet">
+    <script src="scripts/cookies.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="/scripts/keywords.js"></script>
     <title>Input Tweet</title>
@@ -15,20 +16,21 @@
       <p id="title">Engage</p>
     </header>
     <div id="content">
-      <label><input type="checkbox" id="location-checkbox"/> Use Location</label>
       <br/>
       <div id="form-title">
         <p>Choose Type of Input</p>
       </div>
+      <label><input type="checkbox" /> Use Location</label>
+      <br/>
       <div id="input-select">
         <button id="select-text">Text</button>
         <button id="select-blob">Upload Image</button>
       </div>
-      <form id="keyword-form" class="hide" action="/keyword" method="POST" enctype="multipart/form-data">
-        <textarea id="text-input" name="keyword-sentence" placeholder="Enter your tweet or interests here">Black Lives Matter, COVID-19</textarea>
+      <form id="keyword-form" class="hide" action="/keyword" method="post" enctype="multipart/form-data">
+        <textarea id="text-input" name="keyword-sentence" placeholder="Enter your tweet or interests here"></textarea>
         <input id="blob-input" type="file" name="image" accept="image/*" />
         <br/>
-        <input type="submit"/>
+        <input type="submit" />
       </form>
     </div>
     <footer id="footer" class="base">
