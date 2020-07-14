@@ -45,7 +45,7 @@ public final class Keywords {
       Collection<String> keywordCollection = (Collection<String>) result.getProperty("keywords");
       List<String> keywordList = keywordCollection.stream().limit(MAX_NUM_KEYWORDS).collect(Collectors.toList());
       return keywordList;
-    } catch (Exception ex) {
+    } catch (EntityNotFoundException ex) {
       return new ArrayList<>();
     }
   }

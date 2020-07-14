@@ -1,6 +1,4 @@
 $().ready(function() {
-  /**
-  // TODO: Fix blobstore integration
   $('#select-blob').on('click', function() {
     fetch('/user-image').then(response => response.text()).then((blobURL) => {
       $("#keyword-form").removeClass("hide").attr("action", blobURL);
@@ -8,7 +6,7 @@ $().ready(function() {
       $("#text-input").addClass("hide");
       $("#form-title *").text("Upload an Image Here");
     });
-  });*/
+  });
 
   $("#select-text").on("click", function() {
     $("#keyword-form, #text-input").removeClass("hide");
