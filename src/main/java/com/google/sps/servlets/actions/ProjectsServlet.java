@@ -22,7 +22,7 @@ import com.google.sps.data.UrlRequest;
 @WebServlet("/actions/projects")
 public class ProjectsServlet extends HttpServlet {
 
-  private static String API_KEY = "";  // Insert the API_KEY here for testing.
+  private static String API_KEY;
   private static final String API_PATH = "https://api.globalgiving.org/api/public/services/search/projects";
 
   @Override
