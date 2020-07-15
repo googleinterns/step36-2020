@@ -43,6 +43,12 @@ async function loadKeywords(keywordsUrl) {
 async function loadNoKeywords() {
   const noKeywordsHTML = await NO_KEYWORDS_HTML;
   $('#keywords').append(noKeywordsHTML);
+  hideLoading();
+}
+
+function hideLoading() {
+  $("body").children(":not(#real-body)").addClass("hide");
+  $("#real-body").removeClass("hide").addClass("body");
 }
 
 /**
@@ -71,6 +77,7 @@ function buildKeywordObj(booksObj, projectsObj, keyword) {
 function renderKeyword(template, keywordObj) {
   const keywordHTML = Mustache.render(template, keywordObj);
   $('#keywords').prepend(keywordHTML);
+  hideLoading();
 }
 
 /**
@@ -104,4 +111,5 @@ function buildLocationObj(civicObj) {
 function renderLocation(template, locationObj) {
   const locationHTML = Mustache.render(template, locationObj);
   $('#keywords').append(locationHTML);
+  hideLoading();
 }
