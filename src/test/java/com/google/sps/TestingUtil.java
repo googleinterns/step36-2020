@@ -11,9 +11,9 @@ import java.io.IOException;
 public class TestingUtil { 
 
  /**
-  * @return SetUpObject prepared for mocking a get request from a servlet.
+  * @return ServletSetUpObject prepared for mocking a get request from a servlet.
   */
-  public static SetUpObject mockGet(Map<String, String[]> parametersMap) throws IOException{
+  public static ServletSetUpObject mockGet(Map<String, String[]> parametersMap) throws IOException{
     StringWriter testWriter = new StringWriter();
     HttpServletRequest testRequest = Mockito.mock(HttpServletRequest.class);
     Mockito.when(testRequest.getMethod()).thenReturn("GET");
@@ -22,7 +22,7 @@ public class TestingUtil {
     }
     HttpServletResponse testResponse = Mockito.mock(HttpServletResponse.class);
     Mockito.when(testResponse.getWriter()).thenReturn(new PrintWriter(testWriter));
-    return new SetUpObject(testRequest, testResponse, testWriter);
+    return new ServletSetUpObject(testRequest, testResponse, testWriter);
   }
 
  /**
