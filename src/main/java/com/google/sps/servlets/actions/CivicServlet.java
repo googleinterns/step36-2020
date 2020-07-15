@@ -22,39 +22,13 @@ public class CivicServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    String latitude = request.getParameter("lat");
-    String longitude = request.getParameter("lng");
-    Map<String, String> locationQueryParams = new HashMap<>();
-    locationQueryParams.put("lat", latitude);
-    locationQueryParams.put("lng", longitude);
-    String locationUrl = String.format("%s://%s:%s/location",
-        request.getScheme(), 
-        request.getServerName(), 
-        request.getServerPort());
-    String address = "";
-    try {
-      String locationJsonResult = UrlRequest.urlQuery(locationUrl, locationQueryParams);
-      Gson gson = new Gson();
-      Type mapType = new TypeToken<Map<String, String>>() {}.getType();
-      Map<String, String> locationMap = gson.fromJson(locationJsonResult, mapType);
-      address = String.format("%s %s, %s, %s %s", 
-          locationMap.get("Street Number"),
-          locationMap.get("Street Name"),
-          locationMap.get("City"),
-          locationMap.get("State"),
-          locationMap.get("Zip Code"));
-    } catch (FileNotFoundException fnfe) {
-      // Location URL doesn't work on devserver, so instead use hardcoded string.
-      fnfe.printStackTrace();
-      address = "1 LMU Dr, Los Angeles, California";
-    } finally {
-      Map<String, String> apiQueryParams = new HashMap<>();
-      apiQueryParams.put("key", API_KEY);
-      apiQueryParams.put("address", address);
-      apiQueryParams.put("prettyPrint", "false");
-      String jsonResult = UrlRequest.urlQuery(API_PATH, apiQueryParams);
-      response.setContentType("application/json;");
-      response.getWriter().println(jsonResult);
-    }
+    String address = request.getParameter("address");
+    Map<String, String> queryParams = new HashMap<>();
+    queryParams.put("key", API_KEY);
+    queryParams.put("address", address);
+    queryParams.put("prettyPrint", "false");
+    String jsonResult = UrlRequest.urlQuery(API_PATH, queryParams);
+    response.setContentType("application/json;");
+    response.getWriter().println(jsonResult);
   }
 }
