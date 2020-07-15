@@ -1,9 +1,4 @@
-$().ready(() => {
-  loadContentSection().then(() =>{ 
-    $("body").children(":not(#real-body)").addClass("hide");
-    $("#real-body").removeClass("hide").addClass("body");
-  });
-});
+$().ready(loadContentSection);
 
 $("body").on('click', '.keyword', function() {
   $(this).addClass("active");
