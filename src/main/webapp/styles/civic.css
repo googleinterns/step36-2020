@@ -2,6 +2,10 @@
   background-color: lightgray;
 }
 
+.active.location > .title {
+  padding: 3vh 0 0;
+}
+
 .active.location {
   display: grid;
   grid: [row1-start] "title    close   " 2fr  [row1-end]

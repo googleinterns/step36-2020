@@ -97,7 +97,7 @@ async function loadCivicSection() {
 function buildLocationObj(civicObj) {
   let locationObj = new Object();
   locationObj.address = civicObj.normalizedInput;
-  locationObj.levels = extractOfficials(civicObj);
+  locationObj.levels = officialsByLevel(civicObj);
   return locationObj;
 }
 
