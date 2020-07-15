@@ -33,18 +33,15 @@ import java.util.Map;
 public class BooksServlet extends HttpServlet {
 
   private final int NUM_BOOKS_PER_TERM = 5;
-  private static final String API_KEY = "AIzaSyD7NSsRElnqx6MTVSIq0-lRYe2sl2nosAk";  // Insert the API_KEY here for testing.
+  private String API_KEY = "";  // Insert the API_KEY here for testing.
 
   /*
   * Writes a mapping of terms to lists of book objects in the servlet response.
   */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    System.out.println("line 43");
     GetAPIKeyUtil util = new GetAPIKeyUtil();
-    System.out.println("line 45");
-    System.out.println("testParam is " + util.getAPIKey("books"));
-    System.out.println("line 47");
+    API_KEY = util.getAPIKey("books");
     List<String> terms = Arrays.asList(request.getParameterValues("key"));
     LinkedHashMap<String, List<Book>> booksMap = new LinkedHashMap<>();
     terms.forEach((term) -> {

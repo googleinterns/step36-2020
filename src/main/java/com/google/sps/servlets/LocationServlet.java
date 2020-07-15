@@ -4,6 +4,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import com.google.sps.data.GetAPIKeyUtil;
 import java.net.URL;
 import java.net.HttpURLConnection;
 import java.util.Scanner;
@@ -23,10 +24,12 @@ public class LocationServlet extends HttpServlet {
     private Map<String, String> geoMap = new HashMap<>();
 
     private static final String BASE_URL = "https://maps.googleapis.com/maps/api/geocode/json?";
-    private static final String API_KEY = "API_KEY"; // Insert actual API key to test.
+    private static String API_KEY = "API_KEY"; // Insert actual API key to test.
 
     @Override
-    public void doGet(HttpServletRequest request, HttpServletResponse response) {
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+      GetAPIKeyUtil util = new GetAPIKeyUtil();
+      API_KEY = util.getAPIKey("location");
       String latitude = request.getParameter("lat");
       String longitude = request.getParameter("lng");
       String queryParam = String.format("latlng=%s,%s", latitude, longitude);
