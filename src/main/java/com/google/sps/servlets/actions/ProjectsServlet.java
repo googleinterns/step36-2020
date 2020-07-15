@@ -21,7 +21,7 @@ import com.google.sps.data.UrlRequest;
 @WebServlet("/actions/projects")
 public class ProjectsServlet extends HttpServlet {
 
-  private static final String API_KEY = "API_KEY";  // Insert the API_KEY here for testing.
+  private static final String API_KEY = "a752ec3e-9fcf-4500-9107-694351adc5ee";  // Insert the API_KEY here for testing.
   private static final String API_PATH = "https://api.globalgiving.org/api/public/services/search/projects";
 
   @Override
@@ -48,6 +48,7 @@ public class ProjectsServlet extends HttpServlet {
     results.put("results", jsonResultMap);
     String jsonResultString = gson.toJson(results);
     response.setContentType("application/json;");
+    response.setCharacterEncoding("UTF-8");
     response.getWriter().println(jsonResultString);
   }
 

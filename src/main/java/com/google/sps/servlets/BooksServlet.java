@@ -32,7 +32,7 @@ import java.util.Map;
 public class BooksServlet extends HttpServlet {
 
   private final int NUM_BOOKS_PER_TERM = 5;
-  private static final String API_KEY = "API_KEY";  // Insert the API_KEY here for testing.
+  private static final String API_KEY = "AIzaSyD7NSsRElnqx6MTVSIq0-lRYe2sl2nosAk";  // Insert the API_KEY here for testing.
 
   /*
   * Writes a mapping of terms to lists of book objects in the servlet response.
@@ -47,6 +47,7 @@ public class BooksServlet extends HttpServlet {
       booksMap.put(term, books);
     });
     String json = encodeBookMapAsJson(booksMap);
+    response.setCharacterEncoding("UTF-8");
     response.getWriter().println(json);
   }
 
