@@ -99,9 +99,9 @@ public final class Keywords {
       orderSet.add(entity);
     }
     // We must create a new list of Strings as a collection of NLP Entities is not supported by datastore.
-    List<String> keywordList = new ArrayList<>();
+    Set<String> keywordList = new HashSet<>();
     for (com.google.cloud.language.v1.Entity entity : orderSet) {
-      keywordList.add(entity.getName());
+      keywordList.add(entity.getName().toLowerCase());
     }
     Entity datastoreEntity = new Entity("Keyword");
     datastoreEntity.setProperty("keywords", keywordList);
