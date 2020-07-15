@@ -10,16 +10,21 @@ const PROJECTS_OBJ_URL = '/actions/projects';
 const OBJECTS_URLS = [BOOKS_OBJ_URL, PROJECTS_OBJ_URL];
 
 /**
- * Loads the content section.
+ * Loads the content section. 
+ * Returns a promise that resolves when everything loads.
  */
 async function loadContentSection() {
   const keywords = await loadKeywords(KEYWORDS_OBJ_URL);
+  let sectionsPromises = new Array();
   if (keywords.length === 0) {
-    loadNoKeywords();
+    sectionsPromises.push(loadNoKeywords());
   } else {
-    keywords.forEach(loadKeywordSection);
+    keywords.forEach((keyword)  => {
+      sectionsPromises.push(loadKeywordSection(keyword));
+    });
   }
-  loadCivicSection();
+  sectionsPromises.push(loadCivicSection());
+  return Promise.all(sectionsPromises);
 }
 
 /**
@@ -43,6 +48,13 @@ async function loadKeywords(keywordsUrl) {
 async function loadNoKeywords() {
   const noKeywordsHTML = await NO_KEYWORDS_HTML;
   $('#keywords').append(noKeywordsHTML);
+  hideLoading();
+  return true;
+}
+
+function hideLoading() {
+  $("body").children(":not(#real-body)").addClass("hide");
+  $("#real-body").removeClass("hide").addClass("body");
 }
 
 /**
@@ -55,6 +67,7 @@ async function loadKeywordSection(keyword) {
   const keywordObj = buildKeywordObj(objs[0], objs[1], keyword);
   const template = await KEYWORD_TEMPLATE_PROMISE;
   renderKeyword(template, keywordObj);
+  return true;
 }
 
 /**
@@ -71,6 +84,7 @@ function buildKeywordObj(booksObj, projectsObj, keyword) {
 function renderKeyword(template, keywordObj) {
   const keywordHTML = Mustache.render(template, keywordObj);
   $('#keywords').prepend(keywordHTML);
+  hideLoading();
 }
 
 /**
@@ -87,8 +101,10 @@ async function loadCivicSection() {
       renderLocation(locationTemplate, locationObj);
     } catch (err) {
       alert("We couldn't find any civic information for your location.");
+      return false;
     }
   }
+  return true;
 }
 
 /**
@@ -104,4 +120,5 @@ function buildLocationObj(civicObj) {
 function renderLocation(template, locationObj) {
   const locationHTML = Mustache.render(template, locationObj);
   $('#keywords').append(locationHTML);
+  hideLoading();
 }

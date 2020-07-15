@@ -1,7 +1,6 @@
 $().ready(() => {
   loadContentSection().then(() =>{ 
-    $("body").children(":not(#real-body)").addClass("hide");
-    $("#real-body").removeClass("hide").addClass("body");
+    $('body').removeClass('loading');
   });
 });
 
