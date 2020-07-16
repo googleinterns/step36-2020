@@ -33,8 +33,7 @@ $().ready(function() {
       }
       const blobFile = blobInput[0];
       const fileType = blobFile['type'];
-      const validImageTypes = ['image/jpeg', 'image/png', 'image/jpg'];
-      if (blobFile == null || !validImageTypes.includes(fileType)) {
+      if (blobFile == null || !fileType.includes('image')) {
         alert('You must upload an image file!');
         event.preventDefault();
         return false;
