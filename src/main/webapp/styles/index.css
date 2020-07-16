@@ -23,6 +23,15 @@ body {
   font-weight: bolder;
 }
 
+#title {
+  text-align: center;
+  padding: 20px;
+}
+#instructions {
+  font-size: 30%;
+  padding: 20px;
+}
+
 #keyword-form > textarea {
   resize: none;
   width: 40vw;
@@ -42,4 +51,9 @@ body {
           [row3-start] "footer " 10vh [row3-end]
           / 100vw;
   }
+}
+
+#header {
+  display: flex;
+  flex-direction: column;
 }
