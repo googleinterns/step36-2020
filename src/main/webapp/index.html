@@ -26,9 +26,9 @@
         <button id="select-text">Text</button>
         <button id="select-blob">Upload Image</button>
       </div>
-      <form id="keyword-form" class="hide" action="/keyword" method="post" enctype="multipart/form-data">
+      <form id="keyword-form" class="hide" action="/keyword" method="post" enctype="multipart/form-data" onsubmit="validateForm(event);">
         <textarea id="text-input" name="keyword-sentence" placeholder="Enter your tweet or interests here"></textarea>
-        <input id="blob-input" type="file" name="image" accept="image/*" />
+        <input id="blob-input" type="file" name="image" accept="image/png, image/jpeg, image/jpg" />
         <br/>
         <input type="submit" />
       </form>
