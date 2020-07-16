@@ -36,13 +36,14 @@ function traceCounterMethods(counter, total) {
       const method = target[propKey];
       return function (...args) {
         let result = method.apply(this, args);
-        if (result < 0) {
-          $('body').removeClass('loading');
-        }
         let progress = (1 - (result + 1) / (total + 1)) * 100;
         let progressString = `${Math.floor(progress)}%`;
         console.log(progressString);
-        $("#loading-bar::after").animate({width : progressString});
+        $("#progress").animate({width : progressString}, 300);
+        if (result < 0) {
+          $('body').removeClass('loading');
+          setTimeout(() => $('#progress-bar').animate({width : 0}, 300), 1000);
+        }
         return result;
       };
     }
