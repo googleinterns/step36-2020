@@ -15,16 +15,14 @@ const OBJECTS_URLS = [BOOKS_OBJ_URL, PROJECTS_OBJ_URL];
  */
 async function loadContentSection() {
   const keywords = await loadKeywords(KEYWORDS_OBJ_URL);
-  let sectionsPromises = new Array();
+  const elementsToLoad = Math.max(keywords.length, 1);
+  loadingCounter.add(elementsToLoad);
   if (keywords.length === 0) {
-    sectionsPromises.push(loadNoKeywords());
+    loadNoKeywords();
   } else {
-    keywords.forEach((keyword)  => {
-      sectionsPromises.push(loadKeywordSection(keyword));
-    });
+    keywords.forEach(loadKeywordSection);
   }
-  sectionsPromises.push(loadCivicSection());
-  return Promise.all(sectionsPromises);
+  loadCivicSection();
 }
 
 /**
@@ -49,7 +47,7 @@ async function loadNoKeywords() {
   const noKeywordsHTML = await NO_KEYWORDS_HTML;
   $('#keywords').append(noKeywordsHTML);
   hideLoading();
-  return true;
+  loadingCounter.decrement();
 }
 
 function hideLoading() {
@@ -67,7 +65,7 @@ async function loadKeywordSection(keyword) {
   const keywordObj = buildKeywordObj(objs[0], objs[1], keyword);
   const template = await KEYWORD_TEMPLATE_PROMISE;
   renderKeyword(template, keywordObj);
-  return true;
+  loadingCounter.decrement();
 }
 
 /**
@@ -101,10 +99,9 @@ async function loadCivicSection() {
       renderLocation(locationTemplate, locationObj);
     } catch (err) {
       alert("We couldn't find any civic information for your location.");
-      return false;
     }
   }
-  return true;
+  loadingCounter.decrement();
 }
 
 /**

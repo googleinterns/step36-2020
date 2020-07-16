@@ -1,8 +1,4 @@
-$().ready(() => {
-  loadContentSection().then(() =>{ 
-    $('body').removeClass('loading');
-  });
-});
+$().ready(loadContentSection);
 
 $("body").on('click', '.keyword', function() {
   $(this).addClass("active");
