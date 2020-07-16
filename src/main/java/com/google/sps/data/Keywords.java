@@ -57,7 +57,9 @@ public final class Keywords {
   public static String addKeywords(List<EntityAnnotation> blobAnalysis) throws IOException {
     List<String> labelList = new ArrayList<>();
     for (EntityAnnotation label : blobAnalysis) {
-      labelList.add(label.getDescription());
+      if (label.getScore() >= 0.75) {
+        labelList.add(label.getDescription());
+      }
     }
     String labelSentence = String.join(", ", labelList);
     return addToDatastore(labelSentence);
@@ -93,7 +95,7 @@ public final class Keywords {
       }
     });
     for (com.google.cloud.language.v1.Entity entity : entities) {
-      if (entity.getSalience() == 0) {
+      if (entity.getSalience() < 0.3) {
         continue;
       }
       orderSet.add(entity);
