@@ -47,6 +47,7 @@ public class BooksServlet extends HttpServlet {
       booksMap.put(term, books);
     });
     String json = encodeBookMapAsJson(booksMap);
+    response.setCharacterEncoding("UTF-8");
     response.getWriter().println(json);
   }
 

@@ -48,6 +48,7 @@ public class ProjectsServlet extends HttpServlet {
     results.put("results", jsonResultMap);
     String jsonResultString = gson.toJson(results);
     response.setContentType("application/json;");
+    response.setCharacterEncoding("UTF-8");
     response.getWriter().println(jsonResultString);
   }
 
