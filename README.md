@@ -4,4 +4,4 @@ Our objective is to provide users with relevant news and action-initiatives base
 
 # How To Run
 For security purposes, the API keys used in this applicaiton must be passed as command line arguments.
-To run, use the following command: 	`[mvn command] -DbooksKey=[Google Books API Key] -DprojectsKey=[Global Giving API Key] -DcivicsKey=[Google Civics API Key] -DlocationKey=[Google Geocoder API Key]`
+To run, use the following command: 	`[mvn command] -DgoogleKey=[Key for Google APIs] -DprojectsKey=[Global Giving API Key]`

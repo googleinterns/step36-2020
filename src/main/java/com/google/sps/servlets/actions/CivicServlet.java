@@ -24,7 +24,7 @@ public class CivicServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     GetAPIKeyUtil util = new GetAPIKeyUtil();
-    API_KEY = util.getAPIKey("civic");
+    API_KEY = util.getAPIKey("google");
     String latitude = request.getParameter("lat");
     String longitude = request.getParameter("lng");
     Map<String, String> locationQueryParams = new HashMap<>();

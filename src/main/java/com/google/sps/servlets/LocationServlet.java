@@ -29,7 +29,7 @@ public class LocationServlet extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
       GetAPIKeyUtil util = new GetAPIKeyUtil();
-      API_KEY = util.getAPIKey("location");
+      API_KEY = util.getAPIKey("google");
       String latitude = request.getParameter("lat");
       String longitude = request.getParameter("lng");
       String queryParam = String.format("latlng=%s,%s", latitude, longitude);
