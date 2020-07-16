@@ -22,7 +22,7 @@ async function loadContentSection() {
   } else {
     keywords.forEach(loadKeywordSection);
   }
-  setTimeout(loadCivicSection, 3000);
+  loadCivicSection();
 }
 
 /**
