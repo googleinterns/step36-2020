@@ -1,3 +1,8 @@
+#keywords > hr {
+  margin: 0 2vw;
+  height: 50vh;
+}
+
 .location {
   background-color: lightgray;
 }
@@ -19,7 +24,7 @@
 
 .subtitle {
   grid-area: location;
-  font-size: 2vh;
+  font-size: 1.5vh;
   margin: 0 0 auto;
 }
 
@@ -83,6 +88,15 @@ ion-icon {
 .extended .profile {
   display: block;
 }
+
+@media (orientation: portrait) {
+  #keywords > hr {
+    margin: 1vh 0;
+    width: 50%;
+    height: auto;
+  }
+}
+
 
 @media (any-hover: hover) {
   .location:hover {
