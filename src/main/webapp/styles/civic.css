@@ -97,7 +97,6 @@ ion-icon {
   }
 }
 
-
 @media (any-hover: hover) {
   .location:hover {
     background-color: lightgray;
