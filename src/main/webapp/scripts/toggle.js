@@ -9,6 +9,8 @@ const BOOKS_OBJ_URL =  '/books';
 const PROJECTS_OBJ_URL = '/actions/projects';
 const OBJECTS_URLS = [BOOKS_OBJ_URL, PROJECTS_OBJ_URL];
 
+let loadingCounter;
+
 /**
  * Loads the content section. 
  * Returns a promise that resolves when everything loads.
@@ -16,7 +18,8 @@ const OBJECTS_URLS = [BOOKS_OBJ_URL, PROJECTS_OBJ_URL];
 async function loadContentSection() {
   const keywords = await loadKeywords(KEYWORDS_OBJ_URL);
   const elementsToLoad = Math.max(keywords.length, 1);
-  loadingCounter.add(elementsToLoad);
+  counter.add(elementsToLoad);
+  loadingCounter = traceCounterMethods(counter, elementsToLoad);
   if (keywords.length === 0) {
     loadNoKeywords();
   } else {

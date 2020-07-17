@@ -1,4 +1,4 @@
-let loadingCounter = (function(value = 0) {
+let counter = (function(value = 0) {
 
   const getValue = function() {
     return value;
@@ -9,15 +9,9 @@ let loadingCounter = (function(value = 0) {
       throw `${n} is not a number`;
     }
     value += n;
-    hide();
     return value;
   }
 
-  const hide = function() {
-    if (value < 0) {
-      $('body').removeClass('loading');
-    }
-  }
 
   const add = function(n) {
     return changeBy(n);
@@ -35,3 +29,24 @@ let loadingCounter = (function(value = 0) {
     decrement : () => { return subtract(1); },
   }
 })();
+
+function traceCounterMethods(counter, total) {
+  const handlers = {
+    get: function(target, propKey, receiver) {
+      const method = target[propKey];
+      return function (...args) {
+        let result = method.apply(this, args);
+        let progress = (1 - (result + 1) / (total + 1)) * 100;
+        let progressString = `${Math.floor(progress)}%`;
+        console.log(progressString);
+        $("#progress").animate({width : progressString}, 300);
+        if (result < 0) {
+          $('body').removeClass('loading');
+          setTimeout(() => $('#progress-bar').animate({width : 0}, 300), 1000);
+        }
+        return result;
+      };
+    }
+  };
+  return new Proxy(counter, handlers);
+}
