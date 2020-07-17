@@ -34,6 +34,15 @@ public final class Keywords {
 
   private static final int MAX_NUM_KEYWORDS = 10;
 
+  // We don't want any terms that are far too un-salient to include in the keywords list.
+  // 0.2 is a good minimum threshold as, especially when extracting saliency from a list of
+  // label, many of the high-relevancy terms end up only getting assigned a salience of 0.2.
+  private static final int MIN_SALIENCE_THRESHOLD = 0.2;
+
+  // For labels, we want high-confidence labels. Many of the labels below 0.70 seem to end
+  // up being only tangetially related to the contents of the picture.
+  private static final int MIN_SCORE_THRESHOLD = 0.70;
+
   /**
    * @return a list of the 5 most salient keywords
    */
@@ -57,7 +66,7 @@ public final class Keywords {
   public static String addKeywords(List<EntityAnnotation> blobAnalysis) throws IOException {
     List<String> labelList = new ArrayList<>();
     for (EntityAnnotation label : blobAnalysis) {
-      if (label.getScore() >= 0.75) {
+      if (label.getScore() >= MIN_SCORE_THRESHOLD) {
         labelList.add(label.getDescription());
       }
     }
@@ -95,7 +104,7 @@ public final class Keywords {
       }
     });
     for (com.google.cloud.language.v1.Entity entity : entities) {
-      if (entity.getSalience() < 0.3) {
+      if (entity.getSalience() < MIN_SALIENCE_THRESHOLD) {
         continue;
       }
       orderSet.add(entity);
