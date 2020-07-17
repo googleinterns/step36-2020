@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import com.google.sps.data.Book;
+import com.google.sps.data.GetAPIKeyUtil;
 import java.net.URL;
 import java.net.HttpURLConnection;
 import java.util.Scanner;
@@ -32,13 +33,15 @@ import java.util.Map;
 public class BooksServlet extends HttpServlet {
 
   private final int NUM_BOOKS_PER_TERM = 5;
-  private static final String API_KEY = "API_KEY";  // Insert the API_KEY here for testing.
+  private static String API_KEY;
 
   /*
   * Writes a mapping of terms to lists of book objects in the servlet response.
   */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    GetAPIKeyUtil util = new GetAPIKeyUtil();
+    API_KEY = util.getAPIKey("google");
     List<String> terms = Arrays.asList(request.getParameterValues("key"));
     LinkedHashMap<String, List<Book>> booksMap = new LinkedHashMap<>();
     terms.forEach((term) -> {
