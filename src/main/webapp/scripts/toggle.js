@@ -10,11 +10,17 @@ const BOOKS_OBJ_URL =  '/books';
 const PROJECTS_OBJ_URL = '/actions/projects';
 const OBJECTS_URLS = [BOOKS_OBJ_URL, PROJECTS_OBJ_URL];
 
+let loadingCounter;
+
 /**
- * Loads the content section.
+ * Loads the content section. 
+ * Returns a promise that resolves when everything loads.
  */
 async function loadContentSection() {
   const keywords = await loadKeywords(KEYWORDS_OBJ_URL);
+  const elementsToLoad = Math.max(keywords.length, 1);
+  counter.add(elementsToLoad);
+  loadingCounter = traceCounterMethods(counter, elementsToLoad);
   if (keywords.length === 0) {
     loadNoKeywords();
   } else {
@@ -47,6 +53,13 @@ async function loadKeywords(keywordsUrl) {
 async function loadNoKeywords() {
   const noKeywordsHTML = await NO_KEYWORDS_HTML;
   $('#keywords').append(noKeywordsHTML);
+  hideLoading();
+  loadingCounter.decrement();
+}
+
+function hideLoading() {
+  $("body").children(":not(#real-body)").addClass("hide");
+  $("#real-body").removeClass("hide").addClass("body");
 }
 
 /**
@@ -59,6 +72,7 @@ async function loadKeywordSection(keyword) {
   const keywordObj = buildKeywordObj(objs[0], objs[1], keyword);
   const template = await KEYWORD_TEMPLATE_PROMISE;
   renderKeyword(template, keywordObj);
+  loadingCounter.decrement();
 }
 
 /**
@@ -75,6 +89,7 @@ function buildKeywordObj(booksObj, projectsObj, keyword) {
 function renderKeyword(template, keywordObj) {
   const keywordHTML = Mustache.render(template, keywordObj);
   $('#keywords').prepend(keywordHTML);
+  hideLoading();
 }
 
 /**
@@ -108,6 +123,7 @@ async function loadCivicSection(locationObj) {
   } else {
     alert('Sorry, your current location is not supported');
   }
+  loadingCounter.decrement();
 }
 
 function locationObj2Address(locationObj) {
@@ -128,4 +144,5 @@ function buildCivicLocationObj(civicObj) {
 function renderLocation(template, civicLocationObj) {
   const locationHTML = Mustache.render(template, civicLocationObj);
   $('#keywords').append(locationHTML);
+  hideLoading();
 }

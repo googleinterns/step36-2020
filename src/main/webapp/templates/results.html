@@ -7,20 +7,30 @@
     <link rel="stylesheet" href="/styles/loader.css">
     <link rel="stylesheet" href="/styles/base.css">
     <link rel="stylesheet" href="/styles/results.css">
-    <link rel="stylesheet" href="/styles/civic.css">
+    <link rel="stylesheet" href="/styles/location.css">
     <link rel="stylesheet" href="/styles/profile.css">
+    <link rel="stylesheet" href="/styles/progress.css">
+    <link rel="stylesheet" href="/styles/back.css">
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans&family=Oswald&display=swap" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script type='module' src='https://unpkg.com/ionicons@5.1.1/dist/ionicons/ionicons.esm.js'></script>
     <script nomodule='' src='https://unpkg.com/ionicons@5.1.1/dist/ionicons/ionicons.js'></script>
     <script src="https://unpkg.com/mustache@latest"></script>
   </head>
-  <body data-key="{{key}}">
+  <body data-key="{{key}}" class="loading">
     <div id="loader"></div>
     <p id="loading-text">Loading...</p>
     <div id="real-body" class="hide">
       <header id="header" class="base">
+        <div id="go-back">
+          <ion-icon name="arrow-back-outline"></ion-icon>
+          <p> Go back to input form</p>
+        </div>
         <p id="title">Engage</p>
+        <div id="progress-bar">
+          <div id="bar"></div>
+          <div id="progress"></div>
+        </div>
       </header>
       <div id="content">
         <div id="keywords"> 
@@ -30,6 +40,7 @@
         <p>Google STEP 2020 Capstone project - Team 36</p>
       </footer>
     </div>
+    <script src="scripts/counter.js"></script>
     <script src="/scripts/cookies.js"></script>
     <script src="/scripts/load.js"></script>
     <script src="/scripts/civic.js"></script>

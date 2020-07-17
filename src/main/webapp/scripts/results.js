@@ -1,9 +1,4 @@
-$().ready(() => {
-  loadContentSection().then(() =>{ 
-    $("body").children(":not(#real-body)").addClass("hide");
-    $("#real-body").removeClass("hide").addClass("body");
-  });
-});
+$().ready(loadContentSection);
 
 $("body").on('click', '.keyword', function() {
   $(this).addClass("active");
@@ -31,4 +26,9 @@ $("body").on('click', '.level-name', function() {
   if (!isThisExtended) {
     $(this).parent().addClass("extended");
   }
+});
+
+$("body").on('click', '#go-back', function() {
+  $("#body").off("click");
+  window.location.href = '/';
 });
