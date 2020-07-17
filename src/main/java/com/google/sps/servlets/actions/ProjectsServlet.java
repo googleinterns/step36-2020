@@ -4,6 +4,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import com.google.sps.data.GetAPIKeyUtil;
 import java.io.IOException;
 import java.util.List;
 import java.util.ArrayList;
@@ -21,11 +22,13 @@ import com.google.sps.data.UrlRequest;
 @WebServlet("/actions/projects")
 public class ProjectsServlet extends HttpServlet {
 
-  private static final String API_KEY = "API_KEY";  // Insert the API_KEY here for testing.
+  private static String API_KEY;
   private static final String API_PATH = "https://api.globalgiving.org/api/public/services/search/projects";
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    GetAPIKeyUtil util = new GetAPIKeyUtil();
+    API_KEY = util.getAPIKey("projects");
     String[] terms = request.getParameterValues("key");
     Map<String, List<Project>> jsonResultMap = new HashMap<>();
     Map<String, String> queryParams = new HashMap<>();
@@ -48,6 +51,7 @@ public class ProjectsServlet extends HttpServlet {
     results.put("results", jsonResultMap);
     String jsonResultString = gson.toJson(results);
     response.setContentType("application/json;");
+    response.setCharacterEncoding("UTF-8");
     response.getWriter().println(jsonResultString);
   }
 

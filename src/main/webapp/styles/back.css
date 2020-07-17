@@ -1,0 +1,14 @@
+#go-back {
+  position: absolute;
+  font-size: 45%;
+  left: 0;
+  margin: 0 3vw;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+#go-back > p {
+  display: inline;
+  margin: 0;
+}

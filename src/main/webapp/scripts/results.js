@@ -27,3 +27,8 @@ $("body").on('click', '.level-name', function() {
     $(this).parent().addClass("extended");
   }
 });
+
+$("body").on('click', '#go-back', function() {
+  $("#body").off("click");
+  window.location.href = '/';
+});
