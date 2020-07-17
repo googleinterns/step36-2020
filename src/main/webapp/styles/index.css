@@ -24,12 +24,15 @@ body {
 }
 
 #title {
+  font-size: 200%;
   text-align: center;
-  padding: 20px;
+  padding: 4vw;
+  margin: 0px;
 }
 #instructions {
-  font-size: 30%;
-  padding: 20px;
+  font-size: 40%;
+  padding: 4vw;
+  margin: 0px;
 }
 
 #keyword-form > textarea {
