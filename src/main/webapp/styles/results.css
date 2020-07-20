@@ -65,6 +65,7 @@
 
 .error {
   font-size: 1.5vh;
+  text-align: center;
 }
 
 .item {
@@ -113,23 +114,18 @@
   .keyword:hover { 
     width: 40vw;
     cursor: pointer;
-  }
-  
-  .keyword:hover:not(.location) {
     display: grid;
-    grid: [row1-start] "title   close  " auto [row1-end]
-          [row2-start] "books   books  " 1fr  [row2-end]
-          [row3-start] "line1   line1  " auto [row3-end]
-          [row4-start] "news    news   " 1fr  [row4-end]
-          [row5-start] "line2   line2  " auto [row5-end]
-          [row6-start] "actions actions" 1fr  [row6-end]
+    grid: [row1-start] "title    close   " 2fr  [row1-end]
+          [row2-start] "location location" 1fr  [row2-end]
+          [row3-start] "levels   levels  " 20fr [row3-end]
           / 96% 4%;
     place-items: center center;
+    transition: all 0.3s ease-in-out;
     font-weight: normal;
   }
   
   .keyword:hover > .title {
-    padding: 3vh 0;
+    padding: 3vh 0 0;
     font-weight: bold;
     font-size: 2.5vh;
     transform: rotate(0deg);
@@ -141,50 +137,28 @@
     font-family: 'Oswald', sans-serif;
   }
 
-  .keyword:hover > .hide:not(.section-headers + .close) {
+  .keyword:hover > .levels {
     display: block;
     transition: all 0.5s ease-in-out;
+    grid-area: levels;
+    width: 100%;
+  }
+
+  .keyword:hover > .levels > .level:not(:last-child) {
+    border-bottom: 1px solid darkgray;
   }
   
-  .keyword:hover > hr {
-    display: block;
-    width: 70%;
-  }
-
-  .keyword:hover > .line1 {
-    grid-area: line1;
-  }
-
-  .keyword:hover > .line2 {
-    grid-area: line2;
-  }
-
-  .keyword:hover > .topic-section {
+  .keyword:hover .level {
     transition: all 0.5s ease-in-out;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-    height: 100%;
-    padding: 0 5vw;
-    box-sizing: border-box;
-    overflow: hidden;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    font-size: 1.1vh;
   }
-
-  .keyword:hover > .topic-section:hover {
-    overflow: auto;
-  }
-
-  .keyword:hover > .books-section {
-    grid-area: books;
-  }
-
-  .keyword:hover > .news-section {
-    grid-area: news;
-  }
-
-  .keyword:hover > .actions-section {
-    grid-area: actions;
+  
+  .keyword:hover ion-icon {
+    transform: rotate(0deg);
+    transition: transform 0.2s ease-in-out;
   }
 
   @media (orientation: portrait) {
