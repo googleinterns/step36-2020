@@ -1,58 +1,56 @@
 <div class="keyword">
   <p class="title">{{term}}</p>
   <ion-icon class="close hide" name="close-outline"></ion-icon>
-  <div class="section-headers hide">
-    <input type="radio" id="books" name="section" value="books" checked>
-    <label for="books">Books</label><br>
-    <input type="radio" id="news" name="section" value="news">
-    <label for="news">News</label><br>
-    <input type="radio" id="actions" name="section" value="actions">
-    <label for="actions">Projects</label>
-  </div>
-  <div class="books-section hide topic-section">
-    <div class="section-header">Books</div>
-    {{#books}}
-      <div class="books item" data-url="{{link}}">
-        <p class="books-title element-title">{{title}} - {{author}}</p>
-        <p class="books-content hide">{{description}}</p>
-        <div class="overlay hide">
-          <p>Learn More <ion-icon name="arrow-forward-outline"></ion-icon></p>
+  <div class="levels hide">
+    {{#books.length}}
+      <div class="level">
+        <p class="level-name"><ion-icon name="chevron-forward-outline"></ion-icon>Books</p>
+        <div class="elements">
+          {{#books}}
+            <div class="books item" data-url="{{link}}">
+              <p class="element-title">{{title}} - {{author}}</p>
+              <p class="books-content">{{description}}</p>
+              <div class="overlay hide">
+                <p>Learn More <ion-icon name="arrow-forward-outline"></ion-icon></p>
+              </div>
+            </div>
+          {{/books}}
         </div>
       </div>
-    {{/books}}
-    {{^books}}
-      <div class="books error">Sorry, we couldn't find any books for you</div>  
-    {{/books}}
-  </div>
-  <hr class="hide" class="line1"> 
-  <div class="news-section hide topic-section">
-    <div class="section-header">News</div>
-    {{#news}}
-      <div class="news item" data-url="{{url}}">
-        <!-- Add news template here -->
-        <div class="overlay hide">
-          <p>Learn More <ion-icon name="arrow-forward-outline"></ion-icon></p>
+    {{/books.length}}
+    {{#news.length}}
+      <div class="level">
+        <p class="level-name"><ion-icon name="chevron-forward-outline"></ion-icon>News</p>
+        <div class="elements">
+          {{#news}}
+            <div class="news item" data-url="{{url}}">
+              <!-- Add news template here -->
+              <div class="overlay hide">
+                <p>Learn More <ion-icon name="arrow-forward-outline"></ion-icon></p>
+              </div>
+            </div>
+          {{/news}}
         </div>
       </div>
-    {{/news}}
-    {{^news}}
-      <div class="action error">Sorry, we couldn't find any news for you</div>
-    {{/news}}
-  </div>
-  <hr class="hide line2"> 
-  <div class="actions-section hide topic-section">
-    <div class="section-header">Projects</div>
-    {{#projects}}
-      <div class="action item" data-url="{{url}}">
-        <p class="action-title element-title">{{title}}</p>
-        <p class="action-content hide summary">{{summary}}</p>
-        <div class="overlay hide">
-          <p>Learn More <ion-icon name="arrow-forward-outline"></ion-icon></p>
+    {{/news.length}}
+    {{#projects.length}}
+      <div class="level">
+        <p class="level-name"><ion-icon name="chevron-forward-outline"></ion-icon>Projects</p>
+        <div class="elements">
+          {{#projects}}
+            <div class="action item" data-url="{{url}}">
+              <p class="element-title">{{title}}</p>
+              <p class="action-content summary">{{summary}}</p>
+              <div class="overlay hide">
+                <p>Learn More <ion-icon name="arrow-forward-outline"></ion-icon></p>
+              </div>
+            </div>
+          {{/projects}}
         </div>
       </div>
-    {{/projects}}
-    {{^projects}}
-      <div class="action error">Sorry, we couldn't find any projects for you</div>
-    {{/projects}}
+    {{/projects.length}}
+    {{^books}}{{^news}}{{^projects}}
+      <div class="error">Sorry, we couldn't find any information for this keyword</div>
+    {{/projects}}{{/news}}{{/books}}
   </div>
 </div>
