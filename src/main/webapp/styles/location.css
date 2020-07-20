@@ -113,6 +113,14 @@ ion-icon {
     padding: 3vh 0 0;
   }
 
+  .location:hover > .subtitle {
+    display: block;
+  }
+
+  .location:hover > .levels {
+    display: block;
+  }
+
   .levels > .level:hover {
     border-bottom-color: gray;
   }
