@@ -13,6 +13,13 @@ import javax.servlet.annotation.WebServlet;
 import com.google.sps.data.UrlRequest;
 import com.google.gson.Gson;
 import java.io.IOException;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
+import java.net.URLEncoder;
+import java.net.URL;
+import java.net.HttpURLConnection;
 
 /** Servlet that gets news information. */
 @WebServlet("/news")
@@ -43,14 +50,49 @@ public class NewsServlet extends HttpServlet {
     paramMap.put("hl", "en-US");
     paramMap.put("gl", "US");
     paramMap.put("ceid", "US:en");
-    return UrlRequest.urlQuery("https://news.google.com/search?", paramMap);
+    String basePath = "https://news.google.com/search?";
+    String path = String.format("%s?%s", basePath, UrlRequest.getParamsString(paramMap));
+    URL url = new URL(path);
+    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+    connection.setRequestMethod("GET");
+    connection.setRequestProperty("Accept", "text/html");
+    connection.setRequestProperty("Content-Type", "text/html");
+    int responseCode = connection.getResponseCode();
+    if (responseCode != 200) {
+      System.err.println("Error: connection response code is: " + responseCode);
+    }
+    InputStreamReader inputStream = new InputStreamReader(connection.getInputStream());
+    StringBuilder contentBuilder = new StringBuilder();
+    try (BufferedReader inputReader = new BufferedReader(inputStream)) {
+      String inputLine;
+      while ((inputLine = inputReader.readLine()) != null) {
+        contentBuilder.append(inputLine);
+      }
+    } catch(IOException e) {
+      System.out.println(e);
+      return "";
+    } finally {
+      connection.disconnect();
+    }
+    return contentBuilder.toString();
   }
 
   public List<Article> makeArticleList(String HTMLString) {
-    return new ArrayList<Article>();
+    List<Article> articleList = new ArrayList<>();
+    final String articleTag = "DY5T1d";
+    String[] substrings = HTMLString.split(articleTag);
+    String substring;
+    int closeBracket, openBracket;
+    for (int i = 5; i < substrings.length; i++) {
+      substring = substrings[i];
+      closeBracket = substring.indexOf(">");
+      openBracket = substring.indexOf("<");
+      articleList.add(new Article(substring.substring(closeBracket + 1, openBracket)));
+    }
+    return articleList;
   }
 
-  private String encodeBookMapAsJson(Map<String, List<Article>> map) {
+  public String encodeBookMapAsJson(Map<String, List<Article>> map) {
     Gson gson = new Gson();
     Map<String, Object> newMap = new HashMap<>();
     newMap.put("articles", map);
