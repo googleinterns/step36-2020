@@ -37,11 +37,11 @@ public final class Keywords {
   // We don't want any terms that are far too un-salient to include in the keywords list.
   // 0.2 is a good minimum threshold as, especially when extracting saliency from a list of
   // label, many of the high-relevancy terms end up only getting assigned a salience of 0.2.
-  private static final int MIN_SALIENCE_THRESHOLD = 0.2;
+  private static final double MIN_SALIENCE_THRESHOLD = 0.1;
 
   // For labels, we want high-confidence labels. Many of the labels below 0.70 seem to end
   // up being only tangetially related to the contents of the picture.
-  private static final int MIN_SCORE_THRESHOLD = 0.70;
+  private static final double MIN_SCORE_THRESHOLD = 0.60;
 
   /**
    * @return a list of the 5 most salient keywords
