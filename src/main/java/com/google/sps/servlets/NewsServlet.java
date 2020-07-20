@@ -50,14 +50,13 @@ public class NewsServlet extends HttpServlet {
         e.printStackTrace();
       }
     });
-    String json = encodeBookMapAsJson(articleMap);
+    String json = encodeMapAsJson(articleMap);
     response.setCharacterEncoding("UTF-8");
     response.getWriter().println(json);
   }
 
   public HttpURLConnection getConnection(String basePath, Map<String, String> paramMap) throws IOException {
     String path = String.format("%s?%s", basePath, UrlRequest.getParamsString(paramMap));
-    System.out.println(path);
     URL url = new URL(path);
     HttpURLConnection connection = (HttpURLConnection) url.openConnection();
     connection.setRequestMethod("GET");
@@ -79,7 +78,7 @@ public class NewsServlet extends HttpServlet {
         contentBuilder.append(inputLine);
       }
     } catch(IOException e) {
-      System.out.println(e);
+      System.err.println(e);
       return "";
     } finally {
       connection.disconnect();
@@ -104,7 +103,7 @@ public class NewsServlet extends HttpServlet {
     return articleList;
   }
 
-  public String encodeBookMapAsJson(Map<String, List<Article>> map) {
+  public String encodeMapAsJson(Map<String, List<Article>> map) {
     Gson gson = new Gson();
     Map<String, Object> newMap = new HashMap<>();
     newMap.put("articles", map);
