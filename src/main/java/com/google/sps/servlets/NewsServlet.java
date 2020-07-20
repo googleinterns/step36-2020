@@ -20,10 +20,15 @@ import java.nio.charset.StandardCharsets;
 import java.net.URLEncoder;
 import java.net.URL;
 import java.net.HttpURLConnection;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 /** Servlet that gets news information. */
 @WebServlet("/news")
 public class NewsServlet extends HttpServlet {
+
+  public final String GOOGLE_NEWS_PATH = "https://news.google.com/search";
+  public final String GOOGLE_SEARCH_PATH = "https://www.google.com/search";
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -31,7 +36,13 @@ public class NewsServlet extends HttpServlet {
     HashMap<String, List<Article>> articleMap = new HashMap<>();
     terms.forEach((term) -> {
       try {
-        String HTMLString = getHTML(term);
+        Map<String, String> paramMap = new HashMap<>();
+        paramMap.put("q", UrlRequest.encodeTerm(term));
+        paramMap.put("hl", "en-US");
+        paramMap.put("gl", "US");
+        paramMap.put("ceid", "US:en");
+        HttpURLConnection connect = getConnection(GOOGLE_NEWS_PATH, paramMap);
+        String HTMLString = getHTML(connect);
         List<Article> articleList = makeArticleList(HTMLString);
         articleMap.put(term, articleList);
       }
@@ -44,14 +55,9 @@ public class NewsServlet extends HttpServlet {
     response.getWriter().println(json);
   }
 
-  public String getHTML(String term) throws IOException {
-    Map<String, String> paramMap = new HashMap<>();
-    paramMap.put("q", UrlRequest.encodeTerm(term));
-    paramMap.put("hl", "en-US");
-    paramMap.put("gl", "US");
-    paramMap.put("ceid", "US:en");
-    String basePath = "https://news.google.com/search?";
+  public HttpURLConnection getConnection(String basePath, Map<String, String> paramMap) throws IOException {
     String path = String.format("%s?%s", basePath, UrlRequest.getParamsString(paramMap));
+    System.out.println(path);
     URL url = new URL(path);
     HttpURLConnection connection = (HttpURLConnection) url.openConnection();
     connection.setRequestMethod("GET");
@@ -61,6 +67,10 @@ public class NewsServlet extends HttpServlet {
     if (responseCode != 200) {
       System.err.println("Error: connection response code is: " + responseCode);
     }
+    return connection;
+  }
+
+  public String getHTML(HttpURLConnection connection) throws IOException {
     InputStreamReader inputStream = new InputStreamReader(connection.getInputStream());
     StringBuilder contentBuilder = new StringBuilder();
     try (BufferedReader inputReader = new BufferedReader(inputStream)) {
@@ -77,17 +87,19 @@ public class NewsServlet extends HttpServlet {
     return contentBuilder.toString();
   }
 
-  public List<Article> makeArticleList(String HTMLString) {
+  public List<Article> makeArticleList(String HTMLString) throws IOException {
     List<Article> articleList = new ArrayList<>();
     final String articleTag = "DY5T1d";
     String[] substrings = HTMLString.split(articleTag);
-    String substring;
+    String thisSubstring, lastSubstring, title, link;
     int closeBracket, openBracket;
     for (int i = 5; i < substrings.length; i++) {
-      substring = substrings[i];
-      closeBracket = substring.indexOf(">");
-      openBracket = substring.indexOf("<");
-      articleList.add(new Article(substring.substring(closeBracket + 1, openBracket)));
+      lastSubstring = substrings[i - 1];
+      thisSubstring = substrings[i];
+      title = thisSubstring.substring(thisSubstring.indexOf(">") + 1, thisSubstring.indexOf("<"));
+      link = lastSubstring.substring(lastSubstring.lastIndexOf("href"), lastSubstring.lastIndexOf("\""));
+      link = "news.google.com" + link.substring(link.indexOf(".") + 1, link.lastIndexOf("\""));
+      articleList.add(new Article(title, link));
     }
     return articleList;
   }
