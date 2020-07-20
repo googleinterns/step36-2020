@@ -18,7 +18,7 @@
     var(--lowerColor));
   grid: [row1-start] "content " 100vh [row1-end]
         / 1fr;
-  place-items: strech;
+  place-items: stretch;
   transition: all 0.3s ease-in-out;
 }
 
@@ -59,83 +59,8 @@
   font-size: 1.2vw;
 }
 
-.active {
-  position: absolute;
-  z-index: 5;
-  width: 95vw;
-  height: 90vh;
-  background-color: white;
-  cursor: auto;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.5);
-  display: grid;
-  grid: [row1-start] "title   close  " auto [row1-end]
-        [row2-start] "books    books   " 1fr  [row2-end]
-        [row3-start] "line    line   " auto [row3-end]
-        [row4-start] "actions actions" 1fr  [row4-end]
-        / 96% 4%;
-  place-items: center center;
-  transition: all 0.3s ease-in-out;
-  font-weight: normal;
-}
-
-.active > .title {
-  padding: 3vh 0;
-  font-weight: bold;
-  font-size: 2.5vh;
-  transform: rotate(0deg);
-  writing-mode: horizontal-tb;
-  transition: all 0.5s ease-in-out;
-  grid-row: 1;
-  grid-column-start: 1;
-  grid-column-end: span 2;
-  font-family: 'Oswald', sans-serif;
-}
-
-.active .hide {
-  display: block;
-  transition: all 0.5s ease-in-out;
-}
-
 .section-header {
   font-weight: bold;
-}
-
-.active .section-header {
-  font-family: 'Oswald', sans-serif;
-  font-weight: normal;
-  font-size: 2.3vh;
-}
-
-.active > hr {
-  display: block;
-  grid-area: line;
-  width: 70%;
-}
-
-.active > .books-section,
-.active > .actions-section {
-  transition: all 0.5s ease-in-out;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-  height: 100%;
-  padding: 0 5vw;
-  box-sizing: border-box;
-  overflow: hidden;
-}
-
-.active > .books-section,
-.active > .actions-section {
-  overflow: auto;
-}
-
-.active > .books-section {
-  grid-area: books;
-}
-
-.active > .actions-section {
-  grid-area: actions;
 }
 
 .error {
@@ -149,45 +74,8 @@
   font-size: 1.3vh;
 }
 
-.active .item {
-  position: relative;
-  display: inline-block;
-  border-radius: 1vh;
-  box-shadow: 0 0.1vh 0.2vw rgba(0,0,0,0.15);
-  padding: 0 1vw;
-}
-
-.active .overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: -1;
-  width: 100%;
-  height: 100%;
-  opacity: 0;
-  border-radius: 1vh;
-  box-shadow: 0 0.5vh 1.5vw rgba(0,0,0,0.3);
-  transition: opacity 0.3s ease-in-out;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-family: 'Oswald', sans-serif;
-  font-size: 200%;
-  font-weight: bold;
-}
-
-.active .books-title,
-.active .action-title {
-  font-weight: bold;
-}
-
-.active > .close {
-  display: inline;
-  grid-area: close;
-  place-self: start center;
-  margin: 1vh;
-  font-size: 2.5vh;
-  cursor: pointer;
+.item > p {
+  margin: 0.15vh;
 }
 
 @media (orientation: portrait) {
@@ -219,15 +107,6 @@
     width: auto;
     font-size: 1.5vh;
   }
-  
-  .active {
-    width: 95vw;
-    height: 95vh;
-  }
-
-  .active > .title {
-    font-size: 2.5vh;
-  }
 }
 
 @media (any-hover: hover) {
@@ -236,22 +115,14 @@
     cursor: pointer;
   }
   
-  .active:hover {
-    position: absolute;
-    z-index: 5;
-    width: 95vw;
-    height: 90vh;
-    background-color: white;
-    cursor: auto;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
-  }
-  
   .keyword:hover:not(.location) {
     display: grid;
     grid: [row1-start] "title   close  " auto [row1-end]
-          [row2-start] "books   books   " 1fr  [row2-end]
-          [row3-start] "line    line   " auto [row3-end]
-          [row4-start] "actions actions" 1fr  [row4-end]
+          [row2-start] "books   books  " 1fr  [row2-end]
+          [row3-start] "line1   line1  " auto [row3-end]
+          [row4-start] "news    news   " 1fr  [row4-end]
+          [row5-start] "line2   line2  " auto [row5-end]
+          [row6-start] "actions actions" 1fr  [row6-end]
           / 96% 4%;
     place-items: center center;
     font-weight: normal;
@@ -270,19 +141,25 @@
     font-family: 'Oswald', sans-serif;
   }
 
-  .keyword:hover > .hide {
+  .keyword:hover > .hide:not(.section-headers + .close) {
     display: block;
     transition: all 0.5s ease-in-out;
   }
   
   .keyword:hover > hr {
     display: block;
-    grid-area: line;
     width: 70%;
   }
 
-  .keyword:hover > .books-section,
-  .keyword:hover > .actions-section {
+  .keyword:hover > .line1 {
+    grid-area: line1;
+  }
+
+  .keyword:hover > .line2 {
+    grid-area: line2;
+  }
+
+  .keyword:hover > .topic-section {
     transition: all 0.5s ease-in-out;
     display: flex;
     flex-direction: column;
@@ -294,54 +171,26 @@
     overflow: hidden;
   }
 
-  .keyword:hover > .books-section:hover,
-  .keyword:hover > .actions-section:hover {
+  .keyword:hover > .topic-section:hover {
     overflow: auto;
   }
-
 
   .keyword:hover > .books-section {
     grid-area: books;
   }
 
+  .keyword:hover > .news-section {
+    grid-area: news;
+  }
+
   .keyword:hover > .actions-section {
     grid-area: actions;
-  }
-  .active .item:hover {
-    cursor: pointer;
-  }
-
-  .active .item:hover > p {
-    color: transparent;
-    text-shadow: 0 0 5px rgba(0,0,0,0.7);
-    user-select: none;
-  }
-
-  .active .item:hover > .overlay {
-    opacity: 1;
-  }
-  .keyword:hover > .close {
-    display: none;
-  }
-
-  .active:hover > .close {
-    display: inline;
-    grid-area: close;
-    place-self: start center;
-    margin: 1vh;
-    font-size: 2.5vh;
-    cursor: pointer;
   }
 
   @media (orientation: portrait) {
     .keyword:hover {
       width: 60vw;
       height: 40vh;
-    }
-    
-    .active:hover {
-      width: 95vw;
-      height: 95vh;
     }
   }
 }
