@@ -7,44 +7,44 @@
     <link rel="stylesheet" href="/styles/index.css">
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans&family=Oswald&display=swap" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script type='module' src='https://unpkg.com/ionicons@5.1.1/dist/ionicons/ionicons.esm.js'></script>
+    <script nomodule='' src='https://unpkg.com/ionicons@5.1.1/dist/ionicons/ionicons.js'></script>
     <title>Input Tweet</title>
   </head>
   <body>
     <header id="header" class="base">
       <p id="title">Engage</p>
-      <p id="instructions">
-        We help you engage more deeply with your social media feed. 
-        Copy and paste a post, or upload an image from you feed. 
-        Then, press submit, and you'll see a collection of books and community projects
-        about each important keyword in your feed. If you'd like to contact a local politician
-        about an issue, enable the use of location data and find your local representatives 
-        on the right side of the screen.
-      </p>
-      <p id="instructions">
-        If you would like to contact one of the creators, please email
-        andrewhl@google.com, uribejuan@google.com, or nsafir@google.com.
-      </p>
+      <ol id="instructions">
+        <li>Copy and paste a post, or upload an image from you feed.</li>
+        <li>Press submit to see a collection of books, news and community projects about each important keyword in your feed.</li>
+        <li>Enable the use of location data if you'd like to find your local representatives and their contact information.</li>
+      </ol>
     </header>
     <div id="content">
-      <br/>
       <div id="form-title">
         <p>Choose Type of Input</p>
       </div>
-      <label><input type="checkbox" /> Use Location</label>
-      <br/>
+      <div id="location-input">
+        <label for="location-checkbox">Use Location</label>
+        <input id="location-checkbox" type="checkbox" />
+      </div>
       <div id="input-select">
-        <button id="select-text">Text</button>
-        <button id="select-blob">Upload Image</button>
+        <button id="select-text" class="button">Text</button>
+        <button id="select-blob" class="button">Upload Image</button>
       </div>
       <form id="keyword-form" class="hide" action="/keyword" method="post" enctype="multipart/form-data">
         <textarea id="text-input" name="keyword-sentence" placeholder="Enter your tweet or interests here"></textarea>
-        <input id="blob-input" type="file" name="image" accept="image/*" />
-        <br/>
-        <input type="submit" />
+        <div id="blob-input">
+          <label for="blob-file" id="blob-label"><p class="upload-button"><ion-icon name="cloud-upload-outline"></ion-icon> Choose File</p> <p id="file-path">No file chosen</p></label>
+          <input id="blob-file" type="file" name="image" accept="image/*" />
+        </div>
+        <input id="submit-form" type="submit" class="button" />
       </form>
     </div>
     <footer id="footer" class="base">
+      <p>Helping you engage more deeply with your social media feed</p>
       <p>Google STEP 2020 Capstone project - Team 36</p>
+      <p>Contact us at <a href="mailto:andrewhl@google.com">andrewhl@google.com</a>, <a href="mailto:uribejuan@google.com">uribejuan@google.com</a>, or <a href="mailto:nsafir@google.com">nsafir@google.com</a></p>
     </footer>
     <script src="scripts/cookies.js"></script>
     <script src="scripts/index.js"></script>
