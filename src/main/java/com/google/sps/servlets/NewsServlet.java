@@ -28,7 +28,7 @@ import java.nio.file.Paths;
 public class NewsServlet extends HttpServlet {
 
   public final String GOOGLE_NEWS_PATH = "https://news.google.com/search";
-  public final String GOOGLE_SEARCH_PATH = "https://www.google.com/search";
+  public final String articleTag = "DY5T1d"; // Class tag for articles in Google News html code.
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -88,11 +88,12 @@ public class NewsServlet extends HttpServlet {
 
   public List<Article> makeArticleList(String HTMLString) throws IOException {
     List<Article> articleList = new ArrayList<>();
-    final String articleTag = "DY5T1d";
     String[] substrings = HTMLString.split(articleTag);
     String thisSubstring, lastSubstring, title, link;
     int closeBracket, openBracket;
+    // For each substring seperated by the article class tag.
     for (int i = 5; i < substrings.length; i++) {
+      // Get the link from before the article tag and the title from after to make a new Article object.
       lastSubstring = substrings[i - 1];
       thisSubstring = substrings[i];
       title = thisSubstring.substring(thisSubstring.indexOf(">") + 1, thisSubstring.indexOf("<"));
