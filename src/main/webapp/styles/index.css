@@ -27,12 +27,12 @@ body {
   font-size: 200%;
   text-align: center;
   padding: 4vw;
-  margin: 0px;
+  margin: 0;
 }
 #instructions {
   font-size: 40%;
   padding: 4vw;
-  margin: 0px;
+  margin: 0;
 }
 
 #keyword-form > textarea {
