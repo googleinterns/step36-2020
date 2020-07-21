@@ -29,6 +29,7 @@ public class NewsServlet extends HttpServlet {
 
   public final String GOOGLE_NEWS_PATH = "https://news.google.com/search";
   public final String articleTag = "DY5T1d"; // Class tag for articles in Google News html code.
+  public final int MAX_ARTICLES = 3;
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -92,7 +93,7 @@ public class NewsServlet extends HttpServlet {
     String thisSubstring, lastSubstring, title, link;
     int closeBracket, openBracket;
     // For each substring seperated by the article class tag.
-    for (int i = 5; i < substrings.length; i++) {
+    for (int i = 4; i < Math.min(substrings.length, 4 + MAX_ARTICLES); i++) {
       // Get the link from before the article tag and the title from after to make a new Article object.
       lastSubstring = substrings[i - 1];
       thisSubstring = substrings[i];
