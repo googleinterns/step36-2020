@@ -28,7 +28,7 @@ import java.nio.file.Paths;
 public class NewsServlet extends HttpServlet {
 
   public final String GOOGLE_NEWS_PATH = "https://news.google.com/search";
-  public final String articleTag = "DY5T1d"; // Class tag for articles in Google News html code.
+  public final String articleTag = "DY5T1d";  // Class tag for articles in Google News HTML code.
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
