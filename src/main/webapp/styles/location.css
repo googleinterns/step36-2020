@@ -7,86 +7,10 @@
   background-color: lightgray;
 }
 
-.active.location > .title {
-  padding: 3vh 0 0;
-}
-
-.active.location {
-  display: grid;
-  grid: [row1-start] "title    close   " 2fr  [row1-end]
-        [row2-start] "location location" 1fr  [row2-end]
-        [row3-start] "levels   levels  " 20fr [row3-end]
-        / 96% 4%;
-  place-items: center center;
-  transition: all 0.3s ease-in-out;
-  font-weight: normal;
-}
-
 .subtitle {
   grid-area: location;
   font-size: 1.5vh;
   margin: 0 0 auto;
-}
-
-.levels {
-  grid-area: levels;
-  width: 100%;
-}
-
-.levels > .level:not(:last-child) {
-  border-bottom: 1px solid darkgray;
-}
-
-.level {
-  margin: 0;
-  padding: 0;
-  text-align: center;
-  font-size: 1.1vh;
-}
-
-ion-icon {
-  transform: rotate(0deg);
-  transition: transform 0.2s ease-in-out;
-}
-
-.level-name {
-  margin: 0;
-  padding: 1.5vh 0;
-  cursor: pointer;
-  background-color: rgba(0, 0, 0, 0);
-  transition: background-color 0.2s ease-in-out;
-  font-size: 1.5vh;
-}
-
-.extended > .level-name {
-  font-family: 'Oswald', sans-serif;
-  font-weight: bold;
-  font-size: 1.7vh;
-  letter-spacing: 110%;
-  background-color: rgba(0, 0, 0, 0.1);
-}
-
-.extended > .level-name > ion-icon {
-  transform: rotate(90deg);
-}
-
-.profiles {
-  display: flex;
-  flex-flow: row wrap;
-  justify-content: space-around;
-  height: 0;
-  opacity: 0;
-  transition: height 0.5s ease-in-out, opacity 0.2s linear;
-}
-
-.extended > .profiles {
-  opacity: 1;
-  height: 50vh;
-  overflow: auto;
-}
-
-.extended .profile {
-  display: block;
 }
 
 @media (orientation: portrait) {
@@ -100,20 +24,9 @@ ion-icon {
 @media (any-hover: hover) {
   .location:hover {
     background-color: lightgray;
-    display: grid;
-    grid: [row1-start] "title    close   " 2fr  [row1-end]
-          [row2-start] "location location" 1fr  [row2-end]
-          [row3-start] "levels   levels  " 20fr [row3-end]
-          / 96% 4%;
-    place-items: center center;
-    font-weight: normal;
   }
 
-  .location:hover > .title {
-    padding: 3vh 0 0;
-  }
-
-  .levels > .level:hover {
-    border-bottom-color: gray;
+  .location:hover > .subtitle {
+    display: block;
   }
 }
