@@ -1,8 +1,9 @@
-//$("checkbox").click(setLocationCookie);
-$(document).ready(function() {
+$().ready(function() {
   $('#location-checkbox').change(function() {
     if(this.checked) {
-      setLocationCookie();
+      setCookie('location', 'true', 1);
+    } else {
+      eraseCookie('location');
     }
   });
 });
