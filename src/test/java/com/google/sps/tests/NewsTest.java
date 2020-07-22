@@ -22,11 +22,16 @@ import java.util.HashMap;
 @RunWith(JUnit4.class)
 public final class NewsTest {
 
-  public final String FULL_HTML_PATH = "src/test/java/com/google/sps/data/fullNewsHTML.txt";
-  public final String EMPTY_HTML_PATH = "src/test/java/com/google/sps/data/emptyHTML.txt";
-  public List<Article> fullArticleList = new ArrayList<>(); 
+  public final static String FULL_HTML_PATH = "src/test/java/com/google/sps/data/fullNewsHTML.txt";
+  public final static String PART_HTML_PATH = "src/test/java/com/google/sps/data/partialNewsHTML.txt";
+  public final static String EMPTY_HTML_PATH = "src/test/java/com/google/sps/data/emptyHTML.txt";
+  public List<Article> someArticleList = new ArrayList<>(); 
 
-  public static String textToString(String filePath) throws IOException {
+ /**
+  * Helper method that converts a file path of a text file to a String.
+  * @return String version of text in specified file.
+  */
+  private static String textToString(String filePath) throws IOException {
     StringBuilder stringBuilder = new StringBuilder();
     try (BufferedReader inputReader = new BufferedReader(new FileReader(filePath))) {
       String inputLine;
@@ -40,58 +45,91 @@ public final class NewsTest {
     return stringBuilder.toString();
   }
 
+ /**
+  * Helper method to check the makeArticleList method in the NewsServlet class.
+  * Checks if makeArticleList on HTML text in the specified file has output equivalent to expectedList.
+  */
+  private static void checkMakeArticleList(String filePath, List<Article> expectedList) throws IOException {
+    NewsServlet ns = new NewsServlet();
+    String htmlString = textToString(filePath);
+    List<Article> articleList = ns.makeArticleList(htmlString);
+    // Check each class instance in each article object is equal.
+    Assert.assertEquals(articleList.size(), expectedList.size());
+    for(int i = 0; i < articleList.size(); i++) {
+      Article realArticle = articleList.get(i);
+      Article expectedArticle = expectedList.get(i);  
+      Assert.assertEquals(expectedArticle.getTitle(), realArticle.getTitle());
+      Assert.assertEquals(expectedArticle.getLink(), realArticle.getLink());
+    }  
+  }
+  
+ /**
+  * Set up for following tests.
+  * Populates someArticleList with Article entries.
+  */
   @Before
   public void setUp() {
-    // Populate fullArticleList.
-    fullArticleList.add(new Article(
+    someArticleList.add(new Article(
       "The latest Instagram trend: putting your name on photos of frogs, cats and Harry Styles",
       "news.google.com/articles/CBMib2h0dHBzOi8vd3d3LnRoZWd1YXJkaWFuLmNvbS91cy1uZXdzLzIwMjAvanVsLzIwL2luc3RhZ3JhbS13aGF0LWZyb2ctYXJlLXlvdS1pbnNpZGUtdGhlLWxhdGVzdC13YXktdG8td2FzdGUtdGltZdIBb2h0dHBzOi8vYW1wLnRoZWd1YXJkaWFuLmNvbS91cy1uZXdzLzIwMjAvanVsLzIwL2luc3RhZ3JhbS13aGF0LWZyb2ctYXJlLXlvdS1pbnNpZGUtdGhlLWxhdGVzdC13YXktdG8td2FzdGUtdGltZQ?hl=en-US&amp;gl=US&amp;ceid=US%3Aen"
     ));
-    fullArticleList.add(new Article(
+    someArticleList.add(new Article(
       "How a blue protein turns tree frogs bright green",
       "news.google.com/articles/CBMiVmh0dHBzOi8vd3d3LnNjaWVuY2VtYWcub3JnL25ld3MvMjAyMC8wNy9ob3ctYmx1ZS1wcm90ZWluLXR1cm5zLXRyZWUtZnJvZ3MtYnJpZ2h0LWdyZWVu0gEA?hl=en-US&amp;gl=US&amp;ceid=US%3Aen"
     ));
+  }
+
+ /**
+  * Check that when given no HTML text, makeArticleList returns an empty list.
+  */
+  @Test
+  public void articlesFromEmptyHTML() throws IOException {
+    NewsServlet ns = new NewsServlet();
+    List<Article> articleList = ns.makeArticleList("");
+    Assert.assertEquals(articleList, new ArrayList<Article>());
+  }
+
+ /**
+  * Checks that makeArticleList makes a list with all the articles in the HTML text
+  * if there are less articles in the HTML text than makeArticleList would genereate by default.
+  */
+  @Test
+  public void articlesFromPartialHTML() throws IOException {
+    checkMakeArticleList(PART_HTML_PATH, someArticleList);
+  }
+
+ /**
+  * Checks that makeArticleList makes correctly sized list when there are more articles in the 
+  * HTML text than makeArticleList would generate by default.
+  */
+  @Test
+  public void articlesFromFullHTML() throws IOException {  
+    List<Article> fullArticleList = someArticleList;
     fullArticleList.add(new Article(
       "How frogs became green — again, and again, and again : Research Highlights", 
       "news.google.com/articles/CBMiMmh0dHBzOi8vd3d3Lm5hdHVyZS5jb20vYXJ0aWNsZXMvZDQxNTg2LTAyMC0wMjEwMy160gEA?hl=en-US&amp;gl=US&amp;ceid=US%3Aen"
     ));
+    checkMakeArticleList(FULL_HTML_PATH, fullArticleList);
   }
 
-  @Test
-  public void articlesFromEmptyHTML() throws IOException {
-    NewsServlet ns = new NewsServlet();
-    String htmlString = "";
-    List<Article> articleList = ns.makeArticleList(htmlString);
-    Assert.assertEquals(articleList, new ArrayList<Article>());
-  }
-
-  @Test
-  public void articlesFromFullHTML() throws IOException {
-    NewsServlet ns = new NewsServlet();
-    String htmlString = textToString(FULL_HTML_PATH);
-    List<Article> articleList = ns.makeArticleList(htmlString);
-    // Check each class instance in each article object is equal.
-    Assert.assertEquals(articleList.size(), fullArticleList.size());
-    for(int i = 0; i < articleList.size(); i++) {
-      Article realArticle = articleList.get(i);
-      Article expectedArticle = fullArticleList.get(i);
-      Assert.assertEquals(expectedArticle.getTitle(), realArticle.getTitle());
-      Assert.assertEquals(expectedArticle.getLink(), realArticle.getLink());
-    }   
-  }
-
+ /**
+  * Checks that getHTML method returns empty string when no HTML text.
+  */
   @Test
   public void getEmptyHTML() {
     try {
       HttpURLConnection connection = Mockito.mock(HttpURLConnection.class);
       Mockito.when(connection.getInputStream()).thenReturn(new FileInputStream(EMPTY_HTML_PATH));
       NewsServlet ns = new NewsServlet();
-      Assert.assertEquals(ns.getHTML(connection), textToString(EMPTY_HTML_PATH));  
+      Assert.assertEquals(ns.getHTML(connection), "");  
     } catch (Exception e) {
       e.printStackTrace();
     }
   }
 
+ /**
+  * Checks that getHTML method translates HTML text to String correctly under normal conditions.
+  */
   @Test
   public void getFullHTML() {
     try {
@@ -103,7 +141,5 @@ public final class NewsTest {
       e.printStackTrace();
     }
   }
-
   
-
 }
