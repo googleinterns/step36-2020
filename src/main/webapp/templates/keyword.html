@@ -8,7 +8,7 @@
         <div class="elements">
           {{#books}}
             <div class="books item" data-url="{{link}}">
-              <p class="element-title">{{title}} - {{author}}</p>
+              <p class="element-title">{{title}} {{#author}}- {{.}}{{/author}}</p>
               <p class="books-content">{{description}}</p>
               <div class="overlay hide">
                 <p>Learn More <ion-icon name="arrow-forward-outline"></ion-icon></p>
