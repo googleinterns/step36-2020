@@ -57,6 +57,7 @@
   transition: all 0.3s ease-in-out;
   height: auto;
   font-size: 1.2vw;
+  color: hsl(var(--upperColor-hs), 20%);
 }
 
 .section-header {
@@ -73,10 +74,27 @@
   margin: 0.5vh 0;	
   transition: all 0.3s ease-in-out;
   font-size: 1.3vh;
+  display: none;
+}
+
+.extended .item {
+  display: inline-block;
 }
 
 .item > p {
   margin: 0.15vh;
+}
+
+.books > .level-name {
+  color: var(--booksColor);
+}
+
+.news > .level-name {
+  color: var(--newsColor);
+}
+
+.actions > .level-name {
+  color: var(--actionsColor);
 }
 
 @media (orientation: portrait) {
