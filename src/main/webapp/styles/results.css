@@ -87,14 +87,29 @@
 
 .books > .level-name {
   color: var(--booksColor);
+  background-color: hsl(var(--booksColor-hs), 90%);
 }
 
 .news > .level-name {
   color: var(--newsColor);
+  background-color: hsl(var(--newsColor-hs), 90%);
 }
 
 .actions > .level-name {
   color: var(--actionsColor);
+  background-color: hsl(var(--actionsColor-hs), 90%);
+}
+
+.extended.books > .level-name {
+  background-color: hsl(var(--booksColor-hs), 85%);
+}
+
+.extended.news > .level-name {
+  background-color: hsl(var(--newsColor-hs), 85%);
+}
+
+.extended.actions > .level-name {
+  background-color: hsl(var(--actionsColor-hs), 85%);
 }
 
 @media (orientation: portrait) {
