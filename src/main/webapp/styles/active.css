@@ -37,7 +37,6 @@
 
 .active .item {
   position: relative;
-  display: inline-block;
   border-radius: 1vh;
   box-shadow: 0 0.1vh 0.2vw rgba(0,0,0,0.15);
   padding: 1vh 1vw;
