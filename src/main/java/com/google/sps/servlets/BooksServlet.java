@@ -24,6 +24,7 @@ import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Collections;
 
 /**
  * Servlet for generating a map of each term to a 
@@ -45,9 +46,14 @@ public class BooksServlet extends HttpServlet {
     List<String> terms = Arrays.asList(request.getParameterValues("key"));
     LinkedHashMap<String, List<Book>> booksMap = new LinkedHashMap<>();
     terms.forEach((term) -> {
-      String jsonString = getJsonStringForTerm(term);
-      List<Book> books = makeBooksList(jsonString);
-      booksMap.put(term, books);
+      try {
+        String jsonString = getJsonStringForTerm(term);
+        List<Book> books = makeBooksList(jsonString);
+        booksMap.put(term, books);
+      } catch (NullPointerException|IllegalStateException exception) {
+        exception.printStackTrace();
+        booksMap.put(term, Collections.emptyList());
+      }
     });
     String json = encodeBookMapAsJson(booksMap);
     response.setCharacterEncoding("UTF-8");

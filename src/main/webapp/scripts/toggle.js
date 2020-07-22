@@ -3,7 +3,8 @@ const LOCATION_TEMPLATE_PROMISE = loadTemplate('/templates/location.html');
 const NO_KEYWORDS_HTML = loadTemplate('/templates/noKeywords.html')
 
 const KEYWORDS_OBJ_URL = '/keyword';
-const CIVIC_OBJ_URL = '/actions/civic'
+const CIVIC_OBJ_URL = '/actions/civic';
+const LOCATION_OBJ_URL = '/location';
 
 const BOOKS_OBJ_URL =  '/books';
 const PROJECTS_OBJ_URL = '/actions/projects';
@@ -25,7 +26,10 @@ async function loadContentSection() {
   } else {
     keywords.forEach(loadKeywordSection);
   }
-  loadCivicSection();
+  const location = getCookie('location');
+  if (location != "") {
+    loadLocationObj(loadCivicSection);
+  }
 }
 
 /**
@@ -89,36 +93,56 @@ function renderKeyword(template, keywordObj) {
 }
 
 /**
+ * Loads the current location of the user, and passes the locationObj to the callback function.
+ * Returns a locationObj.
+ */
+function loadLocationObj(callback) {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(async (position) => {
+      const lat = position.coords.latitude;
+      const lng = position.coords.longitude;
+      locationObj = await loadObject(`${LOCATION_OBJ_URL}?lat=${lat}&lng=${lng}`);
+      callback(locationObj);
+    }, (err) => {
+      console.warn(`ERROR(${err.code}): ${err.message}`);
+      alert("We cannot access your location. Try checking your browswer settings");
+    });
+  }
+}
+
+/**
  * Loads the civic section to the DOM, or alerts the user if there aren't any results for their location.
  */
-async function loadCivicSection() {
-  const lat = getCookie("latitude");
-  const lng = getCookie("longitude");
-  if (lat != "" && lng != "") {
-    try {
-      const civicObj = await loadObject(`${CIVIC_OBJ_URL}?lat=${lat}&lng=${lng}`);
-      const locationObj = buildLocationObj(civicObj);
-      const locationTemplate = await LOCATION_TEMPLATE_PROMISE;
-      renderLocation(locationTemplate, locationObj);
-    } catch (err) {
-      alert("We couldn't find any civic information for your location.");
-    }
+async function loadCivicSection(locationObj) {
+  if (locationObj.Country === "United States") {
+    const address = locationObj2Address(locationObj);
+    const civicObj = await loadObject(`${CIVIC_OBJ_URL}?address=${address}`);
+    const civicLocationObj = buildCivicLocationObj(civicObj);
+    const locationTemplate = await LOCATION_TEMPLATE_PROMISE;
+    renderLocation(locationTemplate, civicLocationObj);
+  } else {
+    alert('Sorry, your current location is not supported');
   }
   loadingCounter.decrement();
 }
 
-/**
- * Builds a keyword object given a civic object returned by the civic API.
- */
-function buildLocationObj(civicObj) {
-  let locationObj = new Object();
-  locationObj.address = civicObj.normalizedInput;
-  locationObj.levels = officialsByLevel(civicObj);
-  return locationObj;
+function locationObj2Address(locationObj) {
+  const addressTemplate = '{{Street Number}} {{Street Name}}, {{City}} {{State}} {{Zip Code}}';
+  return Mustache.render(addressTemplate, locationObj);
 }
 
-function renderLocation(template, locationObj) {
-  const locationHTML = Mustache.render(template, locationObj);
+/**
+ * Builds a civic location object given a civic object returned by the civic API.
+ */
+function buildCivicLocationObj(civicObj) {
+  let civicLocationObj = new Object();
+  civicLocationObj.address = civicObj.normalizedInput;
+  civicLocationObj.levels = officialsByLevel(civicObj);
+  return civicLocationObj;
+}
+
+function renderLocation(template, civicLocationObj) {
+  const locationHTML = Mustache.render(template, civicLocationObj);
   $('#keywords').append(locationHTML);
   hideLoading();
 }
