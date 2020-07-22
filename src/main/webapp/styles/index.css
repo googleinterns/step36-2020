@@ -1,4 +1,4 @@
-body {
+.body {
   background: linear-gradient( to right,
     var(--upperColor) 0, 
     var(--upperColor) 50vw, 
@@ -106,7 +106,7 @@ body {
 }
 
 @media (orientation: portrait) {
-  body {
+  .body {
     background: linear-gradient(
       var(--upperColor) 0, 
       var(--upperColor) 33vh, 

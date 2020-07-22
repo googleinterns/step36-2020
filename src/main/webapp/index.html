@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=">
     <link rel="stylesheet" href="/styles/base.css">
     <link rel="stylesheet" href="/styles/index.css">
+    <link rel="stylesheet" href="/styles/loader.css">
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans&family=Oswald&display=swap" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script type='module' src='https://unpkg.com/ionicons@5.1.1/dist/ionicons/ionicons.esm.js'></script>
@@ -12,40 +13,44 @@
     <title>Input Tweet</title>
   </head>
   <body>
-    <header id="header" class="base">
-      <p id="title">Engage</p>
-      <ol id="instructions">
-        <li>Copy and paste a post, or upload an image from you feed.</li>
-        <li>Press submit to see a collection of books, news and community projects about each important keyword in your feed.</li>
-        <li>Enable the use of location data if you'd like to find your local representatives and their contact information.</li>
-      </ol>
-    </header>
-    <div id="content">
-      <div id="form-title">
-        <p>Choose Type of Input</p>
-      </div>
-      <div id="location-input">
-        <label for="location-checkbox">Use Location</label>
-        <input id="location-checkbox" type="checkbox" />
-      </div>
-      <div id="input-select">
-        <button id="select-text" class="button">Text</button>
-        <button id="select-blob" class="button">Upload Image</button>
-      </div>
-      <form id="keyword-form" class="hide" action="/keyword" method="post" enctype="multipart/form-data">
-        <textarea id="text-input" name="keyword-sentence" placeholder="Enter your tweet or interests here"></textarea>
-        <div id="blob-input">
-          <label for="blob-file" id="blob-label"><p class="upload-button"><ion-icon name="cloud-upload-outline"></ion-icon> Choose File</p> <p id="file-path">No file chosen</p></label>
-          <input id="blob-file" type="file" name="image" accept="image/*" />
+    <div id="loader" class="load hide"></div>
+    <p id="loading-text" class="load hide">Loading...</p>
+    <div id="real-body" class="body">
+      <header id="header" class="base">
+        <p id="title">Engage</p>
+        <ol id="instructions">
+          <li>Copy and paste a post, or upload an image from you feed.</li>
+          <li>Press submit to see a collection of books, news and community projects about each important keyword in your feed.</li>
+          <li>Enable the use of location data if you'd like to find your local representatives and their contact information.</li>
+        </ol>
+      </header>
+      <div id="content">
+        <div id="form-title">
+          <p>Choose Type of Input</p>
         </div>
-        <input id="submit-form" type="submit" class="button" />
-      </form>
+        <div id="location-input">
+          <label for="location-checkbox">Use Location</label>
+          <input id="location-checkbox" type="checkbox" />
+        </div>
+        <div id="input-select">
+          <button id="select-text" class="button">Text</button>
+          <button id="select-blob" class="button">Upload Image</button>
+        </div>
+        <form id="keyword-form" class="hide" action="/keyword" method="post" enctype="multipart/form-data">
+          <textarea id="text-input" name="keyword-sentence" placeholder="Enter your tweet or interests here"></textarea>
+          <div id="blob-input">
+            <label for="blob-file" id="blob-label"><p class="upload-button"><ion-icon name="cloud-upload-outline"></ion-icon> Choose File</p> <p id="file-path">No file chosen</p></label>
+            <input id="blob-file" type="file" name="image" accept="image/*" />
+          </div>
+          <input id="submit-form" type="submit" class="button" />
+        </form>
+      </div>
+      <footer id="footer" class="base">
+        <p>Helping you engage more deeply with your social media feed</p>
+        <p>Google STEP 2020 Capstone project - Team 36</p>
+        <p>Contact us at <a href="mailto:andrewhl@google.com">andrewhl@google.com</a>, <a href="mailto:uribejuan@google.com">uribejuan@google.com</a>, or <a href="mailto:nsafir@google.com">nsafir@google.com</a></p>
+      </footer>
     </div>
-    <footer id="footer" class="base">
-      <p>Helping you engage more deeply with your social media feed</p>
-      <p>Google STEP 2020 Capstone project - Team 36</p>
-      <p>Contact us at <a href="mailto:andrewhl@google.com">andrewhl@google.com</a>, <a href="mailto:uribejuan@google.com">uribejuan@google.com</a>, or <a href="mailto:nsafir@google.com">nsafir@google.com</a></p>
-    </footer>
     <script src="/scripts/load.js"></script>
     <script src="scripts/cookies.js"></script>
     <script src="scripts/index.js"></script>
