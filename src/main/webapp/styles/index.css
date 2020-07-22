@@ -36,12 +36,16 @@ body {
   align-items: center;
   justify-content: center;
   font-family: 'Open Sans', sans-serif;
+  place-self: start;
+  margin: 30vh 0;
+  height: auto;
 }
 
 #form-title {
   font-size: 200%;
   font-weight: bolder;
   font-family: 'Oswald', sans-serif;
+  color: var(--upperColor);
 }
 
 .button {
@@ -63,15 +67,21 @@ body {
   align-items: center;
 }
 
-#keyword-form {
-  margin: 1vh;
+#input-select {
+  margin: 0 1vh;
 }
 
-#text-input {
+#keyword-form:not(.hide) {
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+}
+
+#text-input:not(.hide) {
   resize: none;
   width: 40vw;
   height: 20vh;
-  margin: 0 0 0.5vh;
+  margin: 0.5vh 0.3vw;
 }
 
 #blob-label {
@@ -104,7 +114,7 @@ body {
   display: none;
 }
 
-#submit-form {
+#submit-form:not(.hide) {
   display: block;
 }
 
