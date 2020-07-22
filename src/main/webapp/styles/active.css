@@ -63,6 +63,15 @@
   font-weight: bold;
 }
 
+.learn-more {
+  display: inline-flex;
+  align-items: center;
+}
+
+.learn-more > ion-icon {
+  margin: 0 0 0 0.1vw;
+}
+
 .active .element-title {
   font-weight: bold;
 }

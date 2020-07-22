@@ -56,3 +56,16 @@ body {
   height: 100%;
   grid-area: content;
 }
+
+.button {
+  background-color: var(--upperColor);
+  color: white;
+  font-weight: 600;
+  font-size: 1vh;
+  padding: 0.7vh 1vw;;
+  border: none;
+  text-decoration: none;
+  display: inline-block;
+  cursor: pointer;
+  margin: 0.5vh 0.3vw;
+}
