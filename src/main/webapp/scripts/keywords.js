@@ -16,6 +16,11 @@ $().ready(function() {
     $('#form-title > p').text('Copy Your Tweet Here');
   });
 
+  $('#blob-input').change(function() {
+    const filePath = $(this).val();
+    $('#file-path').text(filePath.split('\\').pop());
+  });
+
   $('#keyword-form').on('submit', function(event) {
     // Check whether the inputs are valid before submitting.
     if ($('#blob-input').hasClass('hide')) {
