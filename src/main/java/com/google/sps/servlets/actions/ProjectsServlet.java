@@ -40,8 +40,8 @@ public class ProjectsServlet extends HttpServlet {
         String jsonResult = UrlRequest.urlQuery(API_PATH, queryParams);
         List<Project> projectsList = extractProjectsList(jsonResult);
         jsonResultMap.put(term, projectsList);
-      } catch(Exception e) {
-        e.printStackTrace();
+      } catch (NullPointerException|IOException exception) {
+        exception.printStackTrace();
         jsonResultMap.put(term, Collections.emptyList());
       }
     }
