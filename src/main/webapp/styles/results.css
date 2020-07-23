@@ -22,6 +22,19 @@
   transition: all 0.3s ease-in-out;
 }
 
+#header {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+}
+
+#title {
+  font-size: 120%;
+  margin: 10vh 0 0;
+}
+
 #keywords {
   margin: auto;
   height: 100%;
@@ -127,6 +140,7 @@
   #keywords {
     flex-direction: column;
     align-items: center;
+    justify-content: start;
   }
   
   .keyword {
