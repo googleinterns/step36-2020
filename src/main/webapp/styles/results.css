@@ -53,7 +53,7 @@
   width: 4vw;
   height: 50vh;
   background-color: white;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.25);
+  box-shadow: 0.01vh 0.01vw 0.2vmax rgba(0,0,0,0.25);
   border-radius: 3vmax;
   display: flex;
   transition: all 0.5s ease-out;
