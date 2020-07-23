@@ -22,6 +22,9 @@ import java.net.URL;
 import java.net.HttpURLConnection;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import com.google.gson.reflect.TypeToken;
+import java.lang.reflect.Type;
+import java.io.FileNotFoundException;
 
 /** Servlet that gets news information. */
 @WebServlet("/news")
@@ -38,9 +41,7 @@ public class NewsServlet extends HttpServlet {
       try {
         Map<String, String> paramMap = new HashMap<>();
         paramMap.put("q", UrlRequest.encodeTerm(term));
-        paramMap.put("hl", "en-US");
-        paramMap.put("gl", "US");
-        paramMap.put("ceid", "US:en");
+        paramMap.put("gl", getCountry(request));
         HttpURLConnection connect = getConnection(GOOGLE_NEWS_PATH, paramMap);
         String HTMLString = getHTML(connect);
         List<Article> articleList = makeArticleList(HTMLString);
@@ -53,6 +54,30 @@ public class NewsServlet extends HttpServlet {
     String json = encodeMapAsJson(articleMap);
     response.setCharacterEncoding("UTF-8");
     response.getWriter().println(json);
+  }
+
+  public String getCountry(HttpServletRequest request) throws IOException {
+    String latitude = request.getParameter("lat");
+    String longitude = request.getParameter("lng");
+    Map<String, String> locationQueryParams = new HashMap<>();
+    locationQueryParams.put("lat", latitude);
+    locationQueryParams.put("lng", longitude);
+    String locationUrl = String.format("%s://%s:%s/location",
+        request.getScheme(), 
+        request.getServerName(), 
+        request.getServerPort());
+    String country = "US";  // Have US as default country.
+    try {
+      String locationJsonResult = UrlRequest.urlQuery(locationUrl, locationQueryParams);
+      Gson gson = new Gson();
+      Type mapType = new TypeToken<Map<String, String>>() {}.getType();
+      Map<String, String> locationMap = gson.fromJson(locationJsonResult, mapType);
+      country = locationMap.get("country");
+    } catch (FileNotFoundException fnfe) {
+      // Location URL doesn't work on devserver, so instead use hardcoded string.
+      fnfe.printStackTrace();
+    }
+    return country;
   }
 
   public HttpURLConnection getConnection(String basePath, Map<String, String> paramMap) throws IOException {
