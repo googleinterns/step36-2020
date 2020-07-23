@@ -73,6 +73,8 @@
 
 .active .element-title {
   font-weight: bold;
+  font-size: min(1.5vh, 2vmin);
+  margin: 0 0 1vh;
 }
 
 .active > .close {
@@ -91,7 +93,7 @@
   }
 
   .active > .title {
-    font-size: 2.5vh;
+    font-size: 3.5vh;
   }
 }
 
