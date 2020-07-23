@@ -89,16 +89,19 @@ public class NewsServlet extends HttpServlet {
   public List<Article> makeArticleList(String HTMLString) throws IOException {
     List<Article> articleList = new ArrayList<>();
     String[] substrings = HTMLString.split(articleTag);
-    String thisSubstring, lastSubstring, title, link;
+    String thisSubstring, lastSubstring, title, linkElement, link;
     int closeBracket, openBracket;
     // For each substring seperated by the article class tag.
+    // Begins at index 5 because the article tag appears 4 times before the article elements appear in the HTML.
+    // Ex. lastSubstring: ...<ahref="relative_link" class="
+    // Ex. thisSubstring: ">Title<...
     for (int i = 5; i < substrings.length; i++) {
       // Get the link from before the article tag and the title from after to make a new Article object.
       lastSubstring = substrings[i - 1];
       thisSubstring = substrings[i];
       title = thisSubstring.substring(thisSubstring.indexOf(">") + 1, thisSubstring.indexOf("<"));
-      link = lastSubstring.substring(lastSubstring.lastIndexOf("href"), lastSubstring.lastIndexOf("\""));
-      link = "news.google.com" + link.substring(link.indexOf(".") + 1, link.lastIndexOf("\""));
+      linkElement = lastSubstring.substring(lastSubstring.lastIndexOf("href"), lastSubstring.lastIndexOf("\""));
+      link = "news.google.com" + linkElement.substring(linkElement.indexOf(".") + 1, linkElement.lastIndexOf("\""));
       articleList.add(new Article(title, link));
     }
     return articleList;
