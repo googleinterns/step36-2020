@@ -1,6 +1,6 @@
 :root {
-  --thickness: 1vmax;
-  --diameter: 3vmax;
+  --thickness: min(1vmax, 1.6vh);
+  --diameter: min(3vmax, 4vh);
 }
 
 body {
@@ -25,7 +25,7 @@ body {
 }
 
 #loading-text {
-  font-size: 1.3vmax;
+  font-size: min(1.3vmax, 1.7vh);
   letter-spacing: 0.025em;
 }
 
