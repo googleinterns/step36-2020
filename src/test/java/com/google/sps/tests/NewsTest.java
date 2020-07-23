@@ -2,6 +2,7 @@ package com.google.sps.servlets;
 
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -25,7 +26,9 @@ public final class NewsTest {
   public final static String FULL_HTML_PATH = "src/test/java/com/google/sps/data/fullNewsHTML.txt";
   public final static String PART_HTML_PATH = "src/test/java/com/google/sps/data/partialNewsHTML.txt";
   public final static String EMPTY_HTML_PATH = "src/test/java/com/google/sps/data/emptyHTML.txt";
-  public List<Article> someArticleList = new ArrayList<>(); 
+  public NewsServlet ns;
+  public static List<Article> someArticleList = new ArrayList<>(); 
+  public static List<Article> fullArticleList = new ArrayList<>();
 
  /**
   * Helper method that converts a file path of a text file to a String.
@@ -49,8 +52,7 @@ public final class NewsTest {
   * Helper method to check the makeArticleList method in the NewsServlet class.
   * Checks if makeArticleList on HTML text in the specified file has output equivalent to expectedList.
   */
-  private static void checkMakeArticleList(String filePath, List<Article> expectedList) throws IOException {
-    NewsServlet ns = new NewsServlet();
+  private void checkMakeArticleList(String filePath, List<Article> expectedList) throws IOException {
     String htmlString = textToString(filePath);
     List<Article> articleList = ns.makeArticleList(htmlString);
     // Check each class instance in each article object is equal.
@@ -67,8 +69,8 @@ public final class NewsTest {
   * Set up for following tests.
   * Populates someArticleList with Article entries.
   */
-  @Before
-  public void setUp() {
+  @BeforeClass
+  public static void setUp() {
     someArticleList.add(new Article(
       "The latest Instagram trend: putting your name on photos of frogs, cats and Harry Styles",
       "news.google.com/articles/CBMib2h0dHBzOi8vd3d3LnRoZWd1YXJkaWFuLmNvbS91cy1uZXdzLzIwMjAvanVsLzIwL2luc3RhZ3JhbS13aGF0LWZyb2ctYXJlLXlvdS1pbnNpZGUtdGhlLWxhdGVzdC13YXktdG8td2FzdGUtdGltZdIBb2h0dHBzOi8vYW1wLnRoZWd1YXJkaWFuLmNvbS91cy1uZXdzLzIwMjAvanVsLzIwL2luc3RhZ3JhbS13aGF0LWZyb2ctYXJlLXlvdS1pbnNpZGUtdGhlLWxhdGVzdC13YXktdG8td2FzdGUtdGltZQ?hl=en-US&amp;gl=US&amp;ceid=US%3Aen"
@@ -79,12 +81,17 @@ public final class NewsTest {
     ));
   }
 
+  @Before
+  public void createNewsServlet() throws IOException {
+    System.out.println("createNewsServlet()");
+    ns = new NewsServlet();
+  }
+
  /**
   * Check that when given no HTML text, makeArticleList returns an empty list.
   */
   @Test
   public void articlesFromEmptyHTML() throws IOException {
-    NewsServlet ns = new NewsServlet();
     List<Article> articleList = ns.makeArticleList("");
     Assert.assertEquals(articleList, new ArrayList<Article>());
   }
@@ -95,6 +102,7 @@ public final class NewsTest {
   */
   @Test
   public void articlesFromPartialHTML() throws IOException {
+    System.out.println(someArticleList);
     checkMakeArticleList(PART_HTML_PATH, someArticleList);
   }
 
@@ -104,7 +112,9 @@ public final class NewsTest {
   */
   @Test
   public void articlesFromFullHTML() throws IOException {  
-    List<Article> fullArticleList = someArticleList;
+    List<Article> fullArticleList = new ArrayList<>();
+    fullArticleList.add(someArticleList.get(0));
+    fullArticleList.add(someArticleList.get(1));
     fullArticleList.add(new Article(
       "How frogs became green — again, and again, and again : Research Highlights", 
       "news.google.com/articles/CBMiMmh0dHBzOi8vd3d3Lm5hdHVyZS5jb20vYXJ0aWNsZXMvZDQxNTg2LTAyMC0wMjEwMy160gEA?hl=en-US&amp;gl=US&amp;ceid=US%3Aen"
@@ -120,7 +130,6 @@ public final class NewsTest {
     try {
       HttpURLConnection connection = Mockito.mock(HttpURLConnection.class);
       Mockito.when(connection.getInputStream()).thenReturn(new FileInputStream(EMPTY_HTML_PATH));
-      NewsServlet ns = new NewsServlet();
       Assert.assertEquals(ns.getHTML(connection), "");  
     } catch (Exception e) {
       e.printStackTrace();
@@ -135,11 +144,9 @@ public final class NewsTest {
     try {
       HttpURLConnection connection = Mockito.mock(HttpURLConnection.class);
       Mockito.when(connection.getInputStream()).thenReturn(new FileInputStream(FULL_HTML_PATH));
-      NewsServlet ns = new NewsServlet();
       Assert.assertEquals(ns.getHTML(connection), textToString(FULL_HTML_PATH));  
     } catch (Exception e) {
       e.printStackTrace();
     }
   }
-  
 }
