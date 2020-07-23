@@ -62,6 +62,7 @@ body {
 
 #footer > p {
   margin: 0.2vh 0;
+  text-align: center;
 }
 
 #content {
