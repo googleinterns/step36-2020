@@ -17,14 +17,14 @@
 }
 
 #title {
-  font-size: 200%;
+  font-size: min(200%, 30vmin);
   text-align: center;
   padding: 4vw;
   margin: 0;
 }
 
 #instructions {
-  font-size: max(1.7vmin, 1.6vh);
+  font-size: min(3.6vmin, 1.6vh);
   margin: 0 max(4vw, 2vmax);
   font-family: 'Open Sans', sans-serif;
   font-weight: 300;
