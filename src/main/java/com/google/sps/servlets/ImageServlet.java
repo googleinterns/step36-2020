@@ -14,6 +14,7 @@ import com.google.cloud.vision.v1.AnnotateImageRequest;
 import com.google.cloud.vision.v1.AnnotateImageResponse;
 import com.google.cloud.vision.v1.BatchAnnotateImagesResponse;
 import com.google.cloud.vision.v1.EntityAnnotation;
+import com.google.cloud.vision.v1.TextAnnotation;
 import com.google.cloud.vision.v1.Feature;
 import com.google.cloud.vision.v1.Image;
 import com.google.cloud.vision.v1.ImageAnnotatorClient;
@@ -54,8 +55,13 @@ public class ImageServlet extends HttpServlet {
       return;
     }
     byte[] blobBytes = getBlobBytes(blobKey);
-    List<EntityAnnotation> annotations = getImageLabels(blobBytes); 
-    String key = Keywords.addKeywords(annotations);
+    String key = "";
+    TextAnnotation textAnnotation = getImageText(blobBytes);
+    if (textAnnotation == null || textAnnotation.getText().equals("")) {
+      key = Keywords.addKeywords(getImageLabels(blobBytes));
+    } else {
+      key = Keywords.addKeywords(textAnnotation.getText());
+    }
     response.sendRedirect(String.format("/results?k=%s", key));
   }
 
@@ -70,7 +76,6 @@ public class ImageServlet extends HttpServlet {
 
     // Our form only contains a single file input, so get the first index.
     BlobKey blobKey = blobKeys.get(0);
-    System.out.println(blobKey.getKeyString());
 
     // User submitted form without selecting a file, so the BlobKey is empty (live).
     BlobInfo blobInfo = new BlobInfoFactory().loadBlobInfo(blobKey);
@@ -105,14 +110,34 @@ public class ImageServlet extends HttpServlet {
   }
 
   /**
-   * Creates a list of  that apply to the image, which is
+   * Creates a list of labels that apply to the image, which is
    * represented by the binary data stored in imgBytes.
    */
   private List<EntityAnnotation> getImageLabels(byte[] imgBytes) throws IOException {
+    AnnotateImageResponse imageResponse = getImageResponse(imgBytes, false);    
+    return imageResponse.getLabelAnnotationsList();
+  }
+
+  /**
+   * Gets the text within the image, whic is represented by
+   * the binary data stored in imgBytes.
+   */
+  private TextAnnotation getImageText(byte[] imgBytes) throws IOException {
+    AnnotateImageResponse imageResponse = getImageResponse(imgBytes, true);
+    return imageResponse.getFullTextAnnotation();
+  }
+
+  /**
+   * Gets an AnnotateImageResponse corresponding to the image represented by an array of bytes, and the type
+   * of detection to use. If useTextDetection is false, then the default is to use label detection.
+   */
+  private AnnotateImageResponse getImageResponse(byte[] imgBytes, boolean useTextDetection) throws IOException {
     ByteString byteString = ByteString.copyFrom(imgBytes);
     Image image = Image.newBuilder().setContent(byteString).build();
 
-    Feature feature = Feature.newBuilder().setType(Feature.Type.LABEL_DETECTION).build();
+    Feature.Type detectionMethod = (useTextDetection) ? Feature.Type.TEXT_DETECTION : Feature.Type.LABEL_DETECTION;
+
+    Feature feature = Feature.newBuilder().setType(detectionMethod).build();
     AnnotateImageRequest request =
         AnnotateImageRequest.newBuilder().addFeatures(feature).setImage(image).build();
     List<AnnotateImageRequest> requests = new ArrayList<>();
@@ -125,11 +150,10 @@ public class ImageServlet extends HttpServlet {
     AnnotateImageResponse imageResponse = imageResponses.get(0);
 
     if (imageResponse.hasError()) {
-      System.err.println("Error getting image labels: " + imageResponse.getError().getMessage());
+      System.err.println("Error getting image labels or text: " + imageResponse.getError().getMessage());
       return null;
     }
-
-    return imageResponse.getLabelAnnotationsList();
+    return imageResponse;
   }
 }
 
