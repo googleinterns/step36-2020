@@ -24,6 +24,6 @@
 
 @media (orientation: portrait) {
   #progress-bar {
-    width: 60%
+    width: 60%;
   }
 }
