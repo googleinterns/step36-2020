@@ -29,6 +29,12 @@
   font-family: 'Oswald', sans-serif;
 }
 
+.active > .levels {
+  display: block;
+  transition: all 0.5s ease-in-out;
+  place-self: start;
+}
+
 .active .item {
   position: relative;
   display: inline-block;
@@ -55,6 +61,15 @@
   font-family: 'Oswald', sans-serif;
   font-size: 200%;
   font-weight: bold;
+}
+
+.learn-more {
+  display: inline-flex;
+  align-items: center;
+}
+
+.learn-more > ion-icon {
+  margin: 0 0 0 0.1vw;
 }
 
 .active .element-title {

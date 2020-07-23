@@ -44,14 +44,15 @@
   display: flex;
   flex-flow: row wrap;
   justify-content: space-around;
-  height: 0;
+  height: 60vh;     
+  max-height: 0;
   opacity: 0;
-  transition: height 0.5s ease-in-out, opacity 0.2s linear;
+  transition: max-height 0.5s ease-in-out, opacity 0.2s linear;
 }
 
 .extended > .elements {
   opacity: 1;
-  height: 50vh;
+  max-height: 50vh;
   overflow: auto;
 }
 

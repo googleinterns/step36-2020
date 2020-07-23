@@ -13,6 +13,10 @@
   margin: 0 0 auto;
 }
 
+.location.active > .subtitle {
+  display: block;
+}
+
 @media (orientation: portrait) {
   #keywords > hr {
     margin: 1vh 0;

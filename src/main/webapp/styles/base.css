@@ -1,6 +1,10 @@
 :root {
-  --upperColor: #333333;
-  --lowerColor: #F8F8F8;
+  --upperColor-hs: 0, 0%;
+  --upperColor-l: 20%;
+  --upperColor: hsl(var(--upperColor-hs), var(--upperColor-l));
+  --lowerColor-hs: 0, 0%;
+  --lowerColor-l: 97%;
+  --lowerColor: hsl(var(--lowerColor-hs), var(--lowerColor-l));
 }
 
 .hide {
@@ -36,14 +40,32 @@ body {
   width: 100%;
   height: 100%;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   font-family: 'Open Sans', sans-serif;
   font-size: 1.2vh;
 }
 
+#footer > p {
+  margin: 0.2vh 0;
+}
+
 #content {
   width: 100%;
   height: 100%;
   grid-area: content;
+}
+
+.button {
+  background-color: var(--upperColor);
+  color: white;
+  font-weight: 600;
+  font-size: 1vh;
+  padding: 0.7vh 1vw;;
+  border: none;
+  text-decoration: none;
+  display: inline-block;
+  cursor: pointer;
+  margin: 0.5vh 0.3vw;
 }

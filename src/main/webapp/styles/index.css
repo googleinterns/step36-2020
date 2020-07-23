@@ -11,16 +11,9 @@ body {
   place-items: center;
 }
 
-#content {
+#header {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-#form-title {
-  font-size: 200%;
-  font-weight: bolder;
 }
 
 #title {
@@ -29,16 +22,87 @@ body {
   padding: 4vw;
   margin: 0;
 }
+
 #instructions {
-  font-size: 40%;
-  padding: 4vw;
-  margin: 0;
+  font-size: max(1.7vmin, 1.2vh);
+  margin: 0 2vw;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 300;
 }
 
-#keyword-form > textarea {
+#content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Open Sans', sans-serif;
+  place-self: start;
+  margin: 30vh 0;
+  height: auto;
+}
+
+#form-title {
+  font-size: 200%;
+  font-weight: bolder;
+  font-family: 'Oswald', sans-serif;
+  color: var(--upperColor);
+}
+
+#location-input {
+  margin: 0 0 1vh;
+  display: flex;
+  align-items: center;
+}
+
+#input-select {
+  margin: 0 1vh;
+}
+
+#keyword-form:not(.hide) {
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+}
+
+#text-input:not(.hide) {
   resize: none;
   width: 40vw;
   height: 20vh;
+  margin: 0.5vh 0.3vw;
+}
+
+#blob-label {
+  display: flex;
+  align-items: center;
+}
+
+#blob-label > * {
+  display: inline-flex;
+}
+
+.upload-button {
+  background-color: var(--lowerColor);
+  color: black;
+  font-weight: 600;
+  font-size: 1vh;
+  padding: 0.7vh 1vw;;
+  border: black 0.1vh solid;
+  cursor: pointer;
+  margin: 0.5vh 0.3vw;
+  align-items: center;
+}
+
+.upload-button > ion-icon {
+  font-size: 150%;
+  margin: 0 0.4vw 0 0;
+}
+
+#blob-file {
+  display: none;
+}
+
+#submit-form:not(.hide) {
+  display: block;
 }
 
 @media (orientation: portrait) {
@@ -54,9 +118,4 @@ body {
           [row3-start] "footer " 10vh [row3-end]
           / 100vw;
   }
-}
-
-#header {
-  display: flex;
-  flex-direction: column;
 }
