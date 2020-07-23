@@ -57,6 +57,7 @@
   transition: all 0.3s ease-in-out;
   height: auto;
   font-size: 1.2vw;
+  color: hsl(var(--upperColor-hs), 20%);
 }
 
 .section-header {
@@ -73,10 +74,42 @@
   margin: 0.5vh 0;	
   transition: all 0.3s ease-in-out;
   font-size: 1.3vh;
+  display: none;
+}
+
+.extended .item {
+  display: inline-block;
 }
 
 .item > p {
   margin: 0.15vh;
+}
+
+.books > .level-name {
+  color: var(--booksColor);
+  background-color: hsl(var(--booksColor-hs), 90%);
+}
+
+.news > .level-name {
+  color: var(--newsColor);
+  background-color: hsl(var(--newsColor-hs), 90%);
+}
+
+.actions > .level-name {
+  color: var(--actionsColor);
+  background-color: hsl(var(--actionsColor-hs), 90%);
+}
+
+.extended.books > .level-name {
+  background-color: hsl(var(--booksColor-hs), 85%);
+}
+
+.extended.news > .level-name {
+  background-color: hsl(var(--newsColor-hs), 85%);
+}
+
+.extended.actions > .level-name {
+  background-color: hsl(var(--actionsColor-hs), 85%);
 }
 
 @media (orientation: portrait) {

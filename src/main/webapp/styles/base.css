@@ -1,10 +1,23 @@
 :root {
-  --upperColor-hs: 0, 0%;
-  --upperColor-l: 20%;
+  --upperColor-hs: 182, 50%;
+  --upperColor-l: 30%;
   --upperColor: hsl(var(--upperColor-hs), var(--upperColor-l));
+
   --lowerColor-hs: 0, 0%;
   --lowerColor-l: 97%;
   --lowerColor: hsl(var(--lowerColor-hs), var(--lowerColor-l));
+
+  --booksColor-hs: 82, 39%;
+  --booksColor-l: 30%;
+  --booksColor: hsl(var(--booksColor-hs), var(--booksColor-l));
+
+  --newsColor-hs: 0, 0%;
+  --newsColor-l: 41%;
+  --newsColor: hsl(var(--newsColor-hs), var(--newsColor-l));
+
+  --actionsColor-hs: 180, 25%;
+  --actionsColor-l: 25%;
+  --actionsColor: hsl(var(--actionsColor-hs), var(--actionsColor-l));
 }
 
 .hide {

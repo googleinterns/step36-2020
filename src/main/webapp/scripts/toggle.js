@@ -29,6 +29,8 @@ async function loadContentSection() {
   const location = getCookie('location');
   if (location != "") {
     loadLocationObj(loadCivicSection);
+  } else {
+    loadingCounter.decrement();
   }
 }
 
