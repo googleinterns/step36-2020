@@ -26,11 +26,16 @@ async function loadContentSection() {
   } else {
     keywords.forEach(loadKeywordSection);
   }
+  const address = encodeURI(getCookie('address'));
   const location = getCookie('location');
-  if (location != "") {
-    loadLocationObj(loadCivicSection);
+  if (address != "") {
+    loadCivicSectionFromAddress(address);
   } else {
-    loadingCounter.decrement();
+    if (location != "") {
+      loadLocationObj(loadCivicSectionFromLocation);
+    } else {
+      loadingCounter.decrement();
+    }
   }
 }
 
@@ -112,16 +117,21 @@ function loadLocationObj(callback) {
   }
 }
 
+async function loadCivicSectionFromAddress(address) {
+  const civicObj = await loadObject(`${CIVIC_OBJ_URL}?address=${address}`);
+  console.log(`${CIVIC_OBJ_URL}?address=${address}`);
+  const civicLocationObj = buildCivicLocationObj(civicObj);
+  const locationTemplate = await LOCATION_TEMPLATE_PROMISE;
+  renderLocation(locationTemplate, civicLocationObj);
+}
+
 /**
  * Loads the civic section to the DOM, or alerts the user if there aren't any results for their location.
  */
-async function loadCivicSection(locationObj) {
+async function loadCivicSectionFromLocation(locationObj) {
   if (locationObj.Country === "United States") {
     const address = locationObj2Address(locationObj);
-    const civicObj = await loadObject(`${CIVIC_OBJ_URL}?address=${address}`);
-    const civicLocationObj = buildCivicLocationObj(civicObj);
-    const locationTemplate = await LOCATION_TEMPLATE_PROMISE;
-    renderLocation(locationTemplate, civicLocationObj);
+    loadCivicSectionFromAddress(address);
   } else {
     alert('Sorry, your current location is not supported');
   }
