@@ -134,9 +134,7 @@ public class ImageServlet extends HttpServlet {
   private AnnotateImageResponse getImageResponse(byte[] imgBytes, boolean useTextDetection) throws IOException {
     ByteString byteString = ByteString.copyFrom(imgBytes);
     Image image = Image.newBuilder().setContent(byteString).build();
-
     Feature.Type detectionMethod = (useTextDetection) ? Feature.Type.TEXT_DETECTION : Feature.Type.LABEL_DETECTION;
-
     Feature feature = Feature.newBuilder().setType(detectionMethod).build();
     AnnotateImageRequest request =
         AnnotateImageRequest.newBuilder().addFeatures(feature).setImage(image).build();
