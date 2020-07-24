@@ -101,7 +101,7 @@ public class NewsServlet extends HttpServlet {
       thisSubstring = substrings[i];
       title = thisSubstring.substring(thisSubstring.indexOf(">") + 1, thisSubstring.indexOf("<"));
       linkElement = lastSubstring.substring(lastSubstring.lastIndexOf("href"), lastSubstring.lastIndexOf("\""));
-      link = "news.google.com" + linkElement.substring(linkElement.indexOf(".") + 1, linkElement.lastIndexOf("\""));
+      link = "http://news.google.com" + linkElement.substring(linkElement.indexOf(".") + 1, linkElement.lastIndexOf("\""));
       articleList.add(new Article(title, link));
     }
     return articleList;
@@ -110,8 +110,8 @@ public class NewsServlet extends HttpServlet {
   public String encodeMapAsJson(Map<String, List<Article>> map) {
     Gson gson = new Gson();
     Map<String, Object> newMap = new HashMap<>();
-    newMap.put("articles", map);
-    String json = gson.toJson(map); 
+    newMap.put("news", map);
+    String json = gson.toJson(newMap); 
     return json;
   }
 }
