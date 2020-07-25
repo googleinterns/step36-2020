@@ -148,7 +148,8 @@ public class ImageServlet extends HttpServlet {
     AnnotateImageResponse imageResponse = imageResponses.get(0);
 
     if (imageResponse.hasError()) {
-      System.err.println(String.format("Error getting image %s: %s ", (useTextDetection) ? "text" : "labels", imageResponse.getError().getMessage()));
+      String errorType = (useTextDetection) ? "text" : "labels";
+      System.err.println(String.format("Error getting image %s: %s ", errorType, imageResponse.getError().getMessage()));
       return null;
     }
     return imageResponse;
