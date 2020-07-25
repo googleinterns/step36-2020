@@ -1,6 +1,7 @@
 #keywords > hr {
-  margin: 0 2vw;
+  margin: 0 3vw;
   height: 50vh;
+  border: 0.1vw solid hsl(var(--lowerColor-hs), calc(var(--lowerColor-l) - 30%));
 }
 
 .location {
@@ -19,7 +20,7 @@
 
 @media (orientation: portrait) {
   #keywords > hr {
-    margin: 1vh 0;
+    margin: 1.5vh 0;
     width: 50%;
     height: auto;
   }
