@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.List;
 import java.util.ArrayList;
 
-/* Class conatining helper methods to make url requests */
+/* Class conatining helper methods to make url requests. */
 public final class UrlRequest {
   /**
    * Returns the a JSON string with the API response given an URL path and the query parameters.
@@ -27,6 +27,7 @@ public final class UrlRequest {
     int responseCode = connection.getResponseCode();
     if (responseCode != 200) {
       System.err.println("Error: connection response code is: " + responseCode);
+      return String.format("{\"error\":%s}", responseCode);
     }
     InputStreamReader inputStream = new InputStreamReader(connection.getInputStream());
     StringBuilder contentBuilder = new StringBuilder();
