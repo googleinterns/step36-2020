@@ -18,14 +18,16 @@ import java.io.FileInputStream;
 import java.net.HttpURLConnection;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.HashSet;
 
 
 @RunWith(JUnit4.class)
 public final class NewsTest {
-
-  public final static String FULL_HTML_PATH = "src/test/java/com/google/sps/data/fullNewsHTML.txt";
-  public final static String PART_HTML_PATH = "src/test/java/com/google/sps/data/partialNewsHTML.txt";
-  public final static String EMPTY_HTML_PATH = "src/test/java/com/google/sps/data/emptyHTML.txt";
+  
+  public final static String HTML_PATH_PREFIX = "src/test/java/com/google/sps/data/";
+  public final static String FULL_HTML_PATH = HTML_PATH_PREFIX + "fullNewsHTML.txt";
+  public final static String PART_HTML_PATH = HTML_PATH_PREFIX + "partialNewsHTML.txt";
+  public final static String EMPTY_HTML_PATH = HTML_PATH_PREFIX + "emptyHTML.txt";
   public NewsServlet ns;
   public static List<Article> someArticleList = new ArrayList<>(); 
   public static List<Article> fullArticleList = new ArrayList<>();
@@ -50,7 +52,8 @@ public final class NewsTest {
 
  /**
   * Helper method to check the makeArticleList method in the NewsServlet class.
-  * Checks if makeArticleList on HTML text in the specified file has output equivalent to expectedList.
+  * Checks if makeArticleList on HTML text in the specified file has output
+  * equivalent to expectedList.
   */
   private void checkMakeArticleList(String filePath, List<Article> expectedList) throws IOException {
     String htmlString = textToString(filePath);
@@ -83,7 +86,6 @@ public final class NewsTest {
 
   @Before
   public void createNewsServlet() throws IOException {
-    System.out.println("createNewsServlet()");
     ns = new NewsServlet();
   }
 
@@ -97,18 +99,18 @@ public final class NewsTest {
   }
 
  /**
-  * Checks that makeArticleList makes a list with all the articles in the HTML text
-  * if there are less articles in the HTML text than makeArticleList would genereate by default.
+  * Checks that makeArticleList makes a list with all the articles in the HTML
+  * text if there are less articles in the HTML text than makeArticleList would
+  * genereate by default.
   */
   @Test
   public void articlesFromPartialHTML() throws IOException {
-    System.out.println(someArticleList);
     checkMakeArticleList(PART_HTML_PATH, someArticleList);
   }
 
  /**
-  * Checks that makeArticleList makes correctly sized list when there are more articles in the 
-  * HTML text than makeArticleList would generate by default.
+  * Checks that makeArticleList makes correctly sized list when there are more
+  * articles in the HTML text than makeArticleList would generate by default.
   */
   @Test
   public void articlesFromFullHTML() throws IOException {  
@@ -137,7 +139,8 @@ public final class NewsTest {
   }
 
  /**
-  * Checks that getHTML method translates HTML text to String correctly under normal conditions.
+  * Checks that getHTML method translates HTML text to String correctly under
+  * normal conditions.
   */
   @Test
   public void getFullHTML() {
