@@ -10,9 +10,10 @@ $().ready(function() {
 });
 
 $('#address').keypress(function(event){
-  var keycode = (event.keyCode ? event.keyCode : event.which);
+  let keycode = (event.keyCode ? event.keyCode : event.which);
+  // If enter key is pressed for address input, store the address as a cookie.
   if(keycode == '13'){
-    var address = $('#address').val();
+    let address = $('#address').val();
     setCookie('address', address, 1);  
   }
 });
