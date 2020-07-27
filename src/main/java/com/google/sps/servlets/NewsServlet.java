@@ -28,8 +28,9 @@ import java.nio.file.Paths;
 public class NewsServlet extends HttpServlet {
 
   public final String GOOGLE_NEWS_PATH = "https://news.google.com/search";
-  public final String articleTag = "DY5T1d";  // Class tag for articles in Google News HTML code.
-
+  public final String ARTICLE_TAG = "DY5T1d"; // Class tag for articles in Google News html code.
+  public final int MAX_ARTICLES = 3;
+  
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     List<String> terms = Arrays.asList(request.getParameterValues("key"));
@@ -88,15 +89,14 @@ public class NewsServlet extends HttpServlet {
 
   public List<Article> makeArticleList(String HTMLString) throws IOException {
     List<Article> articleList = new ArrayList<>();
-    String[] substrings = HTMLString.split(articleTag);
+    String[] substrings = HTMLString.split(ARTICLE_TAG);
     String thisSubstring, lastSubstring, title, linkElement, link;
-    int closeBracket, openBracket;
     // For each substring seperated by the article class tag.
-    // Begins at index 5 because the article tag appears 4 times before the article elements appear in the HTML.
-    // Ex. lastSubstring: ...<ahref="relative_link" class="
-    // Ex. thisSubstring: ">Title<...
-    for (int i = 5; i < substrings.length; i++) {
+    // Begins at index 4 because the article tag appears 4 times before the article elements appear in the HTML.
+    for (int i = 4; i < Math.min(substrings.length, 4 + MAX_ARTICLES); i++) {
       // Get the link from before the article tag and the title from after to make a new Article object.
+      // Ex. lastSubstring: ...<ahref="relative_link" class="
+      // Ex. thisSubstring: ">Title<..
       lastSubstring = substrings[i - 1];
       thisSubstring = substrings[i];
       title = thisSubstring.substring(thisSubstring.indexOf(">") + 1, thisSubstring.indexOf("<"));
