@@ -9,10 +9,10 @@
     {{#levels}}
       <div class="level">
         <p class="level-name"><ion-icon name="chevron-forward-outline"></ion-icon>{{levelName}}</p>
-        <div class="profiles">
+        <div class="elements">
           {{#officials}}
             <div class="profile">
-              <p><a href="{{urls.0}}" class="profile-name">{{name}}</a></p>
+              <p class="profile-name">{{name}}</p>
               <p class="profile-title">{{title}}</p>
               <img src="{{photoUrl}}" class="profile-img">
               {{#phones}}
@@ -24,6 +24,7 @@
               {{#channels}}
                 <p clas="profile-channel"><b>{{type}}:</b> {{id}}</p>
               {{/channels}}
+              <a href="{{urls.0}}" class="button learn-more">Learn More <ion-icon name="arrow-forward-outline"></ion-icon></a>
             </div>
           {{/officials}}
         </div>

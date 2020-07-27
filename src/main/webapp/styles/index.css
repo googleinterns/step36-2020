@@ -1,4 +1,4 @@
-body {
+.body {
   background: linear-gradient( to right,
     var(--upperColor) 0, 
     var(--upperColor) 50vw, 
@@ -11,35 +11,157 @@ body {
   place-items: center;
 }
 
+#header {
+  display: flex;
+  flex-direction: column;
+}
+
+#title {
+  font-size: min(200%, 30vmin);
+  text-align: center;
+  padding: 4vw;
+  margin: 0;
+}
+
+#instructions {
+  font-size: min(3.6vmin, 1.6vh);
+  margin: 0 max(4vw, 2vmax);
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 300;
+}
+
 #content {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  font-family: 'Open Sans', sans-serif;
+  place-self: start;
+  margin: 30vh 0;
+  height: auto;
+  font-size: 1.3vh;
 }
 
 #form-title {
   font-size: 200%;
   font-weight: bolder;
+  font-family: 'Oswald', sans-serif;
+  color: var(--upperColor);
 }
 
-#keyword-form > textarea {
+#location-input {
+  margin: 0 0 2vh;
+}
+
+#location-input > label {
+  display: flex;
+  flex-flow: row-reverse;
+  align-items: center;
+  cursor: pointer;
+}
+
+#location-checkbox {
+  display: none;
+}
+
+.checkmark {
+  background-color: hsl(var(--lowerColor-hs), calc(var(--lowerColor-l) - 15%));
+  width: 1.3vh;
+  height: 1.3vh;
+  margin: 0 0.5vw;
+  display: inline-block;
+}
+
+.checkmark > ion-icon {
+  color: white;
+  opacity: 0;
+}
+
+#location-input:hover .checkmark {
+  background-color: hsl(var(--lowerColor-hs), calc(var(--lowerColor-l) - 25%));
+}
+
+#location-checkbox:checked ~ .checkmark {
+  background-color: hsl(var(--upperColor-hs), calc(var(--upperColor-l) + 20%));
+}
+
+#location-checkbox:checked ~ .checkmark > ion-icon {
+  opacity: 1;
+}
+
+#input-select {
+  margin: 0 1vh;
+}
+
+#keyword-form:not(.hide) {
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+}
+
+#text-input:not(.hide) {
   resize: none;
   width: 40vw;
   height: 20vh;
+  margin: 0.5vh 0.3vw;
+  padding: 1vh 1vw;
+  box-sizing: border-box;
+  font-size: 1vh;
+}
+
+#blob-label {
+  display: flex;
+  align-items: center;
+}
+
+#blob-label > * {
+  display: inline-flex;
+}
+
+.upload-button {
+  background-color: var(--lowerColor);
+  color: black;
+  font-weight: 600;
+  font-size: 1vh;
+  padding: 0.7vh 1vw;;
+  border: black 0.1vh solid;
+  cursor: pointer;
+  margin: 0.5vh 0.3vw;
+  align-items: center;
+}
+
+.upload-button > ion-icon {
+  font-size: 150%;
+  margin: 0 0.4vw 0 0;
+}
+
+#blob-file {
+  display: none;
+}
+
+#submit-form:not(.hide) {
+  display: block;
 }
 
 @media (orientation: portrait) {
-  body {
+  .body {
     background: linear-gradient(
       var(--upperColor) 0, 
       var(--upperColor) 33vh, 
       var(--lowerColor) 33vh, 
       var(--lowerColor));
     display: grid;
-    grid: [row1-start] "header " 20vh [row1-end]
-          [row2-start] "content" 70vh [row2-end]
+    grid: [row1-start] "header " 30vh [row1-end]
+          [row2-start] "content" 60vh [row2-end]
           [row3-start] "footer " 10vh [row3-end]
           / 100vw;
+  }
+
+  #content {
+    margin: 10vh 0;
+  }
+
+  #text-input:not(.hide) {
+    width: 70vw;
   }
 }

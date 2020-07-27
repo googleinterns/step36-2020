@@ -97,8 +97,9 @@ public class LocationServlet extends HttpServlet {
             case "route" :
               geoMap.put("Street Name", name);
               break;
-            case "country" :
-              geoMap.put("Country", shortName);
+            case "country":
+              geoMap.put("Country", name);
+              geoMap.put("Short Country", shortName);
               break;
             default:
               break;

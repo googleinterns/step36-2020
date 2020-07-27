@@ -1,35 +1,56 @@
 <div class="keyword">
   <p class="title">{{term}}</p>
   <ion-icon class="close hide" name="close-outline"></ion-icon>
-  <div class="books-section hide">
-    <div class="section-header">Books</div>
-    {{#books}}
-      <div class="books item" data-url="{{link}}">
-        <p class="books-title element-title">{{title}} - {{author}}</p>
-        <p class="books-content hide">{{description}}</p>
-        <div class="overlay hide">
-          <p>Learn More <ion-icon name="arrow-forward-outline"></ion-icon></p>
+  <div class="levels hide">
+    {{#books.length}}
+      <div class="level books">
+        <p class="level-name"><ion-icon name="chevron-forward-outline"></ion-icon>Books</p>
+        <div class="elements">
+          {{#books}}
+            <div class="book item" data-url="{{link}}">
+              <p class="element-title">{{title}} {{#author}}- {{.}}{{/author}}</p>
+              <p class="books-content">{{description}}</p>
+              <div class="overlay hide">
+                <p class="learn-more">Learn More <ion-icon name="arrow-forward-outline"></ion-icon></p>
+              </div>
+            </div>
+          {{/books}}
         </div>
       </div>
-    {{/books}}
-    {{^books}}
-      <div class="books error">Sorry, we couldn't find any books for you</div>  
-    {{/books}}
-  </div>
-  <hr class="hide"> 
-  <div class="actions-section hide">
-    <div class="section-header">Projects</div>
-    {{#projects}}
-      <div class="action item" data-url="{{url}}">
-        <p class="action-title element-title">{{title}}</p>
-        <p class="action-content hide summary">{{summary}}</p>
-        <div class="overlay hide">
-          <p>Learn More <ion-icon name="arrow-forward-outline"></ion-icon></p>
+    {{/books.length}}
+    {{#news.length}}
+      <div class="level news">
+        <p class="level-name"><ion-icon name="chevron-forward-outline"></ion-icon>News</p>
+        <div class="elements">
+          {{#news}}
+            <div class="news-e item" data-url="{{link}}">
+              <p class="element-title">{{title}}</p>
+              <div class="overlay hide">
+                <p class="learn-more">Learn More <ion-icon name="arrow-forward-outline"></ion-icon></p>
+              </div>
+            </div>
+          {{/news}}
         </div>
       </div>
-    {{/projects}}
-    {{^projects}}
-      <div class="action error">Sorry, we couldn't find any projects for you</div>
-    {{/projects}}
+    {{/news.length}}
+    {{#projects.length}}
+      <div class="level actions">
+        <p class="level-name"><ion-icon name="chevron-forward-outline"></ion-icon>Projects</p>
+        <div class="elements">
+          {{#projects}}
+            <div class="action item" data-url="{{url}}">
+              <p class="element-title">{{title}}</p>
+              <p class="action-content summary">{{summary}}</p>
+              <div class="overlay hide">
+                <p class="learn-more">Learn More <ion-icon name="arrow-forward-outline"></ion-icon></p>
+              </div>
+            </div>
+          {{/projects}}
+        </div>
+      </div>
+    {{/projects.length}}
+    {{^books}}{{^news}}{{^projects}}
+      <div class="error">Sorry, we couldn't find any information for this keyword</div>
+    {{/projects}}{{/news}}{{/books}}
   </div>
 </div>
