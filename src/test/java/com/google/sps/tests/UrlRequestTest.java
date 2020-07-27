@@ -1,29 +1,97 @@
 package com.google.sps.data;
 
-// import java.util.ArrayList;
-// import java.util.Arrays;
-// import java.util.Collection;
-// import java.util.Collections;
-// import java.util.List;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.Map;
+import java.util.HashMap;
+import java.net.URL;
+import java.net.URLConnection;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
+import org.mockito.Mockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
+import org.powermock.api.mockito.PowerMockito;
 
 /** */
-@RunWith(JUnit4.class)
+@RunWith(PowerMockRunner.class) 
+@PrepareForTest({ URL.class, UrlRequest.class })
 public final class UrlRequestTest {
 
   private final static String EMPTY_STRING = "";
+  private final static Map<String, String> EMPTY_PARAMS = new HashMap<>();
+  private final static String BASE_PATH = "http://www.testing.com";
+  private final static String URL_PATH = String.format("%s?%s", BASE_PATH, UrlRequest.getParamsString(EMPTY_PARAMS));
 
-  // Testing UrlRequest.urlQuery()
-  // @Test
+  private static HttpURLConnection mockUrlConnection(String urlPath) throws Exception {
+    URL mockedUrl = PowerMockito.mock(URL.class);
+    HttpURLConnection mockedConnection = PowerMockito.mock(HttpURLConnection.class);
 
-  // // Testing UrlRequest.getParamsString()
-  // @Test
+    PowerMockito.whenNew(URL.class).withArguments(urlPath).thenReturn(mockedUrl);
+    PowerMockito.when(mockedUrl.openConnection()).thenReturn(mockedConnection);
+    return mockedConnection;
+  }
 
-  // Testing UrlRequest.encodeTerm()
+  @Test
+  public void errorUrlQuery() throws Exception {
+    int responseCode = 400;
+  
+    HttpURLConnection mockedConnection = mockUrlConnection(URL_PATH);
+    PowerMockito.when(mockedConnection.getResponseCode()).thenReturn(responseCode);
+
+    String actual = UrlRequest.urlQuery(BASE_PATH, EMPTY_PARAMS);
+    String expected = String.format("{\"error\":%s}", responseCode);
+    Assert.assertEquals(expected, actual);
+  }
+
+  @Test
+  public void successfulURlQuery() throws Exception {
+    int responseCode = 200;
+    String content = "hello world";
+    InputStream inputStream = new ByteArrayInputStream(content.getBytes(StandardCharsets.UTF_8.toString()));
+
+    HttpURLConnection mockedConnection = mockUrlConnection(URL_PATH);
+    PowerMockito.when(mockedConnection.getResponseCode()).thenReturn(responseCode);
+    PowerMockito.when(mockedConnection.getInputStream()).thenReturn(inputStream);
+
+    String actual = UrlRequest.urlQuery(BASE_PATH, EMPTY_PARAMS);
+    String expected = content;
+    Assert.assertEquals(expected, actual);
+  }
+
+  @Test
+  public void formatEmptyParamsMap() {
+    String actual = UrlRequest.getParamsString(EMPTY_PARAMS);
+    String expected = EMPTY_STRING;
+    Assert.assertEquals(expected, actual);
+  }
+
+  @Test
+  public void formatOneParam() {
+    Map<String, String> params = new HashMap<>();
+    params.put("hello", "world");
+    String actual = UrlRequest.getParamsString(params);
+    String expected = "hello=world";
+    Assert.assertEquals(expected, actual);
+  }
+
+  @Test
+  public void formatMultipleParams() {
+    Map<String, String> params = new HashMap<>();
+    params.put("hello", "world");
+    params.put("second", "param");
+    params.put("third", "param");
+    String actual = UrlRequest.getParamsString(params);
+    String expected = "hello=world&second=param&third=param"; // You don't know the order of the params.
+    Assert.assertEquals(expected, actual);
+  }
 
   @Test
   public void encodeEmptyString() {
