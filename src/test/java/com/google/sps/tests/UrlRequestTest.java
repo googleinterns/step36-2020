@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Arrays;
+import java.util.List;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.HttpURLConnection;
@@ -19,6 +21,8 @@ import org.mockito.Mockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.api.mockito.PowerMockito;
+import org.hamcrest.MatcherAssert;
+import static org.hamcrest.collection.IsIterableContainingInAnyOrder.containsInAnyOrder;
 
 /** */
 @RunWith(PowerMockRunner.class) 
@@ -86,11 +90,12 @@ public final class UrlRequestTest {
   public void formatMultipleParams() {
     Map<String, String> params = new HashMap<>();
     params.put("hello", "world");
-    params.put("second", "param");
-    params.put("third", "param");
-    String actual = UrlRequest.getParamsString(params);
-    String expected = "hello=world&second=param&third=param"; // You don't know the order of the params.
-    Assert.assertEquals(expected, actual);
+    params.put("second", "param2");
+    params.put("third", "param3");
+    String response = UrlRequest.getParamsString(params);
+    List<String> actual = Arrays.asList(response.split("&", 0));
+    List<String> expected = Arrays.asList("hello=world", "second=param2", "third=param3");
+    MatcherAssert.assertThat("Array equality without order", actual, containsInAnyOrder(expected.toArray()));
   }
 
   @Test
