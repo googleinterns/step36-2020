@@ -19,7 +19,6 @@ public final class UrlRequest {
    */
   public static String urlQuery(String basePath, Map<String, String> params) throws IOException {
     String path = String.format("%s?%s", basePath, getParamsString(params));
-    System.out.println("Path is " + path);
     URL url = new URL(path);
     HttpURLConnection connection = (HttpURLConnection) url.openConnection();
     connection.setRequestMethod("GET");
@@ -29,6 +28,7 @@ public final class UrlRequest {
     if (responseCode != 200) {
       System.err.println("Error: connection response code is: " + responseCode);
     }
+    System.out.println("After loop");
     InputStreamReader inputStream = new InputStreamReader(connection.getInputStream());
     StringBuilder contentBuilder = new StringBuilder();
     try (BufferedReader inputReader = new BufferedReader(inputStream)) {

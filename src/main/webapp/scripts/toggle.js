@@ -119,7 +119,6 @@ function loadLocationObj(callback) {
 
 async function loadCivicSectionFromAddress(address) {
   const civicObj = await loadObject(`${CIVIC_OBJ_URL}?address=${address}`);
-  console.log(`${CIVIC_OBJ_URL}?address=${address}`);
   const civicLocationObj = buildCivicLocationObj(civicObj);
   const locationTemplate = await LOCATION_TEMPLATE_PROMISE;
   renderLocation(locationTemplate, civicLocationObj);
