@@ -32,6 +32,7 @@ public class CivicServlet extends HttpServlet {
     queryParams.put("prettyPrint", "false");
     String jsonResult = UrlRequest.urlQuery(API_PATH, queryParams);
     response.setContentType("application/json;");
-    response.getWriter().println(jsonResult);
+    System.out.println("json is: " + jsonResult);
+    response.getWriter().println(jsonResult);    
   }
 }

@@ -26,5 +26,6 @@ function loadTemplate(url) {
  */
 function loadObject(url) {
   const objPromise = fetch(url).then(promiseResponse => promiseResponse.json());
+  console.log(objPromise);
   return objPromise;
 }
