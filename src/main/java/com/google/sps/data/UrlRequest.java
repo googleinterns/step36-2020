@@ -27,6 +27,7 @@ public final class UrlRequest {
     int responseCode = connection.getResponseCode();
     if (responseCode != 200) {
       System.err.println("Error: connection response code is: " + responseCode);
+      return String.format("{\"error\":%s}", responseCode);
     }
     System.out.println("After loop");
     InputStreamReader inputStream = new InputStreamReader(connection.getInputStream());

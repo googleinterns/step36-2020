@@ -119,9 +119,14 @@ function loadLocationObj(callback) {
 
 async function loadCivicSectionFromAddress(address) {
   const civicObj = await loadObject(`${CIVIC_OBJ_URL}?address=${address}`);
-  const civicLocationObj = buildCivicLocationObj(civicObj);
-  const locationTemplate = await LOCATION_TEMPLATE_PROMISE;
-  renderLocation(locationTemplate, civicLocationObj);
+  if ('error in civicObj') {
+    alert('Sorry, your current location is not supported');
+  } else {
+    const civicLocationObj = buildCivicLocationObj(civicObj);
+    const locationTemplate = await LOCATION_TEMPLATE_PROMISE;
+    renderLocation(locationTemplate, civicLocationObj);
+  }
+  loadingCounter.decrement();
 }
 
 /**
