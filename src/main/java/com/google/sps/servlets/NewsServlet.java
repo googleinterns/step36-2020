@@ -72,7 +72,7 @@ public class NewsServlet extends HttpServlet {
       Gson gson = new Gson();
       Type mapType = new TypeToken<Map<String, String>>() {}.getType();
       Map<String, String> locationMap = gson.fromJson(locationJsonResult, mapType);
-      country = locationMap.get("country");
+      country = locationMap.get("Short country");
     } catch (FileNotFoundException fnfe) {
       // Location URL doesn't work on devserver, so instead use hardcoded string.
       fnfe.printStackTrace();
