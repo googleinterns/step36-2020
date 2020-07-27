@@ -38,11 +38,10 @@ function traceCounterMethods(counter, total) {
         let result = method.apply(this, args);
         let progress = (1 - (result + 1) / (total + 1)) * 100;
         let progressString = `${Math.floor(progress)}%`;
-        console.log(progressString);
-        $("#progress").animate({width : progressString}, 300);
+        $("#progress").animate({width : progressString}, 150);
         if (result < 0) {
           $('body').removeClass('loading');
-          setTimeout(() => $('#progress-bar').animate({width : 0}, 300), 1000);
+          setTimeout(() => $('#progress-bar').animate({width : 0}, 300), 1500);
         }
         return result;
       };

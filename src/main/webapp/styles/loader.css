@@ -1,5 +1,6 @@
 :root {
-  --thickness: 1em;
+  --thickness: min(1vmax, 1.6vh);
+  --diameter: min(3vmax, 4vh);
 }
 
 body {
@@ -12,15 +13,19 @@ body {
 }
 
 #loader {
-  border: var(--thickness) solid #f3f3f3;
   border-radius: 50%;
   border-top: var(--thickness) solid rgb(53, 168, 83);
   border-right: var(--thickness) solid rgb(251, 188, 1);
   border-bottom: var(--thickness) solid rgb(234, 67, 53);
   border-left: var(--thickness) solid rgb(66, 133, 244);
-  width: 3em;
-  height: 3em;
+  width: var(--diameter);
+  height: var(--diameter);
   animation: spin 4s linear infinite;
+}
+
+#loading-text {
+  font-size: min(1.3vmax, 1.7vh);
+  letter-spacing: 0.025em;
 }
 
 @keyframes spin {

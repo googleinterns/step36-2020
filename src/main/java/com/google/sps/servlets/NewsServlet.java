@@ -30,7 +30,7 @@ public class NewsServlet extends HttpServlet {
   public final String GOOGLE_NEWS_PATH = "https://news.google.com/search";
   public final String ARTICLE_TAG = "DY5T1d"; // Class tag for articles in Google News html code.
   public final int MAX_ARTICLES = 3;
-
+  
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     List<String> terms = Arrays.asList(request.getParameterValues("key"));
@@ -90,16 +90,18 @@ public class NewsServlet extends HttpServlet {
   public List<Article> makeArticleList(String HTMLString) throws IOException {
     List<Article> articleList = new ArrayList<>();
     String[] substrings = HTMLString.split(ARTICLE_TAG);
-    String thisSubstring, lastSubstring, title, link;
-    int closeBracket, openBracket;
+    String thisSubstring, lastSubstring, title, linkElement, link;
     // For each substring seperated by the article class tag.
+    // Begins at index 4 because the article tag appears 4 times before the article elements appear in the HTML.
     for (int i = 4; i < Math.min(substrings.length, 4 + MAX_ARTICLES); i++) {
       // Get the link from before the article tag and the title from after to make a new Article object.
+      // Ex. lastSubstring: ...<ahref="relative_link" class="
+      // Ex. thisSubstring: ">Title<..
       lastSubstring = substrings[i - 1];
       thisSubstring = substrings[i];
       title = thisSubstring.substring(thisSubstring.indexOf(">") + 1, thisSubstring.indexOf("<"));
-      link = lastSubstring.substring(lastSubstring.lastIndexOf("href"), lastSubstring.lastIndexOf("\""));
-      link = "news.google.com" + link.substring(link.indexOf(".") + 1, link.lastIndexOf("\""));
+      linkElement = lastSubstring.substring(lastSubstring.lastIndexOf("href"), lastSubstring.lastIndexOf("\""));
+      link = "http://news.google.com" + linkElement.substring(linkElement.indexOf(".") + 1, linkElement.lastIndexOf("\""));
       articleList.add(new Article(title, link));
     }
     return articleList;
@@ -108,8 +110,8 @@ public class NewsServlet extends HttpServlet {
   public String encodeMapAsJson(Map<String, List<Article>> map) {
     Gson gson = new Gson();
     Map<String, Object> newMap = new HashMap<>();
-    newMap.put("articles", map);
-    String json = gson.toJson(map); 
+    newMap.put("news", map);
+    String json = gson.toJson(newMap); 
     return json;
   }
 }

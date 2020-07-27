@@ -1,6 +1,23 @@
 :root {
-  --upperColor: #333333;
-  --lowerColor: #F8F8F8;
+  --upperColor-hs: 182, 50%;
+  --upperColor-l: 30%;
+  --upperColor: hsl(var(--upperColor-hs), var(--upperColor-l));
+
+  --lowerColor-hs: 0, 0%;
+  --lowerColor-l: 97%;
+  --lowerColor: hsl(var(--lowerColor-hs), var(--lowerColor-l));
+
+  --booksColor-hs: 82, 39%;
+  --booksColor-l: 30%;
+  --booksColor: hsl(var(--booksColor-hs), var(--booksColor-l));
+
+  --newsColor-hs: 0, 0%;
+  --newsColor-l: 41%;
+  --newsColor: hsl(var(--newsColor-hs), var(--newsColor-l));
+
+  --actionsColor-hs: 180, 25%;
+  --actionsColor-l: 25%;
+  --actionsColor: hsl(var(--actionsColor-hs), var(--actionsColor-l));
 }
 
 .hide {
@@ -36,14 +53,33 @@ body {
   width: 100%;
   height: 100%;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   font-family: 'Open Sans', sans-serif;
-  font-size: 1.2vh;
+  font-size: min(1.2vh, 4.6vmin);
+}
+
+#footer > p {
+  margin: 0.2vh 0;
+  text-align: center;
 }
 
 #content {
   width: 100%;
   height: 100%;
   grid-area: content;
+}
+
+.button {
+  background-color: var(--upperColor);
+  color: white;
+  font-weight: 600;
+  font-size: 1vh;
+  padding: 0.7vh 1vw;;
+  border: none;
+  text-decoration: none;
+  display: inline-block;
+  cursor: pointer;
+  margin: 0.5vh 0.3vw;
 }
