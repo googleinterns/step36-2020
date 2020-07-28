@@ -11,4 +11,10 @@ $().ready(function() {
       eraseCookie('location');
     }
   });
+  $('#address').val(getCookie("address"));
+});
+
+$('submit-form').click(function () {
+  let address = $('#address').val();
+  setCookie('address', address, 1);  
 });
