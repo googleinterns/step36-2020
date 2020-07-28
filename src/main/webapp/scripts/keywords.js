@@ -1,6 +1,47 @@
 const BLOB_URL_PROMISE = loadTemplate('/user-image');
 
 $().ready(function() {
+  fetch('/login').then(response => response.json()).then((logURL) => {
+    $('#log-btn > a').attr('href', logURL[0]);
+    if (logURL.length == 2) {  // User is not loggeed in.
+      $('#form-title > p').text('You are not logged in.');
+      $('#log-btn > a').text("Login");
+      $('#keyword-form, #input-select, #location-input, #previous-keywords').addClass('hide');
+    } else {
+      $('#form-title > p').text('Choose Type of Input');
+      $('#log-btn > a').text('Logout');
+      $('#input-select, #location-input, #previous-keywords').removeClass('hide');
+    }
+    $('#log-btn').removeClass('hide');
+  });
+
+  fetch('/all-keywords').then(response => response.json()).then((keywordMap) => {
+    let keywordsDiv = $('#keywords-window');
+    let keywordsBtn = $('#previous-keywords');
+    if (keywordMap.size == 0) {  // No previous input, or user isn't logged in.
+      keywordsDiv.text('No previous results found');
+    } else {  // User has previous input.
+      keywordsDiv.empty();
+      keywordsBtn.removeClass('hide');
+      for (let key of Object.keys(keywordMap)) {
+        let btn = $('<a></a>').attr('href', '/results?k=' + key);
+        let keywords = keywordMap[key].join(', ');
+        btn.text(keywords);
+        btn.addClass('button');
+        keywordsDiv.append(btn);
+      }
+    }
+  });
+
+  $('#previous-keywords').on('click', function() {
+    let keywordsWindow = $('#keywords-window');
+    if (keywordsWindow.hasClass('hide')) {
+      keywordsWindow.removeClass('hide');
+    } else {
+      keywordsWindow.addClass('hide');
+    }
+  });
+
   $('#select-blob').on('click', async function() {
     const blobURL = await BLOB_URL_PROMISE;
     $('#keyword-form, #blob-input, #submit-form').removeClass('hide');
@@ -54,3 +95,10 @@ $().ready(function() {
     return true;
   });
 });
+
+function addKeyword(key, value, map) {
+  let btn = $('<a></a>').attr('href', '/results?k=' + key);
+  let keywords = value.join(', ');
+  btn.text(keywords);
+  keywordsDiv.append(btn);
+}

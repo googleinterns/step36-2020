@@ -17,9 +17,13 @@ import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query.SortDirection;
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
@@ -36,27 +40,31 @@ public final class Keywords {
 
   // We don't want any terms that are far too un-salient to include in the keywords list.
   // 0.2 is a good minimum threshold as, especially when extracting saliency from a list of
-  // label, many of the high-relevancy terms end up only getting assigned a salience of 0.2.
-  private static final double MIN_SALIENCE_THRESHOLD = 0.1;
+  // label, many of the high-relevancy terms end up only getting assigned a salience of 0.08.
+  private static final double MIN_SALIENCE_THRESHOLD = 0.08;
 
-  // For labels, we want high-confidence labels. Many of the labels below 0.70 seem to end
+  // For labels, we want high-confidence labels. Many of the labels below 0.60 seem to end
   // up being only tangetially related to the contents of the picture.
   private static final double MIN_SCORE_THRESHOLD = 0.60;
 
   /**
-   * @return a list of the 5 most salient keywords
+   * @return a list of the 10 most salient keywords from the datastore in accordance to the keys
    */
-  public static List<String> getKeywords(String keyString) {
-    try {
-      DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-      Entity result = datastore.get(KeyFactory.stringToKey(keyString));
-    
-      Collection<String> keywordCollection = (Collection<String>) result.getProperty("keywords");
-      List<String> keywordList = keywordCollection.stream().limit(MAX_NUM_KEYWORDS).collect(Collectors.toList());
-      return keywordList;
-    } catch (EntityNotFoundException ex) {
-      return new ArrayList<>();
-    }
+  public static Collection<String> getKeywords(String keyString) {
+    UserService userService = UserServiceFactory.getUserService();
+    Map<String, Collection<String>> allKeywords = getKeyKeywordMap(userService.getCurrentUser().getUserId());
+        
+    Collection<String> keywordCollection = allKeywords.get(keyString);
+    List<String> keywordList = keywordCollection.stream().limit(MAX_NUM_KEYWORDS).collect(Collectors.toList());
+    return keywordList;
+  }
+
+  /**
+   * @return a key-to-keyword mapping of all keywords that the current user has created.
+   */
+  public static Map<String, Collection<String>> getAllKeywords() {
+    UserService userService = UserServiceFactory.getUserService();
+    return getKeyKeywordMap(userService.getCurrentUser().getUserId());
   }
 
   /**
@@ -114,8 +122,11 @@ public final class Keywords {
     for (com.google.cloud.language.v1.Entity entity : orderSet) {
       keywordSet.add(entity.getName().toLowerCase());
     }
+    UserService userService = UserServiceFactory.getUserService();
+    final String userId = userService.getCurrentUser().getUserId();
     Entity datastoreEntity = new Entity("Keyword");
     datastoreEntity.setProperty("keywords", keywordSet);
+    datastoreEntity.setProperty("id", userId);
     datastore.put(datastoreEntity);
     return KeyFactory.keyToString(datastoreEntity.getKey());
   }
@@ -136,5 +147,22 @@ public final class Keywords {
       ex.printStackTrace();
       return null;
     }
-  }  
+  }
+  
+  /**
+   * @return a map of keys to their list of keywords of all sets of keywords that the
+   * user defined by id has entered.
+   */
+  private static Map<String, Collection<String>> getKeyKeywordMap(String id) {
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    Query query = new Query("Keyword").setFilter(
+        new Query.FilterPredicate("id", Query.FilterOperator.EQUAL, id));
+    PreparedQuery results = datastore.prepare(query);
+    Map<String, Collection<String>> keyKeywordMap = new HashMap<>();
+    for (Entity entity : results.asIterable()) {
+      Collection<String> keywords = (Collection<String>) entity.getProperty("keywords");
+      keyKeywordMap.put(KeyFactory.keyToString(entity.getKey()), keywords);
+    }
+    return keyKeywordMap;
+  }
 }
