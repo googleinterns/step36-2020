@@ -20,17 +20,13 @@ import com.google.sps.data.UrlRequest;
 @RunWith(PowerMockRunner.class) 
 @PrepareForTest({ UrlRequest.class, CivicServlet.class })
 public final class CivicServletTest { 
-  
-  private final static String EXPECTED_RESPONSE = "response";
 
-  @BeforeClass
-  public static void setUpUrlQueryMock() throws IOException {
+  private void setUpUrlQueryMock(String expectedResponse) throws IOException {
     PowerMockito.mockStatic(UrlRequest.class);
-    PowerMockito.when(UrlRequest.urlQuery(Mockito.anyString(), Mockito.any(Map.class))).thenReturn(EXPECTED_RESPONSE);
+    PowerMockito.when(UrlRequest.urlQuery(Mockito.anyString(), Mockito.any(Map.class))).thenReturn(expectedResponse);
   }
 
-  @Test
-  public void testServlet() throws IOException {
+  private String mockServlet() throws IOException {
     HttpServletRequest mockedRequest = PowerMockito.mock(HttpServletRequest.class);
     HttpServletResponse mockedResponse = PowerMockito.mock(HttpServletResponse.class);
 
@@ -45,7 +41,22 @@ public final class CivicServletTest {
 
     Mockito.verify(mockedRequest, Mockito.atLeast(1)).getParameter("address");
     writer.flush();
-    String actual = stringWriter.toString();
-    Assert.assertTrue(actual.contains(EXPECTED_RESPONSE));
+    return stringWriter.toString();
+  }
+
+  @Test
+  public void testServlet() throws IOException {
+    String expectedResponse = "response";
+    setUpUrlQueryMock(expectedResponse);
+    String actual = mockServlet();
+    Assert.assertTrue(actual.contains(expectedResponse));
+  }
+
+  @Test
+  public void testNonASCIICharacters() throws IOException {
+    String expectedResponse = "sí 👍";
+    setUpUrlQueryMock(expectedResponse);
+    String actual = mockServlet();
+    Assert.assertTrue(actual.contains(expectedResponse));
   }
 }
