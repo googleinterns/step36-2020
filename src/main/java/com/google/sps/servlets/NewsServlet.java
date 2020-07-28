@@ -40,10 +40,8 @@ public class NewsServlet extends HttpServlet {
     HashMap<String, List<Article>> articleMap = new HashMap<>();
     terms.forEach((term) -> {
       try {
-        System.out.println("In try loop");
         Map<String, String> paramMap = new HashMap<>();
         paramMap.put("q", UrlRequest.encodeTerm(term));
-        System.out.println("after encode term");
         //paramMap.put("gl", getCountry(request));
         HttpURLConnection connect = getConnection(GOOGLE_NEWS_PATH, paramMap);
         String HTMLString = getHTML(connect);
