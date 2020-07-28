@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.lang.reflect.Type;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.google.gson.JsonSyntaxException;
 import com.google.sps.data.Project;
 import com.google.sps.data.UrlRequest;
 
@@ -40,7 +41,7 @@ public class ProjectsServlet extends HttpServlet {
         String jsonResult = UrlRequest.urlQuery(API_PATH, queryParams);
         List<Project> projectsList = extractProjectsList(jsonResult);
         jsonResultMap.put(term, projectsList);
-      } catch (NullPointerException|IOException exception) {
+      } catch (NullPointerException|IOException|JsonSyntaxException exception) {
         exception.printStackTrace();
         jsonResultMap.put(term, Collections.emptyList());
       }
