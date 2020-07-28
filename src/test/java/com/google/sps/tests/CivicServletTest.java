@@ -21,6 +21,8 @@ import com.google.sps.data.UrlRequest;
 @PrepareForTest({ UrlRequest.class, CivicServlet.class })
 public final class CivicServletTest { 
 
+  private final static CivicServlet CIVIC_SERVLET = new CivicServlet();
+
   private void setUpUrlQueryMock(String expectedResponse) throws IOException {
     PowerMockito.mockStatic(UrlRequest.class);
     PowerMockito.when(UrlRequest.urlQuery(Mockito.anyString(), Mockito.any(Map.class))).thenReturn(expectedResponse);
@@ -37,7 +39,7 @@ public final class CivicServletTest {
     PrintWriter writer = new PrintWriter(stringWriter);
     PowerMockito.when(mockedResponse.getWriter()).thenReturn(writer);
 
-    new CivicServlet().doGet(mockedRequest, mockedResponse);
+    CIVIC_SERVLET.doGet(mockedRequest, mockedResponse);
 
     Mockito.verify(mockedRequest, Mockito.atLeast(1)).getParameter("address");
     writer.flush();
