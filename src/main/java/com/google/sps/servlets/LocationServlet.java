@@ -79,6 +79,7 @@ public class LocationServlet extends HttpServlet {
         for (int i = 0; i < addressArray.size(); i++){
           entry = addressArray.get(i).getAsJsonObject();
           name = entry.getAsJsonPrimitive("long_name").getAsString();
+          shortName = entry.getAsJsonPrimitive("short_name").getAsString();
           geoType = entry.getAsJsonArray("types").get(0).getAsString();
           switch (geoType) {
             case "locality" :
@@ -98,6 +99,7 @@ public class LocationServlet extends HttpServlet {
               break;
             case "country":
               geoMap.put("Country", name);
+              geoMap.put("Short Country", shortName);
               break;
             default:
               break;
