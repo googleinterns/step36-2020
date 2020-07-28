@@ -36,7 +36,7 @@ public final class UrlRequest {
         contentBuilder.append(inputLine);
       }
     } catch(IOException e) {
-      System.out.println(e);
+      System.err.println(e);
       return "";
     } finally {
       connection.disconnect();
@@ -74,7 +74,7 @@ public final class UrlRequest {
     try {
       return URLEncoder.encode(term, StandardCharsets.UTF_8.toString());
     } catch (UnsupportedEncodingException uee) {
-      System.out.println(uee);
+      System.err.println(uee);
       return "";
     }
   }
