@@ -47,8 +47,8 @@ public class LocationServlet extends HttpServlet {
           Gson gson = new Gson();
           response.getWriter().println(gson.toJson(geoMap));
         } else {
-          System.out.println("Error: connection response code is: " + responseCode);
-          System.out.println("Ensure coordinates are correct");
+          System.err.println("Error: connection response code is: " + responseCode);
+          System.err.println("Ensure coordinates are correct");
         }    
       } catch(Exception e) {
         e.printStackTrace();
@@ -74,7 +74,7 @@ public class LocationServlet extends HttpServlet {
         JsonArray resultsArray = responseObject.getAsJsonArray("results");
         JsonArray addressArray = resultsArray.get(0).getAsJsonObject().getAsJsonArray("address_components");
         JsonObject entry;
-        String name, geoType;
+        String name, shortName, geoType;
         // Extract useful location informatin from JSON array.
         for (int i = 0; i < addressArray.size(); i++){
           entry = addressArray.get(i).getAsJsonObject();

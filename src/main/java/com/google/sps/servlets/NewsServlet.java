@@ -42,7 +42,8 @@ public class NewsServlet extends HttpServlet {
       try {
         Map<String, String> paramMap = new HashMap<>();
         paramMap.put("q", UrlRequest.encodeTerm(term));
-        paramMap.put("gl", getCountry(request));
+        // TODO: Add lat and lng params to this servlet request before un-commenting line below.
+        //paramMap.put("gl", getCountry(request));
         HttpURLConnection connect = getConnection(GOOGLE_NEWS_PATH, paramMap);
         String HTMLString = getHTML(connect);
         List<Article> articleList = makeArticleList(HTMLString);
@@ -73,7 +74,7 @@ public class NewsServlet extends HttpServlet {
       Gson gson = new Gson();
       Type mapType = new TypeToken<Map<String, String>>() {}.getType();
       Map<String, String> locationMap = gson.fromJson(locationJsonResult, mapType);
-      country = locationMap.get("Short country");
+      country = locationMap.get("Short Country");
     } catch (FileNotFoundException fnfe) {
       // Location URL doesn't work on devserver, so instead use hardcoded string.
       fnfe.printStackTrace();

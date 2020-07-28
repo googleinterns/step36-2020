@@ -76,11 +76,11 @@ public final class NewsTest {
   public static void setUp() {
     someArticleList.add(new Article(
       "The latest Instagram trend: putting your name on photos of frogs, cats and Harry Styles",
-      "news.google.com/articles/CBMib2h0dHBzOi8vd3d3LnRoZWd1YXJkaWFuLmNvbS91cy1uZXdzLzIwMjAvanVsLzIwL2luc3RhZ3JhbS13aGF0LWZyb2ctYXJlLXlvdS1pbnNpZGUtdGhlLWxhdGVzdC13YXktdG8td2FzdGUtdGltZdIBb2h0dHBzOi8vYW1wLnRoZWd1YXJkaWFuLmNvbS91cy1uZXdzLzIwMjAvanVsLzIwL2luc3RhZ3JhbS13aGF0LWZyb2ctYXJlLXlvdS1pbnNpZGUtdGhlLWxhdGVzdC13YXktdG8td2FzdGUtdGltZQ?hl=en-US&amp;gl=US&amp;ceid=US%3Aen"
+      "http://news.google.com/articles/CBMib2h0dHBzOi8vd3d3LnRoZWd1YXJkaWFuLmNvbS91cy1uZXdzLzIwMjAvanVsLzIwL2luc3RhZ3JhbS13aGF0LWZyb2ctYXJlLXlvdS1pbnNpZGUtdGhlLWxhdGVzdC13YXktdG8td2FzdGUtdGltZdIBb2h0dHBzOi8vYW1wLnRoZWd1YXJkaWFuLmNvbS91cy1uZXdzLzIwMjAvanVsLzIwL2luc3RhZ3JhbS13aGF0LWZyb2ctYXJlLXlvdS1pbnNpZGUtdGhlLWxhdGVzdC13YXktdG8td2FzdGUtdGltZQ?hl=en-US&amp;gl=US&amp;ceid=US%3Aen"
     ));
     someArticleList.add(new Article(
       "How a blue protein turns tree frogs bright green",
-      "news.google.com/articles/CBMiVmh0dHBzOi8vd3d3LnNjaWVuY2VtYWcub3JnL25ld3MvMjAyMC8wNy9ob3ctYmx1ZS1wcm90ZWluLXR1cm5zLXRyZWUtZnJvZ3MtYnJpZ2h0LWdyZWVu0gEA?hl=en-US&amp;gl=US&amp;ceid=US%3Aen"
+      "http://news.google.com/articles/CBMiVmh0dHBzOi8vd3d3LnNjaWVuY2VtYWcub3JnL25ld3MvMjAyMC8wNy9ob3ctYmx1ZS1wcm90ZWluLXR1cm5zLXRyZWUtZnJvZ3MtYnJpZ2h0LWdyZWVu0gEA?hl=en-US&amp;gl=US&amp;ceid=US%3Aen"
     ));
   }
 
@@ -119,7 +119,7 @@ public final class NewsTest {
     fullArticleList.add(someArticleList.get(1));
     fullArticleList.add(new Article(
       "How frogs became green — again, and again, and again : Research Highlights", 
-      "news.google.com/articles/CBMiMmh0dHBzOi8vd3d3Lm5hdHVyZS5jb20vYXJ0aWNsZXMvZDQxNTg2LTAyMC0wMjEwMy160gEA?hl=en-US&amp;gl=US&amp;ceid=US%3Aen"
+      "http://news.google.com/articles/CBMiMmh0dHBzOi8vd3d3Lm5hdHVyZS5jb20vYXJ0aWNsZXMvZDQxNTg2LTAyMC0wMjEwMy160gEA?hl=en-US&amp;gl=US&amp;ceid=US%3Aen"
     ));
     checkMakeArticleList(FULL_HTML_PATH, fullArticleList);
   }
