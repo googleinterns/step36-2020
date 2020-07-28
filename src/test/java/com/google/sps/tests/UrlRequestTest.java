@@ -45,7 +45,6 @@ public final class UrlRequestTest {
   @Test
   public void errorUrlQuery() throws Exception {
     int responseCode = 400;
-  
     HttpURLConnection mockedConnection = mockUrlConnection(URL_PATH);
     PowerMockito.when(mockedConnection.getResponseCode()).thenReturn(responseCode);
 
@@ -59,7 +58,6 @@ public final class UrlRequestTest {
     int responseCode = 200;
     String content = "hello world";
     InputStream inputStream = new ByteArrayInputStream(content.getBytes(StandardCharsets.UTF_8.toString()));
-
     HttpURLConnection mockedConnection = mockUrlConnection(URL_PATH);
     PowerMockito.when(mockedConnection.getResponseCode()).thenReturn(responseCode);
     PowerMockito.when(mockedConnection.getInputStream()).thenReturn(inputStream);
