@@ -1,19 +1,9 @@
 package com.google.sps.servlets;
 
-// import java.io.ByteArrayInputStream;
-// import java.io.InputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-// import java.nio.charset.StandardCharsets;
 import java.util.Map;
-// import java.util.HashMap;
-// import java.util.Arrays;
-// import java.util.List;
-// import java.net.URL;
-// import java.net.URLConnection;
-// import java.net.HttpURLConnection;
-// import java.net.MalformedURLException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.junit.Assert;
@@ -24,9 +14,7 @@ import org.mockito.Mockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.api.mockito.PowerMockito;
-// import org.hamcrest.MatcherAssert;
 import com.google.sps.data.UrlRequest;
-// import static org.hamcrest.collection.IsIterableContainingInAnyOrder.containsInAnyOrder;
 
 /** */
 @RunWith(PowerMockRunner.class) 
