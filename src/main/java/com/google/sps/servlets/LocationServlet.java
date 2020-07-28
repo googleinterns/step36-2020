@@ -45,6 +45,7 @@ public class LocationServlet extends HttpServlet {
           String json = getJson(url);
           jsonToMap(json);
           Gson gson = new Gson();
+          response.setCharacterEncoding("UTF-8");
           response.getWriter().println(gson.toJson(geoMap));
         } else {
           System.err.println("Error: connection response code is: " + responseCode);
