@@ -121,7 +121,7 @@ function loadLocationObj(callback) {
 
 async function loadCivicSectionFromAddress(address) {
   const civicObj = await loadObject(`${CIVIC_OBJ_URL}?address=${address}`);
-  if ('error in civicObj') {
+  if ('error' in civicObj) {
     alert('Sorry, your current location is not supported');
   } else {
     const civicLocationObj = buildCivicLocationObj(civicObj);
