@@ -10,6 +10,8 @@ import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
 import com.google.appengine.api.images.ImagesService;
 import com.google.appengine.api.images.ImagesServiceFactory;
 import com.google.appengine.api.images.ServingUrlOptions;
+import com.google.appengine.api.users.UserServiceFactory;
+import com.google.appengine.api.users.UserService;
 import com.google.cloud.vision.v1.AnnotateImageRequest;
 import com.google.cloud.vision.v1.AnnotateImageResponse;
 import com.google.cloud.vision.v1.BatchAnnotateImagesResponse;
@@ -49,6 +51,7 @@ public class ImageServlet extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     PrintWriter writer = response.getWriter();
+    UserService userService = UserServiceFactory.getUserService();
     BlobKey blobKey = getBlobKey(request, "image");
     if (blobKey == null) { // TODO: Check whether file is an image.
       response.sendRedirect("/index.html");
@@ -56,11 +59,13 @@ public class ImageServlet extends HttpServlet {
     }
     byte[] blobBytes = getBlobBytes(blobKey);
     String key = "";
-    TextAnnotation textAnnotation = getImageText(blobBytes);
-    if (textAnnotation == null || textAnnotation.getText().equals("")) {
-      key = Keywords.addKeywords(getImageLabels(blobBytes));
-    } else {
-      key = Keywords.addKeywords(textAnnotation.getText());
+    if (userService.isUserLoggedIn()) {
+      TextAnnotation textAnnotation = getImageText(blobBytes);
+      if (textAnnotation == null || textAnnotation.getText().equals("")) {
+        key = Keywords.addKeywords(getImageLabels(blobBytes));
+      } else {
+        key = Keywords.addKeywords(textAnnotation.getText());
+      }
     }
     response.sendRedirect(String.format("/results?k=%s", key));
   }
