@@ -53,8 +53,8 @@ public class ImageServlet extends HttpServlet {
     PrintWriter writer = response.getWriter();
     UserService userService = UserServiceFactory.getUserService();
     BlobKey blobKey = getBlobKey(request, "image");
-    if (blobKey == null) { // TODO: Check whether file is an image.
-      response.sendRedirect("/index.html");
+    if (blobKey == null) {
+      response.sendRedirect("/");
       return;
     }
     byte[] blobBytes = getBlobBytes(blobKey);
@@ -62,7 +62,15 @@ public class ImageServlet extends HttpServlet {
     if (userService.isUserLoggedIn()) {
       TextAnnotation textAnnotation = getImageText(blobBytes);
       if (textAnnotation == null || textAnnotation.getText().equals("")) {
-        key = Keywords.addKeywords(getImageLabels(blobBytes));
+        List<EntityAnnotation> imageLabels = getImageLabels(blobBytes);
+        // If the image isn't valid then imageLabels is null, and it is erased from blobstore.
+        if (imageLabels == null) {
+          BlobstoreService blobstore = BlobstoreServiceFactory.getBlobstoreService();
+          blobstore.delete(blobKey);
+          response.sendRedirect("/"); // TODO: Notify the user the file wasn't valid
+          return;
+        }
+        key = Keywords.addKeywords(imageLabels);
       } else {
         key = Keywords.addKeywords(textAnnotation.getText());
       }
