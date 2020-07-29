@@ -19,6 +19,13 @@ $().ready(function() {
   $('body').on('click', '#pop-up > .close', function() {
     $('#modal-window').addClass('hide');
   });
+
+  $('#address').val(getCookie("address"));
+});
+
+$('submit-form').click(function () {
+  let address = $('#address').val();
+  setCookie('address', address, 1);  
 });
 
 async function loadModalWindow() {
