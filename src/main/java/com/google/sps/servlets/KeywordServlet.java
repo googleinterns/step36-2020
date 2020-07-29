@@ -34,6 +34,7 @@ public class KeywordServlet extends HttpServlet {
     List<String> keywords = Keywords.getKeywords(key);
     Gson gson = new Gson();
     String json = gson.toJson(keywords);
+    response.setCharacterEncoding("UTF-8");
     response.getWriter().println(json);
   }
 
