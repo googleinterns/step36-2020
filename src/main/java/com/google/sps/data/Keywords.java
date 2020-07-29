@@ -48,15 +48,12 @@ public final class Keywords {
   private static final double MIN_SCORE_THRESHOLD = 0.60;
 
   /**
-   * @return a list of the 10 most salient keywords from the datastore in accordance to the keys
+   * @return a list of the 10 most salient keywords from the datastore in accordance to the keys.
    */
   public static Collection<String> getKeywords(String keyString) {
     UserService userService = UserServiceFactory.getUserService();
-    Map<String, Collection<String>> allKeywords = getKeyKeywordMap(userService.getCurrentUser().getUserId());
-        
-    Collection<String> keywordCollection = allKeywords.get(keyString);
-    List<String> keywordList = keywordCollection.stream().limit(MAX_NUM_KEYWORDS).collect(Collectors.toList());
-    return keywordList;
+    Map<String, Collection<String>> allKeywords = getKeyKeywordMap(userService.getCurrentUser().getUserId());        
+    return allKeywords.get(keyString);
   }
 
   /**
@@ -118,14 +115,20 @@ public final class Keywords {
       orderSet.add(entity);
     }
     // We must create a new list of Strings as a collection of NLP Entities is not supported by datastore.
+    /**
     Set<String> keywordSet = new HashSet<>();
     for (com.google.cloud.language.v1.Entity entity : orderSet) {
       keywordSet.add(entity.getName().toLowerCase());
     }
+    */
+    Collection<String> keywordCollection = 
+        orderSet.stream().limit(MAX_NUM_KEYWORDS).map(e -> e.getName().toLowerCase()).distinct().collect(Collectors.toList());
+
+    // Add the keyword collection to the datastore, marked by the User ID.
     UserService userService = UserServiceFactory.getUserService();
     final String userId = userService.getCurrentUser().getUserId();
     Entity datastoreEntity = new Entity("Keyword");
-    datastoreEntity.setProperty("keywords", keywordSet);
+    datastoreEntity.setProperty("keywords", keywordCollection);
     datastoreEntity.setProperty("id", userId);
     datastore.put(datastoreEntity);
     return KeyFactory.keyToString(datastoreEntity.getKey());

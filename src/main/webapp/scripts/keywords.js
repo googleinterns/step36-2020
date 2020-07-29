@@ -1,37 +1,36 @@
 const BLOB_URL_PROMISE = loadTemplate('/user-image');
+const LOG_URL_PROMISE = loadObject('/login');
+const KEYWORD_MAP_PROMISE = loadObject('/all-keywords');
 
-$().ready(function() {
-  fetch('/login').then(response => response.json()).then((logURL) => {
-    $('#log-btn > a').attr('href', logURL[0]);
-    if (logURL.length == 2) {  // User is not loggeed in.
-      $('#form-title > p').text('You are not logged in.');
-      $('#log-btn > a').text("Login");
-      $('#keyword-form, #input-select, #location-input, #previous-keywords').addClass('hide');
-    } else {
-      $('#form-title > p').text('Choose Type of Input');
-      $('#log-btn > a').text('Logout');
-      $('#input-select, #location-input, #previous-keywords').removeClass('hide');
-    }
-    $('#log-btn').removeClass('hide');
-  });
+$().ready(async function() {
+  const logURL = await LOG_URL_PROMISE;
+  $('#log-btn').attr('href', logURL[0]);
+  if (logURL.length == 2) {  // User is not loggeed in.
+    $('#form-title > p').text('You are not logged in.');
+    $('#log-btn').text("Login");
+    $('#keyword-form, #input-select, #location-input, #previous-keywords, #address-input').addClass('hide');
+  } else {
+    $('#form-title > p').text('Choose Type of Input');
+    $('#log-btn').text('Logout');
+    $('#input-select, #location-input, #previous-keywords, #address-input').removeClass('hide');
+  }
+  $('#log-btn').removeClass('hide');
 
-  fetch('/all-keywords').then(response => response.json()).then((keywordMap) => {
-    let keywordsDiv = $('#keywords-window');
-    let keywordsBtn = $('#previous-keywords');
-    if (keywordMap.size == 0) {  // No previous input, or user isn't logged in.
-      keywordsDiv.text('No previous results found');
-    } else {  // User has previous input.
-      keywordsDiv.empty();
-      keywordsBtn.removeClass('hide');
-      for (let key of Object.keys(keywordMap)) {
-        let btn = $('<a></a>').attr('href', '/results?k=' + key);
-        let keywords = keywordMap[key].join(', ');
-        btn.text(keywords);
-        btn.addClass('button');
-        keywordsDiv.append(btn);
-      }
+  const keywordMap = await KEYWORD_MAP_PROMISE;
+  let keywordKeys = Object.keys(keywordMap);
+  if (keywordKeys.size == 0) {  // No previous input, or user isn't logged in.
+    $('#keywords-window').text('No previous results found');
+  } else {  // User has previous input.
+    $('#keywords-window').empty();
+    $('#previous-keywords').removeClass('hide');
+    for (let key of keywordKeys) {
+      let btn = $('<a></a>').attr('href', '/results?k=' + key);
+      let keywords = keywordMap[key].join(', ');
+      btn.text(keywords);
+      btn.addClass('button');
+      $('#keywords-window').append(btn);
     }
-  });
+  }
 
   $('#previous-keywords').on('click', function() {
     let keywordsWindow = $('#keywords-window');
@@ -95,10 +94,3 @@ $().ready(function() {
     return true;
   });
 });
-
-function addKeyword(key, value, map) {
-  let btn = $('<a></a>').attr('href', '/results?k=' + key);
-  let keywords = value.join(', ');
-  btn.text(keywords);
-  keywordsDiv.append(btn);
-}
