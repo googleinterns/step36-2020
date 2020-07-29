@@ -18,7 +18,6 @@ import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheFactory;
 import com.github.mustachejava.DefaultMustacheFactory;
 
-
 /** */
 @RunWith(PowerMockRunner.class) 
 @PrepareForTest({ ResultsServlet.class, DefaultMustacheFactory.class})
