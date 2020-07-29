@@ -55,7 +55,7 @@ public final class CivicServletTest {
   }
 
   @Test
-  public void testNonASCIICharacters() throws IOException {
+  public void testNonAsciiCharacters() throws IOException {
     String expectedResponse = "sí 👍";
     setUpUrlQueryMock(expectedResponse);
     String actual = mockServlet();
