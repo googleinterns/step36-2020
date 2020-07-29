@@ -3,11 +3,11 @@
   <ion-icon class="close hide" name="close-outline"></ion-icon>
   <div class="levels hide">
     {{#books.length}}
-      <div class="level">
+      <div class="level books">
         <p class="level-name"><ion-icon name="chevron-forward-outline"></ion-icon>Books</p>
         <div class="elements">
           {{#books}}
-            <div class="books item" data-url="{{link}}">
+            <div class="book item" data-url="{{link}}">
               <p class="element-title">{{title}} {{#author}}- {{.}}{{/author}}</p>
               <p class="books-content">{{description}}</p>
               <div class="overlay hide">
@@ -19,12 +19,12 @@
       </div>
     {{/books.length}}
     {{#news.length}}
-      <div class="level">
+      <div class="level news">
         <p class="level-name"><ion-icon name="chevron-forward-outline"></ion-icon>News</p>
         <div class="elements">
           {{#news}}
-            <div class="news item" data-url="{{url}}">
-              <!-- Add news template here -->
+            <div class="news-e item" data-url="{{link}}">
+              <p class="element-title">{{title}}</p>
               <div class="overlay hide">
                 <p class="learn-more">Learn More <ion-icon name="arrow-forward-outline"></ion-icon></p>
               </div>
@@ -34,7 +34,7 @@
       </div>
     {{/news.length}}
     {{#projects.length}}
-      <div class="level">
+      <div class="level actions">
         <p class="level-name"><ion-icon name="chevron-forward-outline"></ion-icon>Projects</p>
         <div class="elements">
           {{#projects}}

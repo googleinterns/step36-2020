@@ -45,7 +45,7 @@ $().ready(function() {
   $('#select-blob').on('click', async function() {
     const blobURL = await BLOB_URL_PROMISE;
     $('#keyword-form, #blob-input, #submit-form').removeClass('hide');
-    $('#keyword-form').attr('action', blobURL[0]).attr('enctype', 'multipart/form-data');
+    $('#keyword-form').attr('action', blobURL).attr('enctype', 'multipart/form-data');
     $('#text-input').addClass('hide').val(null);
     $('#form-title > p').text('Upload an Image Here');
   });
@@ -57,7 +57,7 @@ $().ready(function() {
     $('#form-title > p').text('Copy Your Tweet Here');
   });
 
-  $('#blob-input').change(function() {
+  $('#blob-file').change(function() {
     const filePath = $(this).val();
     $('#file-path').text(filePath.split('\\').pop());
   });

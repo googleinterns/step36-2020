@@ -22,6 +22,19 @@
   transition: all 0.3s ease-in-out;
 }
 
+#header {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+}
+
+#title {
+  font-size: 120%;
+  margin: 10vh 0 0;
+}
+
 #keywords {
   margin: auto;
   height: 100%;
@@ -33,6 +46,7 @@
 
 .body.focus #keywords {
   align-items: center;
+  justify-content: center;
 }
 
 .keyword {
@@ -40,8 +54,8 @@
   width: 4vw;
   height: 50vh;
   background-color: white;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.25);
-  border-radius: 3vh;
+  box-shadow: 0.01vh 0.01vw 0.2vmax rgba(0,0,0,0.25);
+  border-radius: min(3vmax, 5vh);
   display: flex;
   transition: all 0.5s ease-out;
   justify-content: center;
@@ -57,6 +71,7 @@
   transition: all 0.3s ease-in-out;
   height: auto;
   font-size: 1.2vw;
+  color: hsl(var(--upperColor-hs), 20%);
 }
 
 .section-header {
@@ -73,10 +88,44 @@
   margin: 0.5vh 0;	
   transition: all 0.3s ease-in-out;
   font-size: 1.3vh;
+  display: none;
+}
+
+.extended .item {
+  display: inline-block;
 }
 
 .item > p {
   margin: 0.15vh;
+  font-size: min(1.2vh, 1.5vmin);
+  text-align: left;
+}
+
+.books > .level-name {
+  color: var(--booksColor);
+  background-color: hsl(var(--booksColor-hs), 90%);
+}
+
+.news > .level-name {
+  color: var(--newsColor);
+  background-color: hsl(var(--newsColor-hs), 90%);
+}
+
+.actions > .level-name {
+  color: var(--actionsColor);
+  background-color: hsl(var(--actionsColor-hs), 90%);
+}
+
+.extended.books > .level-name {
+  background-color: hsl(var(--booksColor-hs), 85%);
+}
+
+.extended.news > .level-name {
+  background-color: hsl(var(--newsColor-hs), 85%);
+}
+
+.extended.actions > .level-name {
+  background-color: hsl(var(--actionsColor-hs), 85%);
 }
 
 @media (orientation: portrait) {
@@ -94,6 +143,7 @@
   #keywords {
     flex-direction: column;
     align-items: center;
+    justify-content: start;
   }
   
   .keyword {
@@ -120,7 +170,7 @@
           [row3-start] "levels   levels  " 20fr [row3-end]
           / 96% 4%;
     place-items: center center;
-    transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease-out;
     font-weight: normal;
   }
   

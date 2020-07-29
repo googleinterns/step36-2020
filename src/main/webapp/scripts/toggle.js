@@ -6,9 +6,10 @@ const KEYWORDS_OBJ_URL = '/keyword';
 const CIVIC_OBJ_URL = '/actions/civic';
 const LOCATION_OBJ_URL = '/location';
 
+const NEWS_OBJ_URL = '/news';
 const BOOKS_OBJ_URL =  '/books';
 const PROJECTS_OBJ_URL = '/actions/projects';
-const OBJECTS_URLS = [BOOKS_OBJ_URL, PROJECTS_OBJ_URL];
+const OBJECTS_URLS = [NEWS_OBJ_URL, BOOKS_OBJ_URL, PROJECTS_OBJ_URL];
 
 let loadingCounter;
 
@@ -26,9 +27,16 @@ async function loadContentSection() {
   } else {
     keywords.forEach(loadKeywordSection);
   }
+  const address = encodeURI(getCookie('address'));
   const location = getCookie('location');
-  if (location != "") {
-    loadLocationObj(loadCivicSection);
+  if (address != "") {
+    loadCivicSectionFromAddress(address);
+  } else {
+    if (location != "") {
+      loadLocationObj(loadCivicSectionFromLocation);
+    } else {
+      loadingCounter.decrement();
+    }
   }
 }
 
@@ -69,18 +77,19 @@ async function loadKeywordSection(keyword) {
   const queryString = `?key=${keyword}`;
   const objsUrls = OBJECTS_URLS.map(url => `${url}${queryString}`);
   const objs = await loadUrls(objsUrls, loadObject);
-  const keywordObj = buildKeywordObj(objs[0], objs[1], keyword);
+  const keywordObj = buildKeywordObj(objs[0], objs[1], objs[2], keyword);
   const template = await KEYWORD_TEMPLATE_PROMISE;
   renderKeyword(template, keywordObj);
   loadingCounter.decrement();
 }
 
 /**
- * Builds a keyword object given a keyword, books, and projects.
+ * Builds a keyword object given a keyword, news, books, and projects.
  */
-function buildKeywordObj(booksObj, projectsObj, keyword) {
+function buildKeywordObj(newsObj, booksObj, projectsObj, keyword) {
   let keywordObj = new Object();
   keywordObj.term = keyword;
+  keywordObj.news = newsObj.news[keyword];
   keywordObj.books = booksObj.books[keyword];
   keywordObj.projects = projectsObj.results[keyword];
   return keywordObj;
@@ -110,16 +119,25 @@ function loadLocationObj(callback) {
   }
 }
 
-/**
- * Loads the civic section to the DOM, or alerts the user if there aren't any results for their location.
- */
-async function loadCivicSection(locationObj) {
-  if (locationObj.Country === "United States") {
-    const address = locationObj2Address(locationObj);
-    const civicObj = await loadObject(`${CIVIC_OBJ_URL}?address=${address}`);
+async function loadCivicSectionFromAddress(address) {
+  const civicObj = await loadObject(`${CIVIC_OBJ_URL}?address=${address}`);
+  if ('error in civicObj') {
+    alert('Sorry, your current location is not supported');
+  } else {
     const civicLocationObj = buildCivicLocationObj(civicObj);
     const locationTemplate = await LOCATION_TEMPLATE_PROMISE;
     renderLocation(locationTemplate, civicLocationObj);
+  }
+  loadingCounter.decrement();
+}
+
+/**
+ * Loads the civic section to the DOM, or alerts the user if there aren't any results for their location.
+ */
+async function loadCivicSectionFromLocation(locationObj) {
+  if (locationObj.Country === "United States") {
+    const address = locationObj2Address(locationObj);
+    loadCivicSectionFromAddress(address);
   } else {
     alert('Sorry, your current location is not supported');
   }
