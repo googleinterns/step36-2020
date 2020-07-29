@@ -37,13 +37,15 @@ public class NewsServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     List<String> terms = Arrays.asList(request.getParameterValues("key"));
+    String country = request.getParameter("country");
+    System.out.println("Country is " + country);
     HashMap<String, List<Article>> articleMap = new HashMap<>();
     terms.forEach((term) -> {
       try {
         Map<String, String> paramMap = new HashMap<>();
         paramMap.put("q", UrlRequest.encodeTerm(term));
         // TODO: Add lat and lng params to this servlet request before un-commenting line below.
-        //paramMap.put("gl", getCountry(request));
+        paramMap.put("gl", country);
         HttpURLConnection connect = getConnection(GOOGLE_NEWS_PATH, paramMap);
         String HTMLString = getHTML(connect);
         List<Article> articleList = makeArticleList(HTMLString);

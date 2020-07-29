@@ -2,6 +2,8 @@ const KEYWORD_TEMPLATE_PROMISE = loadTemplate('/templates/keyword.html');
 const LOCATION_TEMPLATE_PROMISE = loadTemplate('/templates/location.html');
 const NO_KEYWORDS_HTML = loadTemplate('/templates/noKeywords.html')
 
+let locationObj = null;
+
 const KEYWORDS_OBJ_URL = '/keyword';
 const CIVIC_OBJ_URL = '/actions/civic';
 const LOCATION_OBJ_URL = '/location';
@@ -12,14 +14,20 @@ const PROJECTS_OBJ_URL = '/actions/projects';
 const OBJECTS_URLS = [NEWS_OBJ_URL, BOOKS_OBJ_URL, PROJECTS_OBJ_URL];
 
 let loadingCounter;
-let lat = getCookie("lat");
-let lng = getCookie("lng");
 
 /**
  * Loads the content section. 
  * Returns a promise that resolves when everything loads.
  */
 async function loadContentSection() {
+  let location = getCookie('location');
+  if (location != "") {
+    console.log("location not null");
+    let lat = getCookie("lat");
+    let lng = getCookie("lng");
+    locationObj = await loadObject(`${LOCATION_OBJ_URL}?lat=${lat}&lng=${lng}`);
+    console.log(locationObj);
+  }
   const keywords = await loadKeywords(KEYWORDS_OBJ_URL);
   const elementsToLoad = Math.max(keywords.length, 1);
   counter.add(elementsToLoad);
@@ -30,18 +38,12 @@ async function loadContentSection() {
     keywords.forEach(loadKeywordSection);
   }
   const address = encodeURI(getCookie('address'));
-  const location = getCookie('location');
   if (address != "") {
     loadCivicSectionFromAddress(address);
+  } else if (location != "") {
+    loadCivicSectionFromLocation(locationObj);
   } else {
-    if (location != "") {
-      console.log(`${LOCATION_OBJ_URL}?lat=${lat}&lng=${lng}`);
-      let locationObj = await loadObject(`${LOCATION_OBJ_URL}?lat=${lat}&lng=${lng}`);
-      console.log(locationObj);
-      loadCivicSectionFromLocation(locationObj);
-    } else {
-      loadingCounter.decrement();
-    }
+    loadingCounter.decrement();
   }
 }
 
@@ -75,12 +77,23 @@ function hideLoading() {
   $("#real-body").removeClass("hide").addClass("body");
 }
 
+function makeUrl(url, keyword) {
+  let queryString = `?key=${keyword}`;
+  let fullUrl = `${url}${queryString}`;
+  console.log(url);
+  console.log(locationObj);
+  if (url === '/news' && locationObj != null) {
+    fullUrl = `${fullUrl}&country=${locationObj["Short Country"]}`;
+    console.log(fullUrl);
+  }
+  return fullUrl;
+}
+
 /**
  * Loads a keyword section to the DOM.
  */
 async function loadKeywordSection(keyword) {
-  const queryString = `?key=${keyword}`;
-  const objsUrls = OBJECTS_URLS.map(url => `${url}${queryString}`);
+  const objsUrls = OBJECTS_URLS.map(url => makeUrl(url, keyword));
   const objs = await loadUrls(objsUrls, loadObject);
   const keywordObj = buildKeywordObj(objs[0], objs[1], objs[2], keyword);
   const template = await KEYWORD_TEMPLATE_PROMISE;
@@ -133,13 +146,10 @@ async function loadCivicSectionFromAddress(address) {
  * Loads the civic section to the DOM, or alerts the user if there aren't any results for their location.
  */
 async function loadCivicSectionFromLocation(locationObj) {
-  console.log(locationObj.Country);
   if (locationObj.Country === "United States") {
-    console.log("In the US");
     const address = locationObj2Address(locationObj);
     loadCivicSectionFromAddress(address);
   } else {
-    console.log("NOT in the US");
     alert('Sorry, your current location is not supported');
   }
   loadingCounter.decrement();
