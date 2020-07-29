@@ -38,7 +38,6 @@ public class NewsServlet extends HttpServlet {
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     List<String> terms = Arrays.asList(request.getParameterValues("key"));
     String country = request.getParameter("country");
-    System.out.println("Country is " + country);
     HashMap<String, List<Article>> articleMap = new HashMap<>();
     terms.forEach((term) -> {
       try {
@@ -60,30 +59,6 @@ public class NewsServlet extends HttpServlet {
     String json = encodeMapAsJson(articleMap);
     response.setCharacterEncoding("UTF-8");
     response.getWriter().println(json);
-  }
-
-  public String getCountry(HttpServletRequest request) throws IOException {
-    String latitude = request.getParameter("lat");
-    String longitude = request.getParameter("lng");
-    Map<String, String> locationQueryParams = new HashMap<>();
-    locationQueryParams.put("lat", latitude);
-    locationQueryParams.put("lng", longitude);
-    String locationUrl = String.format("%s://%s:%s/location",
-        request.getScheme(), 
-        request.getServerName(), 
-        request.getServerPort());
-    String country = "US";  // Have US as default country.
-    try {
-      String locationJsonResult = UrlRequest.urlQuery(locationUrl, locationQueryParams);
-      Gson gson = new Gson();
-      Type mapType = new TypeToken<Map<String, String>>() {}.getType();
-      Map<String, String> locationMap = gson.fromJson(locationJsonResult, mapType);
-      country = locationMap.get("Short Country");
-    } catch (FileNotFoundException fnfe) {
-      // Location URL doesn't work on devserver, so instead use hardcoded string.
-      fnfe.printStackTrace();
-    }
-    return country;
   }
 
   public HttpURLConnection getConnection(String basePath, Map<String, String> paramMap) throws IOException {

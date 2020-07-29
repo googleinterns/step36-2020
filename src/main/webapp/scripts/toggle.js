@@ -22,11 +22,9 @@ let loadingCounter;
 async function loadContentSection() {
   let location = getCookie('location');
   if (location != "") {
-    console.log("location not null");
     let lat = getCookie("lat");
     let lng = getCookie("lng");
     locationObj = await loadObject(`${LOCATION_OBJ_URL}?lat=${lat}&lng=${lng}`);
-    console.log(locationObj);
   }
   const keywords = await loadKeywords(KEYWORDS_OBJ_URL);
   const elementsToLoad = Math.max(keywords.length, 1);
@@ -80,11 +78,8 @@ function hideLoading() {
 function makeUrl(url, keyword) {
   let queryString = `?key=${keyword}`;
   let fullUrl = `${url}${queryString}`;
-  console.log(url);
-  console.log(locationObj);
   if (url === '/news' && locationObj != null) {
     fullUrl = `${fullUrl}&country=${locationObj["Short Country"]}`;
-    console.log(fullUrl);
   }
   return fullUrl;
 }
