@@ -22,7 +22,6 @@ public class UserServlet extends HttpServlet {
 
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     UserService userService = UserServiceFactory.getUserService();
-
     List<String> logInfo = new ArrayList<>();
     if (userService.isUserLoggedIn()) {
       String logoutUrl = userService.createLogoutURL("/");
@@ -30,7 +29,7 @@ public class UserServlet extends HttpServlet {
     } else {
       String loginUrl = userService.createLoginURL("/");
       logInfo.add(loginUrl);
-      logInfo.add("placeholder");
+      logInfo.add("placeholder");  // Array size 2 means user is not logged in.
     }
     Gson gson = new Gson();
     String json = gson.toJson(logInfo);

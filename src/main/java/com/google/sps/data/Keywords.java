@@ -115,12 +115,7 @@ public final class Keywords {
       orderSet.add(entity);
     }
     // We must create a new list of Strings as a collection of NLP Entities is not supported by datastore.
-    /**
-    Set<String> keywordSet = new HashSet<>();
-    for (com.google.cloud.language.v1.Entity entity : orderSet) {
-      keywordSet.add(entity.getName().toLowerCase());
-    }
-    */
+    // We can limit the collection to 10 keywords, map every entity to their names, and only allow distinct values. 
     Collection<String> keywordCollection = 
         orderSet.stream().limit(MAX_NUM_KEYWORDS).map(e -> e.getName().toLowerCase()).distinct().collect(Collectors.toList());
 
