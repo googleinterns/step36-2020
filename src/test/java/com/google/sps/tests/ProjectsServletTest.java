@@ -48,13 +48,13 @@ public final class ProjectsServletTest {
 
   @Test
   public void testServlet() throws IOException {
-    String APIResponse = "{\"search\":{\"response\":{\"projects\":{\"project\":[{"
+    String apiResponse = "{\"search\":{\"response\":{\"projects\":{\"project\":[{"
                          + "\"id\": 1,"
                          + "\"title\": \"This is the title\","
                          + "\"summary\": \"This is the summary\","
                          + "\"projectLink\": \"This is the url\""
                          + "}]}}}}";
-    setUpUrlQueryMock(APIResponse);
+    setUpUrlQueryMock(apiResponse);
     String actual = mockServlet();
     String expected = "{\"results\":{\"keyword\":[{"
                          + "\"id\":1.0,"
@@ -66,14 +66,14 @@ public final class ProjectsServletTest {
   }
 
   @Test
-  public void testNonASCIICharacters() throws IOException {
-    String APIResponse = "{\"search\":{\"response\":{\"projects\":{\"project\":[{"
+  public void testNonAsciiCharacters() throws IOException {
+    String apiResponse = "{\"search\":{\"response\":{\"projects\":{\"project\":[{"
                          + "\"id\": 1,"
                          + "\"title\": \"यह शीर्षक है\","
                          + "\"summary\": \"यह सारांश है\","
                          + "\"projectLink\": \"यह url है\""
                          + "}]}}}}";
-    setUpUrlQueryMock(APIResponse);
+    setUpUrlQueryMock(apiResponse);
     String actual = mockServlet();
     String expected = "{\"results\":{\"keyword\":[{"
                          + "\"id\":1.0,"
@@ -85,18 +85,18 @@ public final class ProjectsServletTest {
   }
 
   @Test
-  public void testEmptyAPIResponse() throws IOException {
-    String APIResponse = "";
-    setUpUrlQueryMock(APIResponse);
+  public void testEmptyApiResponse() throws IOException {
+    String apiResponse = "";
+    setUpUrlQueryMock(apiResponse);
     String actual = mockServlet();
     String expected = "{\"results\":{\"keyword\":[]}}";
     Assert.assertTrue(actual.contains(expected));
   }
 
   @Test
-  public void testWrongAPIResponse() throws IOException {
-    String APIResponse = "This response is not in the correct json format";
-    setUpUrlQueryMock(APIResponse);
+  public void testWrongApiResponse() throws IOException {
+    String apiResponse = "This response is not in the correct json format";
+    setUpUrlQueryMock(apiResponse);
     String actual = mockServlet();
     String expected = "{\"results\":{\"keyword\":[]}}";
     Assert.assertTrue(actual.contains(expected));
