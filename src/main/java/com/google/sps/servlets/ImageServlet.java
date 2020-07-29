@@ -50,15 +50,23 @@ public class ImageServlet extends HttpServlet {
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     PrintWriter writer = response.getWriter();
     BlobKey blobKey = getBlobKey(request, "image");
-    if (blobKey == null) { // TODO: Check whether file is an image.
-      response.sendRedirect("/index.html");
+    if (blobKey == null) {
+      response.sendRedirect("/");
       return;
     }
     byte[] blobBytes = getBlobBytes(blobKey);
     String key = "";
     TextAnnotation textAnnotation = getImageText(blobBytes);
     if (textAnnotation == null || textAnnotation.getText().equals("")) {
-      key = Keywords.addKeywords(getImageLabels(blobBytes));
+      List<EntityAnnotation> imageLabels = getImageLabels(blobBytes);
+      // If the image isn't valid then imageLabels is null, and it is erased from blobstore.
+      if (imageLabels == null) {
+        BlobstoreService blobstore = BlobstoreServiceFactory.getBlobstoreService();
+        blobstore.delete(blobKey);
+        response.sendRedirect("/"); // TODO: Notify the user the file wasn't valid
+        return;
+      }
+      key = Keywords.addKeywords(imageLabels);
     } else {
       key = Keywords.addKeywords(textAnnotation.getText());
     }
