@@ -20,7 +20,7 @@ public class ResultsServlet extends HttpServlet {
     String key = request.getParameter("k");
     Map<String, String> map = new HashMap<>();
     map.put("key", key);
-    MustacheFactory mf = new DefaultMustacheFactory();
+    DefaultMustacheFactory mf = new DefaultMustacheFactory();
     Mustache mustache = mf.compile("results.html");
     response.setContentType("text/html;");
     mustache.execute(response.getWriter(), map).flush();
