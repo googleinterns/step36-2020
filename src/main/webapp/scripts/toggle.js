@@ -12,6 +12,8 @@ const PROJECTS_OBJ_URL = '/actions/projects';
 const OBJECTS_URLS = [NEWS_OBJ_URL, BOOKS_OBJ_URL, PROJECTS_OBJ_URL];
 
 let loadingCounter;
+let lat = getCookie("lat");
+let lng = getCookie("lng");
 
 /**
  * Loads the content section. 
@@ -33,7 +35,10 @@ async function loadContentSection() {
     loadCivicSectionFromAddress(address);
   } else {
     if (location != "") {
-      loadLocationObj(loadCivicSectionFromLocation);
+      console.log(`${LOCATION_OBJ_URL}?lat=${lat}&lng=${lng}`);
+      let locationObj = await loadObject(`${LOCATION_OBJ_URL}?lat=${lat}&lng=${lng}`);
+      console.log(locationObj);
+      loadCivicSectionFromLocation(locationObj);
     } else {
       loadingCounter.decrement();
     }
@@ -105,23 +110,16 @@ function renderKeyword(template, keywordObj) {
  * Loads the current location of the user, and passes the locationObj to the callback function.
  * Returns a locationObj.
  */
+ /*
 function loadLocationObj(callback) {
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(async (position) => {
-      const lat = position.coords.latitude;
-      const lng = position.coords.longitude;
-      locationObj = await loadObject(`${LOCATION_OBJ_URL}?lat=${lat}&lng=${lng}`);
-      callback(locationObj);
-    }, (err) => {
-      console.warn(`ERROR(${err.code}): ${err.message}`);
-      alert("We cannot access your location. Try checking your browswer settings");
-    });
-  }
+  locationObj = await loadObject(`${LOCATION_OBJ_URL}?lat=${coordinates[0]}&lng=${coordinates[1]}`);
+  callback(locationObj);
 }
+*/
 
 async function loadCivicSectionFromAddress(address) {
   const civicObj = await loadObject(`${CIVIC_OBJ_URL}?address=${address}`);
-  if ('error in civicObj') {
+  if ('error' in civicObj) {
     alert('Sorry, your current location is not supported');
   } else {
     const civicLocationObj = buildCivicLocationObj(civicObj);
@@ -135,10 +133,13 @@ async function loadCivicSectionFromAddress(address) {
  * Loads the civic section to the DOM, or alerts the user if there aren't any results for their location.
  */
 async function loadCivicSectionFromLocation(locationObj) {
+  console.log(locationObj.Country);
   if (locationObj.Country === "United States") {
+    console.log("In the US");
     const address = locationObj2Address(locationObj);
     loadCivicSectionFromAddress(address);
   } else {
+    console.log("NOT in the US");
     alert('Sorry, your current location is not supported');
   }
   loadingCounter.decrement();
