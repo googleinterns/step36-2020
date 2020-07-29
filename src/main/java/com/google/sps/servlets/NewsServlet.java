@@ -45,7 +45,9 @@ public class NewsServlet extends HttpServlet {
         Map<String, String> paramMap = new HashMap<>();
         paramMap.put("q", UrlRequest.encodeTerm(term));
         // TODO: Add lat and lng params to this servlet request before un-commenting line below.
-        paramMap.put("gl", country);
+        if (country != null) {
+          paramMap.put("gl", country);
+        }
         HttpURLConnection connect = getConnection(GOOGLE_NEWS_PATH, paramMap);
         String HTMLString = getHTML(connect);
         List<Article> articleList = makeArticleList(HTMLString);
