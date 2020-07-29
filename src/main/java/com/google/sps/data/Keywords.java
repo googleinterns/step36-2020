@@ -52,7 +52,7 @@ public final class Keywords {
    */
   public static Collection<String> getKeywords(String keyString) {
     UserService userService = UserServiceFactory.getUserService();
-    Map<String, Collection<String>> allKeywords = getKeyKeywordMap(userService.getCurrentUser().getUserId());        
+    Map<String, Collection<String>> allKeywords = getKeyToKeywordMap(userService.getCurrentUser().getUserId());        
     return allKeywords.get(keyString);
   }
 
@@ -61,7 +61,7 @@ public final class Keywords {
    */
   public static Map<String, Collection<String>> getAllKeywords() {
     UserService userService = UserServiceFactory.getUserService();
-    return getKeyKeywordMap(userService.getCurrentUser().getUserId());
+    return getKeyToKeywordMap(userService.getCurrentUser().getUserId());
   }
 
   /**
@@ -148,10 +148,10 @@ public final class Keywords {
   }
   
   /**
-   * @return a map of keys to their list of keywords of all sets of keywords that the
-   * user defined by id has entered.
+   * Given the user's ID, the method will return a map containing all the datastore keys of 
+   * the user's previous keyword inputs, mapped to their respective list of keywords.
    */
-  private static Map<String, Collection<String>> getKeyKeywordMap(String id) {
+  private static Map<String, Collection<String>> getKeyToKeywordMap(String id) {
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     Query query = new Query("Keyword").setFilter(
         new Query.FilterPredicate("id", Query.FilterOperator.EQUAL, id));
@@ -159,6 +159,8 @@ public final class Keywords {
     Map<String, Collection<String>> keyKeywordMap = new HashMap<>();
     for (Entity entity : results.asIterable()) {
       Collection<String> keywords = (Collection<String>) entity.getProperty("keywords");
+
+      // Map the key to its respective collection of keywords
       keyKeywordMap.put(KeyFactory.keyToString(entity.getKey()), keywords);
     }
     return keyKeywordMap;
