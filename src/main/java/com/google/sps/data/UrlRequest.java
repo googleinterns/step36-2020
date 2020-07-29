@@ -19,7 +19,6 @@ public final class UrlRequest {
    */
   public static String urlQuery(String basePath, Map<String, String> params) throws IOException {
     String path = String.format("%s?%s", basePath, getParamsString(params));
-    System.out.println(path);
     URL url = new URL(path);
     HttpURLConnection connection = (HttpURLConnection) url.openConnection();
     connection.setRequestMethod("GET");
