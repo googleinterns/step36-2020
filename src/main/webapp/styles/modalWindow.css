@@ -1,0 +1,94 @@
+#modal-window:not(.hide) {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  backdrop-filter: blur(1vmin) brightness(60%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 20;
+}
+
+#pop-up {
+  position: absolute;
+  width: 60vw;
+  height: auto;
+  background-color: var(--lowerColor);
+  box-shadow: 0.01vh 0.01vw 0.2vmax rgba(0,0,0,0.25);
+  border-radius: min(0.6vmax, 1vh);
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+}
+
+#pop-up > .close {
+  position: relative;
+  top: 1vh;
+  right: -47%;
+  cursor: pointer;
+  font-size: 2.5vh;
+}
+
+#modal-title {
+  color: var(--upperColor);
+  font-weight: bold;
+  margin: 1vh 0;
+  font-size: 2.5vh;
+}
+
+.pop-option > p {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 1.5vh;
+  margin: 0;
+}
+
+#division {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#division > p {
+  font-size: 1.8vh;
+}
+
+#division > hr {
+  display: inline-block;
+  width: 25vw;
+  margin: 1vh 1vw;
+}
+
+#old-keys {
+  max-width: 95%;
+  text-align: center;
+}
+
+#old-keys > ul {
+  display: flex;
+  flex-flow: row wrap;
+}
+
+#old-keys li {
+  list-style-type: none;
+  border: 0.1vmin solid var(--upperColor);
+  padding: 0.1vh 0.3vw;
+  margin: 0.2vh 0.6vw;
+  cursor: pointer;
+  border-radius: min(0.3vmax, 0.5vh);
+}
+
+@media (orientation: portrait) {
+  #pop-up {
+    width: 75vw;
+  }
+}
+
+@media (any-hover: hover){
+  #old-keys li:hover {
+    background-color: var(--upperColor);
+    color: white;
+  }
+}
