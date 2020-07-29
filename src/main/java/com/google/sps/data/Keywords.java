@@ -117,7 +117,7 @@ public final class Keywords {
     // We must create a new list of Strings as a collection of NLP Entities is not supported by datastore.
     // We can limit the collection to 10 keywords, map every entity to their names, and only allow distinct values. 
     Collection<String> keywordCollection = 
-        orderSet.stream().limit(MAX_NUM_KEYWORDS).map(e -> e.getName().toLowerCase()).distinct().collect(Collectors.toList());
+        orderSet.stream().limit(MAX_NUM_KEYWORDS).map(e -> e.getName().toUpperCase()).distinct().collect(Collectors.toList());
 
     // Add the keyword collection to the datastore, marked by the User ID.
     UserService userService = UserServiceFactory.getUserService();
