@@ -1,6 +1,6 @@
 const MODAL_TEMPLATE_PROMISE = loadTemplate('/templates/modalWindow.html');
 const MENU_PROMISE = loadTemplate('/templates/menu.html');
-const KEYWORDS_ALL_OBJ_PROMISE = loadObject('//all-keywords');
+const KEYWORDS_ALL_OBJ_PROMISE = loadObject('/all-keywords');
 
 $().ready(async function() {
   const isLogUrlUndefined = typeof(LOG_URL_PROMISE) === 'undefined';
@@ -24,7 +24,7 @@ function buildModalObj(keywordsObj) {
   for (key in keywordsObj) {
     let keywordObj = new Object();
     keywordObj.key = key;
-    keywordObj.values = keywordsObj[key];
+    keywordObj.values = keywordsObj[key].join(' - ');
     modalObj.keywords.push(keywordObj);
   }
   return modalObj;
@@ -43,8 +43,21 @@ $('body').on('click', '#pop-up > .close', function() {
   $('#modal-window').addClass('hide');
 });
 
-$('body').on('click', '.keys-list', function() {
-  $('body').off('click');
-  const key = $(this).attr('data-key');
-  window.location.href = `/results?k=${key}`;
+$('body').on('click', '.keys-list > p', function() {
+  const key = $(this).parent().attr('data-key');
+  const thisClass = $(this).attr('class');
+  if (thisClass === 'ion-icon') {
+    $(this).parent().remove();
+    deleteKeywords(key);
+  } else {
+    $('this').off('click');
+    window.location.href = `/results?k=${key}`;
+  }
 });
+
+function deleteKeywords(key) {
+  const params = new URLSearchParams();
+  params.append('k', key);
+  const request = new Request('/delete-keywords', {method: 'POST', body: params});
+  fetch(request);
+}
