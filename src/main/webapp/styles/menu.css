@@ -1,14 +1,26 @@
-#go-back {
+.nav {
   position: absolute;
+  top: 0;
   font-size: 45%;
-  left: 0;
   margin: 1.5vh 3vw;
   display: flex;
   align-items: center;
   cursor: pointer;
 }
 
-#go-back > p {
+#open-modal {
+  left: 0;
+}
+
+#go-back {
+  right: 0;
+}
+
+.nav > p {
   display: inline;
   margin: 0;
+}
+
+#open-modal > ion-icon {
+  font-size: 130%;
 }
