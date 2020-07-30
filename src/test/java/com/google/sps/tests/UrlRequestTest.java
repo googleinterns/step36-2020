@@ -28,7 +28,6 @@ import static org.hamcrest.collection.IsIterableContainingInAnyOrder.containsInA
 @PrepareForTest({ URL.class, UrlRequest.class })
 public final class UrlRequestTest {
 
-  private final static String EMPTY_STRING = "";
   private final static Map<String, String> EMPTY_PARAMS = new HashMap<>();
   private final static String BASE_PATH = "http://www.testing.com";
   private final static String URL_PATH = String.format("%s?%s", BASE_PATH, UrlRequest.getParamsString(EMPTY_PARAMS));
@@ -70,7 +69,7 @@ public final class UrlRequestTest {
   @Test
   public void formatEmptyParamsMap() {
     String actual = UrlRequest.getParamsString(EMPTY_PARAMS);
-    String expected = EMPTY_STRING;
+    String expected = "";
     Assert.assertEquals(expected, actual);
   }
 
@@ -97,9 +96,9 @@ public final class UrlRequestTest {
 
   @Test
   public void encodeEmptyString() {
-    String term = EMPTY_STRING;
+    String term = "";
     String actual = UrlRequest.encodeTerm(term);
-    String expected = EMPTY_STRING;
+    String expected = "";
     Assert.assertEquals(expected, actual);
   }
 

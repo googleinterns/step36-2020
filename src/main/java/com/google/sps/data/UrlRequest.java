@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.List;
 import java.util.ArrayList;
 
-/* Class conatining helper methods to make url requests. */
+/* Class containing helper methods to make url requests. */
 public final class UrlRequest {
   /**
    * Returns the a JSON string with the API response given an URL path and the query parameters.
