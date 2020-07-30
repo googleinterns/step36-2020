@@ -126,6 +126,7 @@ public class NewsServlet extends HttpServlet {
       lastSubstring = substrings[i - 1];
       thisSubstring = substrings[i];
       title = thisSubstring.substring(thisSubstring.indexOf(">") + 1, thisSubstring.indexOf("<"));
+      title = title.replace("&#39;", "'");
       linkElement = lastSubstring.substring(lastSubstring.lastIndexOf("href"), lastSubstring.lastIndexOf("\""));
       link = "http://news.google.com" + linkElement.substring(linkElement.indexOf(".") + 1, linkElement.lastIndexOf("\""));
       articleList.add(new Article(title, link));
