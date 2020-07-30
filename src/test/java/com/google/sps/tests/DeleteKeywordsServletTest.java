@@ -45,7 +45,7 @@ public final class DeleteKeywordsServletTest {
   public void testServlet() throws IOException {
     DatastoreService mockedDatastoreService = PowerMockito.mock(DatastoreService.class);
     setUpDatastoreMock(mockedDatastoreService);
-
+    // String representation of a real datastore key.
     String expected = "ahpzfnN0ZXAyMDIwLXRlYW0zNi1jYXBzdG9uZXIUCxIHS2V5d29yZBiAgICYtMiZCgw";
     mockServlet(expected);
 
