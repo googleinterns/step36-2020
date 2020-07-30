@@ -2,7 +2,7 @@ const KEYWORD_TEMPLATE_PROMISE = loadTemplate('/templates/keyword.html');
 const LOCATION_TEMPLATE_PROMISE = loadTemplate('/templates/location.html');
 const NO_KEYWORDS_HTML = loadTemplate('/templates/noKeywords.html')
 
-let locationObj = null;
+let locationObj = JSON.parse(getCookie('location'));
 
 const KEYWORDS_OBJ_URL = '/keyword';
 const CIVIC_OBJ_URL = '/actions/civic';
@@ -20,12 +20,14 @@ let loadingCounter;
  * Returns a promise that resolves when everything loads.
  */
 async function loadContentSection() {
+  /*
   let location = getCookie('location');
   if (location != "") {
     let lat = getCookie("lat");
     let lng = getCookie("lng");
     locationObj = await loadObject(`${LOCATION_OBJ_URL}?lat=${lat}&lng=${lng}`);
   }
+  */
   const keywords = await loadKeywords(KEYWORDS_OBJ_URL);
   const elementsToLoad = Math.max(keywords.length, 1);
   counter.add(elementsToLoad);
@@ -141,6 +143,7 @@ async function loadCivicSectionFromAddress(address) {
  * Loads the civic section to the DOM, or alerts the user if there aren't any results for their location.
  */
 async function loadCivicSectionFromLocation(locationObj) {
+  console.log(locationObj);
   if (locationObj.Country === "United States") {
     const address = locationObj2Address(locationObj);
     loadCivicSectionFromAddress(address);

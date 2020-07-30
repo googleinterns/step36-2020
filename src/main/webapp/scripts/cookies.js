@@ -86,13 +86,16 @@ function loadCheckboxStateCookie(cookieName) {
 /** 
  * Set cookie for user's coordinates with Navigator API.
  */
- function setCoordinateCookie() {
+async function setLocationCookie() {
+  console.log("In setLocationCookie");
   if (navigator.geolocation) {
+    console.log("In navigator.geolocation");
     navigator.geolocation.getCurrentPosition(async (position) => {
       const lat = position.coords.latitude;
       const lng = position.coords.longitude;
-      setCookie("lat", lat, 1);
-      setCookie("lng", lng, 1);
+      console.log(`${LOCATION_OBJ_URL}?lat=${lat}&lng=${lng}`);
+      locationObj = await loadObject(`${LOCATION_OBJ_URL}?lat=${lat}&lng=${lng}`);
+      setCookie('location', JSON.stringify(locationObj), 1);
     }, (err) => {
       console.warn(`ERROR(${err.code}): ${err.message}`);
       alert("We cannot access your location. Try checking your browswer settings");

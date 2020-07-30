@@ -1,20 +1,19 @@
 $().ready(function() {
-  const location = getCookie('location');
-  if (location != "") {
+  console.log(getCookie('location'));
+  if (getCookie('location') != "") {
+    console.log('in right if statement');
     $('#location-checkbox').prop('checked', true);
-    setCoordinateCookie();
+    setLocationCookie();
   }
   else {
-    eraseCookie('coordinates');
+    eraseCookie('location');
   }
 
   $('#location-checkbox').change(function() {
     if(this.checked) {
-      setCookie('location', 'true', 1);
-      setCoordinateCookie();
+      setLocationCookie();
     } else {
       eraseCookie('location');
-      eraseCookie('coordinates');
     }
   });
   $('#address').val(getCookie("address"));
