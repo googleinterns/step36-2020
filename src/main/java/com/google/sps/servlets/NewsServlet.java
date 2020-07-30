@@ -43,7 +43,6 @@ public class NewsServlet extends HttpServlet {
       try {
         Map<String, String> paramMap = new HashMap<>();
         paramMap.put("q", UrlRequest.encodeTerm(term));
-        // TODO: Add lat and lng params to this servlet request before un-commenting line below.
         if (country != null) {
           paramMap.put("gl", country);
         }
