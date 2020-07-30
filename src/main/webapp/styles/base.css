@@ -21,7 +21,7 @@
 }
 
 .hide {
-  display: none;
+  display: none !important;
 }
 
 .loading {
@@ -82,4 +82,10 @@ body {
   display: inline-block;
   cursor: pointer;
   margin: 0.5vh 0.3vw;
+}
+
+#log-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
 }
