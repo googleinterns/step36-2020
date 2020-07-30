@@ -34,13 +34,11 @@ public final class ProjectsServletTest {
     HttpServletResponse mockedResponse = PowerMockito.mock(HttpServletResponse.class);
 
     PowerMockito.when(mockedRequest.getParameterValues("key")).thenReturn(KEYWORD);
-
     StringWriter stringWriter = new StringWriter();
     PrintWriter writer = new PrintWriter(stringWriter);
     PowerMockito.when(mockedResponse.getWriter()).thenReturn(writer);
 
     PROJECTS_SERVLET.doGet(mockedRequest, mockedResponse);
-
     Mockito.verify(mockedRequest, Mockito.atLeast(1)).getParameterValues("key");
     writer.flush();
     return stringWriter.toString();
