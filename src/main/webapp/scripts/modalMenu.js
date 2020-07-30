@@ -1,6 +1,6 @@
 const MODAL_TEMPLATE_PROMISE = loadTemplate('/templates/modalWindow.html');
 const MENU_PROMISE = loadTemplate('/templates/menu.html');
-const KEYWORDS_ALL_OBJ_PROMISE = loadObject('//all-keywords');
+const KEYWORDS_ALL_OBJ_PROMISE = loadObject('/all-keywords');
 
 $().ready(async function() {
   const isLogUrlUndefined = typeof(LOG_URL_PROMISE) === 'undefined';
