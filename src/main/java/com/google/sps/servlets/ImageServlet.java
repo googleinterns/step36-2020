@@ -45,6 +45,7 @@ public class ImageServlet extends HttpServlet {
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     BlobstoreService blobstore = BlobstoreServiceFactory.getBlobstoreService();
     String uploadUrl = blobstore.createUploadUrl("/user-image");
+    response.setContentType("text/html");
     response.getWriter().println(uploadUrl);
   }
 
