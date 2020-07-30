@@ -4,11 +4,14 @@
     <p id="modal-title">Your Previous Keywords</p>
     <ul id="old-keys">
       {{#keywords}}
-        <li class="keys-list" data-key="{{key}}">{{#values}}- {{.}} -{{/values}}</li>
+        <li class="keys-list" data-key="{{key}}">
+          <p class="ion-icon"><ion-icon name="trash-outline"></ion-icon></p>
+          <p>{{values}}</p>
+        </li>
+      {{/keywords}}
+      {{^keywords}}
+        <p>You haven't analyzed any input</p>
       {{/keywords}}
     </ul>
-    {{^keywords}}
-      <p>You haven't analyzed any input</p>
-    {{/keywords}}
   </div>
 </div>
