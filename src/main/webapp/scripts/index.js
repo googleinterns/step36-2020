@@ -1,12 +1,14 @@
 $().ready(function() {
-  const location = getCookie('location');
-  if (location != "") {
+  if (getCookie('location') != "") {
     $('#location-checkbox').prop('checked', true);
+    setLocationCookie();
+  } else {
+    eraseCookie('location');
   }
 
   $('#location-checkbox').change(function() {
     if(this.checked) {
-      setCookie('location', 'true', 1);
+      setLocationCookie();
     } else {
       eraseCookie('location');
     }
