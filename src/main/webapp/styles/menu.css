@@ -1,0 +1,26 @@
+.nav {
+  position: absolute;
+  top: 0;
+  font-size: 45%;
+  margin: 1.5vh 3vw;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+#open-modal {
+  left: 0;
+}
+
+#go-back {
+  right: 0;
+}
+
+.nav > p {
+  display: inline;
+  margin: 0;
+}
+
+#open-modal > ion-icon {
+  font-size: 130%;
+}
