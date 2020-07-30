@@ -1,25 +1,8 @@
 const BLOB_URL_PROMISE = loadTemplate('/user-image');
-const LOG_URL_PROMISE = loadObject('/login');
 
-$().ready(async function() {
-  const logURL = await LOG_URL_PROMISE;
-  $('#log-btn').attr('href', logURL[0]);
-
-  // TODO: Use true condition as default and if false inject the HTML
-  if (logURL.length === 2) {  // User is not loggeed in.
-    $('#form-title > p').text('You are not logged in.');
-    $('#log-btn').text("Login");
-    $('#keyword-form, #input-select, #location-input, #previous-keywords, #address-input').addClass('hide');
-  } else {
-    $('#form-title > p').text('Choose Type of Input');
-    $('#log-btn').text('Logout');
-    $('#input-select, #location-input, #previous-keywords, #address-input').removeClass('hide');
-  }
-
-  $('#log-btn').removeClass('hide');
-
+$().ready(async function() { 
   $('#previous-keywords').on('click', function() {
-    let keywordsWindow = $('#keywords-window');
+    let keywordsWindow = $('#modal-window');
     if (keywordsWindow.hasClass('hide')) {
       keywordsWindow.removeClass('hide');
     } else {
