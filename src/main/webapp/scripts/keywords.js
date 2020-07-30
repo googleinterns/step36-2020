@@ -1,11 +1,12 @@
 const BLOB_URL_PROMISE = loadTemplate('/user-image');
 const LOG_URL_PROMISE = loadObject('/login');
-const KEYWORD_MAP_PROMISE = loadObject('/all-keywords');
 
 $().ready(async function() {
   const logURL = await LOG_URL_PROMISE;
   $('#log-btn').attr('href', logURL[0]);
-  if (logURL.length == 2) {  // User is not loggeed in.
+
+  // TODO: Use true condition as default and if false inject the HTML
+  if (logURL.length === 2) {  // User is not loggeed in.
     $('#form-title > p').text('You are not logged in.');
     $('#log-btn').text("Login");
     $('#keyword-form, #input-select, #location-input, #previous-keywords, #address-input').addClass('hide');
@@ -14,23 +15,8 @@ $().ready(async function() {
     $('#log-btn').text('Logout');
     $('#input-select, #location-input, #previous-keywords, #address-input').removeClass('hide');
   }
-  $('#log-btn').removeClass('hide');
 
-  const keywordMap = await KEYWORD_MAP_PROMISE;
-  let keywordKeys = Object.keys(keywordMap);
-  if (keywordKeys.size == 0) {  // No previous input, or user isn't logged in.
-    $('#keywords-window').text('No previous results found');
-  } else {  // User has previous input.
-    $('#keywords-window').empty();
-    $('#previous-keywords').removeClass('hide');
-    for (let key of keywordKeys) {
-      let btn = $('<a></a>').attr('href', '/results?k=' + key);
-      let keywords = keywordMap[key].join(', ');
-      btn.text(keywords);
-      btn.addClass('button');
-      $('#keywords-window').append(btn);
-    }
-  }
+  $('#log-btn').removeClass('hide');
 
   $('#previous-keywords').on('click', function() {
     let keywordsWindow = $('#keywords-window');
