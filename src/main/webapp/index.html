@@ -6,11 +6,13 @@
     <link rel="stylesheet" href="/styles/base.css">
     <link rel="stylesheet" href="/styles/index.css">
     <link rel="stylesheet" href="/styles/loader.css">
+    <link rel="stylesheet" href="/styles/menu.css">
     <link rel="stylesheet" href="/styles/modalWindow.css">
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans&family=Oswald&display=swap" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script type='module' src='https://unpkg.com/ionicons@5.1.1/dist/ionicons/ionicons.esm.js'></script>
     <script nomodule='' src='https://unpkg.com/ionicons@5.1.1/dist/ionicons/ionicons.js'></script>
+    <script src="https://unpkg.com/mustache@latest"></script>
     <title>Input Tweet</title>
   </head>
   <body>
@@ -55,8 +57,6 @@
           </div>
           <input id="submit-form" type="submit" class="button" />
         </form>
-        <button id="previous-keywords" class="hide button">Previous Keywords</button>
-        <div id="keywords-window" class="hide modular"></div>
       </div>
       <footer id="footer" class="base">
         <p>Helping you engage more deeply with your social media feed</p>
@@ -68,5 +68,6 @@
     <script src="scripts/cookies.js"></script>
     <script src="scripts/index.js"></script>
     <script src="/scripts/keywords.js"></script>
+    <script src="scripts/modalMenu.js"></script>
   </body>
 </html>
