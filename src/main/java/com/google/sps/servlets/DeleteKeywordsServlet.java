@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 
-/** Servlet that deletes the keywords.*/
+/** Servlet that deletes the keywords. */
 @WebServlet("/delete-keywords")
 public class DeleteKeywordsServlet extends HttpServlet {
 
