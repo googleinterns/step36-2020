@@ -19,21 +19,22 @@ $().ready(async function() {
   const keywordMap = await KEYWORD_MAP_PROMISE;
   let keywordKeys = Object.keys(keywordMap);
   if (keywordKeys.size == 0) {  // No previous input, or user isn't logged in.
-    $('#keywords-window').text('No previous results found');
+    $('#old-keys > p').text('No previous results found');
   } else {  // User has previous input.
-    $('#keywords-window').empty();
-    $('#previous-keywords').removeClass('hide');
+    $('#old-keys > p').text('Choose old keys');
+    $('#old-keys > ul').empty();
     for (let key of keywordKeys) {
       let btn = $('<a></a>').attr('href', '/results?k=' + key);
+      let listItem = $('<li></li>').addClass('keys-list');
       let keywords = keywordMap[key].join(', ');
       btn.text(keywords);
-      btn.addClass('button');
-      $('#keywords-window').append(btn);
+      listItem.append(btn);
+      $('#old-keys > ul').append(listItem);
     }
   }
 
   $('#previous-keywords').on('click', function() {
-    let keywordsWindow = $('#keywords-window');
+    let keywordsWindow = $('#modal-window');
     if (keywordsWindow.hasClass('hide')) {
       keywordsWindow.removeClass('hide');
     } else {

@@ -143,6 +143,12 @@
   display: block;
 }
 
+#log-btn {
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
 @media (orientation: portrait) {
   .body {
     background: linear-gradient(

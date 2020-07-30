@@ -73,6 +73,7 @@
 
 #old-keys li {
   list-style-type: none;
+  text-decoration: none;
   border: 0.1vmin solid var(--upperColor);
   padding: 0.1vh 0.3vw;
   margin: 0.2vh 0.6vw;
