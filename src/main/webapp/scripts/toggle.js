@@ -24,14 +24,6 @@ async function loadContentSection() {
   if (locationCookie != "") {
     locationObj = JSON.parse(getCookie('location'))
   }
-  /*
-  let location = getCookie('location');
-  if (location != "") {
-    let lat = getCookie("lat");
-    let lng = getCookie("lng");
-    locationObj = await loadObject(`${LOCATION_OBJ_URL}?lat=${lat}&lng=${lng}`);
-  }
-  */
   const keywords = await loadKeywords(KEYWORDS_OBJ_URL);
   const elementsToLoad = Math.max(keywords.length, 1);
   counter.add(elementsToLoad);
