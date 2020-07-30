@@ -17,15 +17,15 @@
 }
 
 #title {
-  font-size: 200%;
+  font-size: min(200%, 30vmin);
   text-align: center;
   padding: 4vw;
   margin: 0;
 }
 
 #instructions {
-  font-size: max(1.7vmin, 1.2vh);
-  margin: 0 2vw;
+  font-size: min(3.6vmin, 1.6vh);
+  margin: 0 max(4vw, 2vmax);
   font-family: 'Open Sans', sans-serif;
   font-weight: 300;
 }
@@ -39,6 +39,7 @@
   place-self: start;
   margin: 30vh 0;
   height: auto;
+  font-size: 1.3vh;
 }
 
 #form-title {
@@ -49,9 +50,43 @@
 }
 
 #location-input {
-  margin: 0 0 1vh;
+  margin: 0 0 2vh;
+}
+
+#location-input > label {
   display: flex;
+  flex-flow: row-reverse;
   align-items: center;
+  cursor: pointer;
+}
+
+#location-checkbox {
+  display: none;
+}
+
+.checkmark {
+  background-color: hsl(var(--lowerColor-hs), calc(var(--lowerColor-l) - 15%));
+  width: 1.3vh;
+  height: 1.3vh;
+  margin: 0 0.5vw;
+  display: inline-block;
+}
+
+.checkmark > ion-icon {
+  color: white;
+  opacity: 0;
+}
+
+#location-input:hover .checkmark {
+  background-color: hsl(var(--lowerColor-hs), calc(var(--lowerColor-l) - 25%));
+}
+
+#location-checkbox:checked ~ .checkmark {
+  background-color: hsl(var(--upperColor-hs), calc(var(--upperColor-l) + 20%));
+}
+
+#location-checkbox:checked ~ .checkmark > ion-icon {
+  opacity: 1;
 }
 
 #input-select {
@@ -69,6 +104,9 @@
   width: 40vw;
   height: 20vh;
   margin: 0.5vh 0.3vw;
+  padding: 1vh 1vw;
+  box-sizing: border-box;
+  font-size: 1vh;
 }
 
 #blob-label {
@@ -113,9 +151,17 @@
       var(--lowerColor) 33vh, 
       var(--lowerColor));
     display: grid;
-    grid: [row1-start] "header " 20vh [row1-end]
-          [row2-start] "content" 70vh [row2-end]
+    grid: [row1-start] "header " 30vh [row1-end]
+          [row2-start] "content" 60vh [row2-end]
           [row3-start] "footer " 10vh [row3-end]
           / 100vw;
+  }
+
+  #content {
+    margin: 10vh 0;
+  }
+
+  #text-input:not(.hide) {
+    width: 70vw;
   }
 }

@@ -17,4 +17,5 @@ public class Article {
   public String getLink() {
     return link;
   }  
+
 }

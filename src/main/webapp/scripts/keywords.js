@@ -1,10 +1,50 @@
 const BLOB_URL_PROMISE = loadTemplate('/user-image');
+const LOG_URL_PROMISE = loadObject('/login');
+const KEYWORD_MAP_PROMISE = loadObject('/all-keywords');
 
-$().ready(function() {
+$().ready(async function() {
+  const logURL = await LOG_URL_PROMISE;
+  $('#log-btn').attr('href', logURL[0]);
+  if (logURL.length == 2) {  // User is not loggeed in.
+    $('#form-title > p').text('You are not logged in.');
+    $('#log-btn').text("Login");
+    $('#keyword-form, #input-select, #location-input, #previous-keywords, #address-input').addClass('hide');
+  } else {
+    $('#form-title > p').text('Choose Type of Input');
+    $('#log-btn').text('Logout');
+    $('#input-select, #location-input, #previous-keywords, #address-input').removeClass('hide');
+  }
+  $('#log-btn').removeClass('hide');
+
+  const keywordMap = await KEYWORD_MAP_PROMISE;
+  let keywordKeys = Object.keys(keywordMap);
+  if (keywordKeys.size == 0) {  // No previous input, or user isn't logged in.
+    $('#keywords-window').text('No previous results found');
+  } else {  // User has previous input.
+    $('#keywords-window').empty();
+    $('#previous-keywords').removeClass('hide');
+    for (let key of keywordKeys) {
+      let btn = $('<a></a>').attr('href', '/results?k=' + key);
+      let keywords = keywordMap[key].join(', ');
+      btn.text(keywords);
+      btn.addClass('button');
+      $('#keywords-window').append(btn);
+    }
+  }
+
+  $('#previous-keywords').on('click', function() {
+    let keywordsWindow = $('#keywords-window');
+    if (keywordsWindow.hasClass('hide')) {
+      keywordsWindow.removeClass('hide');
+    } else {
+      keywordsWindow.addClass('hide');
+    }
+  });
+
   $('#select-blob').on('click', async function() {
     const blobURL = await BLOB_URL_PROMISE;
     $('#keyword-form, #blob-input, #submit-form').removeClass('hide');
-    $('#keyword-form').attr('action', blobURL[0]).attr('enctype', 'multipart/form-data');
+    $('#keyword-form').attr('action', blobURL).attr('enctype', 'multipart/form-data');
     $('#text-input').addClass('hide').val(null);
     $('#form-title > p').text('Upload an Image Here');
   });
@@ -16,7 +56,7 @@ $().ready(function() {
     $('#form-title > p').text('Copy Your Tweet Here');
   });
 
-  $('#blob-input').change(function() {
+  $('#blob-file').change(function() {
     const filePath = $(this).val();
     $('#file-path').text(filePath.split('\\').pop());
   });

@@ -7,15 +7,15 @@
  */
 function officialsByLevel(civicObj) {
   let levelsArray = new Array();
-  const levels = {"international" : "International",
-                  "country" : "Country",
-                  "regional" : "Regional",
-                  "administrativeArea2" : "Administrative Area 2",
-                  "administrativeArea1" : "Administrative Area 1",
-                  "locality" : "Locality",
-                  "subLocality2" : "Sublocality 2",
+  const levels = {"special" : "Special",
                   "subLocality1" : "Sublocality 1",
-                  "special" : "Special",};
+                  "subLocality2" : "Sublocality 2",
+                  "locality" : "Locality",
+                  "administrativeArea2" : "County",
+                  "administrativeArea1" : "State",
+                  "regional" : "Regional",
+                   "country" : "Country",
+                  "international" : "International"};
   for (const level in levels) {
     let levelsObj = new Object();
     levelsObj.levelType = level;

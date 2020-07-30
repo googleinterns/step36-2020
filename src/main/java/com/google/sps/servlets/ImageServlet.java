@@ -10,10 +10,13 @@ import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
 import com.google.appengine.api.images.ImagesService;
 import com.google.appengine.api.images.ImagesServiceFactory;
 import com.google.appengine.api.images.ServingUrlOptions;
+import com.google.appengine.api.users.UserServiceFactory;
+import com.google.appengine.api.users.UserService;
 import com.google.cloud.vision.v1.AnnotateImageRequest;
 import com.google.cloud.vision.v1.AnnotateImageResponse;
 import com.google.cloud.vision.v1.BatchAnnotateImagesResponse;
 import com.google.cloud.vision.v1.EntityAnnotation;
+import com.google.cloud.vision.v1.TextAnnotation;
 import com.google.cloud.vision.v1.Feature;
 import com.google.cloud.vision.v1.Image;
 import com.google.cloud.vision.v1.ImageAnnotatorClient;
@@ -42,20 +45,37 @@ public class ImageServlet extends HttpServlet {
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     BlobstoreService blobstore = BlobstoreServiceFactory.getBlobstoreService();
     String uploadUrl = blobstore.createUploadUrl("/user-image");
+    response.setContentType("text/html");
     response.getWriter().println(uploadUrl);
   }
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     PrintWriter writer = response.getWriter();
+    UserService userService = UserServiceFactory.getUserService();
     BlobKey blobKey = getBlobKey(request, "image");
-    if (blobKey == null) { // TODO: Check whether file is an image.
-      response.sendRedirect("/index.html");
+    if (blobKey == null) {
+      response.sendRedirect("/");
       return;
     }
     byte[] blobBytes = getBlobBytes(blobKey);
-    List<EntityAnnotation> annotations = getImageLabels(blobBytes); 
-    String key = Keywords.addKeywords(annotations);
+    String key = "";
+    if (userService.isUserLoggedIn()) {
+      TextAnnotation textAnnotation = getImageText(blobBytes);
+      if (textAnnotation == null || textAnnotation.getText().equals("")) {
+        List<EntityAnnotation> imageLabels = getImageLabels(blobBytes);
+        // If the image isn't valid then imageLabels is null, and it is erased from blobstore.
+        if (imageLabels == null) {
+          BlobstoreService blobstore = BlobstoreServiceFactory.getBlobstoreService();
+          blobstore.delete(blobKey);
+          response.sendRedirect("/"); // TODO: Notify the user the file wasn't valid
+          return;
+        }
+        key = Keywords.addKeywords(imageLabels);
+      } else {
+        key = Keywords.addKeywords(textAnnotation.getText());
+      }
+    }
     response.sendRedirect(String.format("/results?k=%s", key));
   }
 
@@ -70,7 +90,6 @@ public class ImageServlet extends HttpServlet {
 
     // Our form only contains a single file input, so get the first index.
     BlobKey blobKey = blobKeys.get(0);
-    System.out.println(blobKey.getKeyString());
 
     // User submitted form without selecting a file, so the BlobKey is empty (live).
     BlobInfo blobInfo = new BlobInfoFactory().loadBlobInfo(blobKey);
@@ -105,14 +124,32 @@ public class ImageServlet extends HttpServlet {
   }
 
   /**
-   * Creates a list of  that apply to the image, which is
+   * Creates a list of labels that apply to the image, which is
    * represented by the binary data stored in imgBytes.
    */
   private List<EntityAnnotation> getImageLabels(byte[] imgBytes) throws IOException {
+    AnnotateImageResponse imageResponse = getImageResponse(imgBytes, false);    
+    return imageResponse.getLabelAnnotationsList();
+  }
+
+  /**
+   * Gets the text within the image, whic is represented by
+   * the binary data stored in imgBytes.
+   */
+  private TextAnnotation getImageText(byte[] imgBytes) throws IOException {
+    AnnotateImageResponse imageResponse = getImageResponse(imgBytes, true);
+    return imageResponse.getFullTextAnnotation();
+  }
+
+  /**
+   * Gets an AnnotateImageResponse corresponding to the image represented by an array of bytes, and the type
+   * of detection to use. If useTextDetection is false, then the default is to use label detection.
+   */
+  private AnnotateImageResponse getImageResponse(byte[] imgBytes, boolean useTextDetection) throws IOException {
     ByteString byteString = ByteString.copyFrom(imgBytes);
     Image image = Image.newBuilder().setContent(byteString).build();
-
-    Feature feature = Feature.newBuilder().setType(Feature.Type.LABEL_DETECTION).build();
+    Feature.Type detectionMethod = (useTextDetection) ? Feature.Type.TEXT_DETECTION : Feature.Type.LABEL_DETECTION;
+    Feature feature = Feature.newBuilder().setType(detectionMethod).build();
     AnnotateImageRequest request =
         AnnotateImageRequest.newBuilder().addFeatures(feature).setImage(image).build();
     List<AnnotateImageRequest> requests = new ArrayList<>();
@@ -125,11 +162,11 @@ public class ImageServlet extends HttpServlet {
     AnnotateImageResponse imageResponse = imageResponses.get(0);
 
     if (imageResponse.hasError()) {
-      System.err.println("Error getting image labels: " + imageResponse.getError().getMessage());
+      String errorType = (useTextDetection) ? "text" : "labels";
+      System.err.println(String.format("Error getting image %s: %s ", errorType, imageResponse.getError().getMessage()));
       return null;
     }
-
-    return imageResponse.getLabelAnnotationsList();
+    return imageResponse;
   }
 }
 

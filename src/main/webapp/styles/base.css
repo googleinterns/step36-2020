@@ -57,11 +57,12 @@ body {
   justify-content: center;
   align-items: center;
   font-family: 'Open Sans', sans-serif;
-  font-size: 1.2vh;
+  font-size: min(1.2vh, 4.6vmin);
 }
 
 #footer > p {
   margin: 0.2vh 0;
+  text-align: center;
 }
 
 #content {

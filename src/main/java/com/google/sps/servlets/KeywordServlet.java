@@ -1,20 +1,10 @@
 package com.google.sps.servlets;
 
 import java.io.IOException;
-import com.google.cloud.language.v1.Document;
-import com.google.cloud.language.v1.LanguageServiceClient;
-import com.google.cloud.language.v1.AnalyzeEntitiesRequest;
-import com.google.cloud.language.v1.AnalyzeEntitiesResponse;
-import com.google.cloud.language.v1.EncodingType;
-import com.google.cloud.language.v1.Entity;
-import com.google.appengine.api.datastore.EntityNotFoundException;
+import com.google.appengine.api.users.UserServiceFactory;
+import com.google.appengine.api.users.UserService;
 import com.google.gson.Gson;
-import com.google.sps.data.Keywords;
-import com.google.gson.Gson;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
 import com.google.sps.data.Keywords;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -28,12 +18,18 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/keyword")
 public class KeywordServlet extends HttpServlet {
 
+  private UserService userService = UserServiceFactory.getUserService();
+
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     String key = request.getParameter("k");
-    List<String> keywords = Keywords.getKeywords(key);
+    Collection<String> keywords = null;
+    if (userService.isUserLoggedIn()) {
+      keywords = Keywords.getKeywords(key);
+    }
     Gson gson = new Gson();
     String json = gson.toJson(keywords);
+    response.setCharacterEncoding("UTF-8");
     response.getWriter().println(json);
   }
 
