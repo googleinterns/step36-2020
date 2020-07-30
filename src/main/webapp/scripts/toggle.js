@@ -2,7 +2,7 @@ const KEYWORD_TEMPLATE_PROMISE = loadTemplate('/templates/keyword.html');
 const LOCATION_TEMPLATE_PROMISE = loadTemplate('/templates/location.html');
 const NO_KEYWORDS_HTML = loadTemplate('/templates/noKeywords.html')
 
-let locationObj = JSON.parse(getCookie('location'));
+let locationObj = null;
 
 const KEYWORDS_OBJ_URL = '/keyword';
 const CIVIC_OBJ_URL = '/actions/civic';
@@ -20,6 +20,10 @@ let loadingCounter;
  * Returns a promise that resolves when everything loads.
  */
 async function loadContentSection() {
+  let locationCookie = getCookie('location');
+  if (locationCookie != "") {
+    locationObj = JSON.parse(getCookie('location'))
+  }
   /*
   let location = getCookie('location');
   if (location != "") {
@@ -40,7 +44,7 @@ async function loadContentSection() {
   const address = encodeURI(getCookie('address'));
   if (address != "") {
     loadCivicSectionFromAddress(address);
-  } else if (location != "") {
+  } else if (locationObj) {
     loadCivicSectionFromLocation(locationObj);
   } else {
     loadingCounter.decrement();
@@ -116,17 +120,6 @@ function renderKeyword(template, keywordObj) {
   hideLoading();
 }
 
-/**
- * Loads the current location of the user, and passes the locationObj to the callback function.
- * Returns a locationObj.
- */
- /*
-function loadLocationObj(callback) {
-  locationObj = await loadObject(`${LOCATION_OBJ_URL}?lat=${coordinates[0]}&lng=${coordinates[1]}`);
-  callback(locationObj);
-}
-*/
-
 async function loadCivicSectionFromAddress(address) {
   const civicObj = await loadObject(`${CIVIC_OBJ_URL}?address=${address}`);
   if ('error' in civicObj) {
@@ -143,7 +136,6 @@ async function loadCivicSectionFromAddress(address) {
  * Loads the civic section to the DOM, or alerts the user if there aren't any results for their location.
  */
 async function loadCivicSectionFromLocation(locationObj) {
-  console.log(locationObj);
   if (locationObj.Country === "United States") {
     const address = locationObj2Address(locationObj);
     loadCivicSectionFromAddress(address);
