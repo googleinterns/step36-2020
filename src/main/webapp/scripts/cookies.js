@@ -3,9 +3,7 @@ const MINUTES_PER_HOUR = 60;
 const SECONDS_PER_MINUTE = 60;
 const SECONDS_PER_DAY = HOURS_PER_DAY * MINUTES_PER_HOUR * SECONDS_PER_MINUTE;
 const MILLISECONDS_PER_SECOND = 1000;
-
 const LOCATION_OBJ_URL = '/location';
-
 
 /**
  * Get the value of a cookie.
