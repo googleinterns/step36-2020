@@ -2,6 +2,8 @@ const KEYWORD_TEMPLATE_PROMISE = loadTemplate('/templates/keyword.html');
 const LOCATION_TEMPLATE_PROMISE = loadTemplate('/templates/location.html');
 const NO_KEYWORDS_HTML = loadTemplate('/templates/noKeywords.html')
 
+let locationObj = null;
+
 const KEYWORDS_OBJ_URL = '/keyword';
 const CIVIC_OBJ_URL = '/actions/civic';
 const LOCATION_OBJ_URL = '/location';
@@ -18,6 +20,10 @@ let loadingCounter;
  * Returns a promise that resolves when everything loads.
  */
 async function loadContentSection() {
+  let locationCookie = getCookie('location');
+  if (locationCookie != "") {
+    locationObj = JSON.parse(getCookie('location'))
+  }
   const keywords = await loadKeywords(KEYWORDS_OBJ_URL);
   const elementsToLoad = Math.max(keywords.length, 1);
   counter.add(elementsToLoad);
@@ -28,15 +34,12 @@ async function loadContentSection() {
     keywords.forEach(loadKeywordSection);
   }
   const address = encodeURI(getCookie('address'));
-  const location = getCookie('location');
   if (address != "") {
     loadCivicSectionFromAddress(address);
+  } else if (locationObj) {
+    loadCivicSectionFromLocation(locationObj);
   } else {
-    if (location != "") {
-      loadLocationObj(loadCivicSectionFromLocation);
-    } else {
-      loadingCounter.decrement();
-    }
+    loadingCounter.decrement();
   }
 }
 
@@ -70,12 +73,20 @@ function hideLoading() {
   $("#real-body").removeClass("hide").addClass("body");
 }
 
+function makeUrl(url, keyword) {
+  let queryString = `?key=${keyword}`;
+  let fullUrl = `${url}${queryString}`;
+  if (url === '/news' && locationObj != null) {
+    fullUrl = `${fullUrl}&country=${locationObj["Short Country"]}`;
+  }
+  return fullUrl;
+}
+
 /**
  * Loads a keyword section to the DOM.
  */
 async function loadKeywordSection(keyword) {
-  const queryString = `?key=${keyword}`;
-  const objsUrls = OBJECTS_URLS.map(url => `${url}${queryString}`);
+  const objsUrls = OBJECTS_URLS.map(url => makeUrl(url, keyword));
   const objs = await loadUrls(objsUrls, loadObject);
   const keywordObj = buildKeywordObj(objs[0], objs[1], objs[2], keyword);
   const template = await KEYWORD_TEMPLATE_PROMISE;
@@ -99,24 +110,6 @@ function renderKeyword(template, keywordObj) {
   const keywordHTML = Mustache.render(template, keywordObj);
   $('#keywords').prepend(keywordHTML);
   hideLoading();
-}
-
-/**
- * Loads the current location of the user, and passes the locationObj to the callback function.
- * Returns a locationObj.
- */
-function loadLocationObj(callback) {
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(async (position) => {
-      const lat = position.coords.latitude;
-      const lng = position.coords.longitude;
-      locationObj = await loadObject(`${LOCATION_OBJ_URL}?lat=${lat}&lng=${lng}`);
-      callback(locationObj);
-    }, (err) => {
-      console.warn(`ERROR(${err.code}): ${err.message}`);
-      alert("We cannot access your location. Try checking your browswer settings");
-    });
-  }
 }
 
 async function loadCivicSectionFromAddress(address) {

@@ -82,3 +82,20 @@ function loadCheckboxStateCookie(cookieName) {
       document.getElementById(cookieName).checked = (cookieValue === "true");
   }
 }
+
+/** 
+ * Set cookie for user's coordinates with Navigator API.
+ */
+async function setLocationCookie() {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(async (position) => {
+      const lat = position.coords.latitude;
+      const lng = position.coords.longitude;
+      locationObj = await loadObject(`${LOCATION_OBJ_URL}?lat=${lat}&lng=${lng}`);
+      setCookie('location', JSON.stringify(locationObj), 1);
+    }, (err) => {
+      console.warn(`ERROR(${err.code}): ${err.message}`);
+      alert("We cannot access your location. Try checking your browswer settings");
+    });
+  }
+}
