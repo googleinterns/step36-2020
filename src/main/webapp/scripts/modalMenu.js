@@ -32,7 +32,7 @@ function buildModalObj(keywordsObj) {
 
 async function loadMenu() {
   const menuHTML = await MENU_PROMISE;
-  $('#header').prepend(menuHTML);
+  $('#menu').append(menuHTML);
 }
 
 $('body').on('click', '#open-modal', function() {
