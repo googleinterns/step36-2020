@@ -6,7 +6,6 @@ let locationObj = null;
 
 const KEYWORDS_OBJ_URL = '/keyword';
 const CIVIC_OBJ_URL = '/actions/civic';
-const LOCATION_OBJ_URL = '/location';
 
 const NEWS_OBJ_URL = '/news';
 const BOOKS_OBJ_URL =  '/books';
@@ -140,11 +139,6 @@ async function loadCivicSectionFromLocation(locationObj) {
     alert('Sorry, your current location is not supported');
   }
   loadingCounter.decrement();
-}
-
-function locationObj2Address(locationObj) {
-  const addressTemplate = '{{Street Number}} {{Street Name}}, {{City}} {{State}} {{Zip Code}}';
-  return Mustache.render(addressTemplate, locationObj);
 }
 
 /**

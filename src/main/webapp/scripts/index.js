@@ -7,9 +7,11 @@ $().ready(function() {
   }
 
   $('#location-checkbox').change(function() {
-    if(this.checked) {
+    if (this.checked) {
+      $('#address').prop('disabled', true);
       setLocationCookie();
     } else {
+      $('#address').prop('disabled', false);
       eraseCookie('location');
     }
   });

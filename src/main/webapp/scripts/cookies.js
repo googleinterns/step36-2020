@@ -3,6 +3,7 @@ const MINUTES_PER_HOUR = 60;
 const SECONDS_PER_MINUTE = 60;
 const SECONDS_PER_DAY = HOURS_PER_DAY * MINUTES_PER_HOUR * SECONDS_PER_MINUTE;
 const MILLISECONDS_PER_SECOND = 1000;
+const LOCATION_OBJ_URL = '/location';
 
 /**
  * Get the value of a cookie.
@@ -91,11 +92,18 @@ async function setLocationCookie() {
     navigator.geolocation.getCurrentPosition(async (position) => {
       const lat = position.coords.latitude;
       const lng = position.coords.longitude;
-      locationObj = await loadObject(`${LOCATION_OBJ_URL}?lat=${lat}&lng=${lng}`);
+      const locationObj = await loadObject(`${LOCATION_OBJ_URL}?lat=${lat}&lng=${lng}`);
+      const address = locationObj2Address(locationObj);
+      $('#address').val(address);
       setCookie('location', JSON.stringify(locationObj), 1);
     }, (err) => {
       console.warn(`ERROR(${err.code}): ${err.message}`);
       alert("We cannot access your location. Try checking your browswer settings");
     });
   }
+}
+
+function locationObj2Address(locationObj) {
+  const addressTemplate = '{{Street Number}} {{Street Name}}, {{City}} {{State}} {{Zip Code}}';
+  return Mustache.render(addressTemplate, locationObj);
 }

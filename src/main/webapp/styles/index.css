@@ -49,6 +49,21 @@
   color: var(--upperColor);
 }
 
+#location {
+  width: 100%;
+  display: flex;
+  flex-flow: row-reverse;
+  justify-content: center;
+  align-items: baseline;
+  margin: 0 0 1vh;
+}
+
+#location > p {
+  margin: 1vh 1.5vw;
+  font-family: 'Oswald', sans-serif;
+  font-size: 110%;
+}
+
 #location-input {
   margin: 0 0 2vh;
 }
