@@ -49,7 +49,7 @@
   color: var(--upperColor);
 }
 
-#location {
+#location:not(.hide) {
   width: 100%;
   display: flex;
   flex-flow: row-reverse;
