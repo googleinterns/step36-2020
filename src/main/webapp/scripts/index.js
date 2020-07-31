@@ -1,5 +1,4 @@
 $().ready(function() {
-
   $('#address').change(function() {
     $(this).attr('size', ($(this).val().length - 10));
   });
@@ -22,7 +21,7 @@ $().ready(function() {
     }
   });
 
-  $('#address').val(getCookie("address").change());
+  $('#address').val(getCookie("address")).change();
 });
 
 $('submit-form').click(function() {

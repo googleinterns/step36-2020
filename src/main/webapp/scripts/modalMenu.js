@@ -4,7 +4,7 @@ const KEYWORDS_ALL_OBJ_PROMISE = loadObject('/all-keywords');
 
 $().ready(async function() {
   const isLogUrlUndefined = typeof(LOG_URL_PROMISE) === 'undefined';
-  if (isLogUrlUndefined || await LOG_URL_PROMISE != 2) {
+  if (isLogUrlUndefined || (await LOG_URL_PROMISE).length != 2) {
     await loadModalWindow();
     loadMenu();
   }
