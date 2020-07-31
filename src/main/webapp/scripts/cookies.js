@@ -94,7 +94,7 @@ async function setLocationCookie() {
       const lng = position.coords.longitude;
       const locationObj = await loadObject(`${LOCATION_OBJ_URL}?lat=${lat}&lng=${lng}`);
       const address = locationObj2Address(locationObj);
-      $('#address').val(address);
+      $('#address').val(address).change();
       setCookie('location', JSON.stringify(locationObj), 1);
     }, (err) => {
       console.warn(`ERROR(${err.code}): ${err.message}`);

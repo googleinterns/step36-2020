@@ -64,6 +64,25 @@
   font-size: 110%;
 }
 
+#address {
+  border: none;
+  border-bottom: 0.2vh solid var(--upperColor);
+  background-color: rgba(0,0,0,0);
+  font-size: inherit;
+  font-family: inherit;
+  padding: 0.5vh 0.5vw;
+  max-width: 30vw;
+  min-width: 15vw;
+}
+
+#address:focus {
+  background-color: rgba(0,0,0,0.05);
+}
+
+#address:read-only {
+  background-color: rgba(0,0,0,0.10);
+}
+
 #location-input {
   margin: 0 0 2vh;
 }
