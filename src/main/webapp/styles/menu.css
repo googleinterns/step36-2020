@@ -1,19 +1,15 @@
-.nav {
+#menu {
   position: absolute;
   top: 0;
+  left: 0;
+}
+
+.nav {
   font-size: 45%;
   margin: 1.5vh 3vw;
   display: flex;
   align-items: center;
   cursor: pointer;
-}
-
-#open-modal {
-  left: 0;
-}
-
-#go-back {
-  right: 0;
 }
 
 .nav > p {

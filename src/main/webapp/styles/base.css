@@ -21,7 +21,7 @@
 }
 
 .hide {
-  display: none !important;
+  display: none;
 }
 
 .loading {
@@ -71,7 +71,7 @@ body {
   grid-area: content;
 }
 
-.button {
+.button:not(.hide) {
   background-color: var(--upperColor);
   color: white;
   font-weight: 600;
