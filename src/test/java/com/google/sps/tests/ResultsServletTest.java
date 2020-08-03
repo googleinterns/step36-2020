@@ -57,13 +57,13 @@ public final class ResultsServletTest {
   public void testServlet() throws IOException {
     String expected = "value";
     String actual = mockServlet(expected);
-    Assert.assertEquals(expected, actual);
+    Assert.assertTrue(actual.contains(expected));
   }
 
   @Test
   public void testNonAsciiCharacters() throws IOException {
     String expected = "मान";
     String actual = mockServlet(expected);
-    Assert.assertEquals(expected, actual);
+    Assert.assertTrue(actual.contains(expected));
   }
 }
