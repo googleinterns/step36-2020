@@ -23,7 +23,9 @@ async function loadContentSection() {
   if (locationCookie != "") {
     locationObj = JSON.parse(getCookie('location'))
   }
-  const keywords = await loadKeywords(KEYWORDS_OBJ_URL);
+  let keywordsJson = await loadKeywords(KEYWORDS_OBJ_URL);
+  const keywords = keywordsJson["keywords"];
+  const language = keywordsJson["language"];
   if (keywords == null) {
     $('#login-error').removeClass('hide');
     hideLoading();
@@ -52,19 +54,12 @@ async function loadContentSection() {
  * Returns a promise of the keywords array.
  */
 async function loadKeywords(keywordsUrl) {
-  console.log("in lodadKeywords");
   const key = $("body").attr("data-key");
-  console.log("line 57");
   let keywords;
-  console.log("line 59");
   const keywordsCookie = getCookie(key);
-  console.log("line 61");
   if (keywordsCookie === "") {
-    console.log("line 63");
     keywords = await loadObject(`${keywordsUrl}?k=${key}`);
-    console.log("line 65")
-    const keywordsJson = JSON.stringify(keywords);
-    console.log(keywordsJson);
+    let keywordsJson = JSON.stringify(keywords);
     setCookie(key, keywordsJson, 1);
   } else {
     keywords = JSON.parse(keywordsCookie);
@@ -162,4 +157,28 @@ function renderLocation(template, civicLocationObj) {
   const locationHTML = Mustache.render(template, civicLocationObj);
   $('#keywords').append(locationHTML);
   hideLoading();
+}
+
+function languageToCountry(language) {
+  let country = "";
+  switch(language) {
+    case "en":
+      country = "us";
+      break;
+    case "zh":
+      country = "cn";
+      break;
+    case "ja":
+      country = "jp";
+      break;
+    case "ko":
+      country = "kp";
+      break;
+    case "pt":
+      country = "br";
+      break;
+    default:
+      country = "language"
+  }
+  return country;
 }

@@ -25,7 +25,6 @@ function loadTemplate(url) {
  * Returns a promise of the object.
  */
 function loadObject(url) {
-  console.log("in load object");
   const objPromise = fetch(url).then(promiseResponse => promiseResponse.json());
   return objPromise;
 }
