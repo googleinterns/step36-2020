@@ -15,7 +15,7 @@
     <script src="https://unpkg.com/mustache@latest"></script>
     <title>Input Tweet</title>
   </head>
-  <body>
+  <body class="loading">
     <div id="loader" class="load hide"></div>
     <p id="loading-text" class="load hide">Analyzing your input...</p>
     <div id="real-body" class="body">
@@ -31,36 +31,9 @@
       </header>
       <div id="content">
         <div id="form-title">
-          <p>Choose Type of Input</p>
+          <p>Wait a moment. Loading...</p>
         </div>
         <a id="log-btn" class="hide button"></a>
-        <div id="location">
-          <div id="location-input">
-            <label for="location-checkbox">
-              Use Location
-              <input id="location-checkbox" type="checkbox" />
-              <span class="checkmark">
-                <ion-icon name="checkmark-sharp"></ion-icon>
-              </span>
-            </label>  
-          </div>
-          <p>OR</p>
-          <div id="address-input">
-            <input id="address" type="text" placeholder="Enter address"/>
-          </div>
-        </div>
-        <div id="input-select">
-          <button id="select-text" class="button">Text</button>
-          <button id="select-blob" class="button">Upload Image</button>
-        </div>
-        <form id="keyword-form" class="hide" action="/keyword" method="post" enctype="multipart/form-data">
-          <textarea id="text-input" name="keyword-sentence" placeholder="Enter your tweet or interests here"></textarea>
-          <div id="blob-input">
-            <label for="blob-file" id="blob-label"><p class="upload-button"><ion-icon name="cloud-upload-outline"></ion-icon> Choose File</p> <p id="file-path">No file chosen</p></label>
-            <input id="blob-file" type="file" name="image" accept="image/*" />
-          </div>
-          <input id="submit-form" type="submit" class="button" />
-        </form>
       </div>
       <footer id="footer" class="base">
         <p>Helping you engage more deeply with your social media feed</p>
@@ -71,8 +44,8 @@
     <script src="/scripts/load.js"></script>
     <script src="scripts/cookies.js"></script>
     <script src="scripts/index.js"></script>
-    <script src="/scripts/keywords.js"></script>
-    <script src="/scripts/logButton.js"></script>
+    <script src="/scripts/keywordsForm.js"></script>
+    <script src="/scripts/login.js"></script>
     <script src="scripts/modalMenu.js"></script>
   </body>
 </html>

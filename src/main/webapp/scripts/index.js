@@ -1,7 +1,9 @@
-$().ready(function() {
+function loadIndexListeners() {
   $('#address').change(function() {
     $(this).attr('size', ($(this).val().length - 10));
   });
+  
+  $('#address').val(getCookie("address")).change();
 
   if (getCookie('location') != "") {
     $('#location-checkbox').prop('checked', true);
@@ -21,10 +23,8 @@ $().ready(function() {
     }
   });
 
-  $('#address').val(getCookie("address")).change();
-});
-
-$('submit-form').click(function() {
-  let address = $('#address').val();
-  setCookie('address', address, 1);  
-});
+  $('submit-form').click(function() {
+    let address = $('#address').val();
+    setCookie('address', address, 1);  
+  });
+}

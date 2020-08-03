@@ -1,0 +1,33 @@
+<div id="location">
+  <div id="location-input">
+    <label for="location-checkbox">
+      Use Location
+      <input id="location-checkbox" type="checkbox" />
+      <span class="checkmark">
+        <ion-icon name="checkmark-sharp"></ion-icon>
+      </span>
+    </label>
+  </div>
+  <div id="or">
+    <p>OR</p>
+  </div>
+  <div id="address-input">
+    <input id="address" type="text" placeholder="Enter address"/>
+  </div>
+</div>
+<div id="input-select">
+  <div>
+    <button id="select-text" class="button">Text</button>
+  </div>
+  <div>
+    <button id="select-blob" class="button">Upload Image</button>
+  </div>
+</div>
+<form id="keyword-form" class="hide" action="/keyword" method="post" enctype="multipart/form-data">
+  <textarea id="text-input" name="keyword-sentence" placeholder="Enter your tweet or interests here"></textarea>
+  <div id="blob-input">
+    <label for="blob-file" id="blob-label"><p class="upload-button"><ion-icon name="cloud-upload-outline"></ion-icon> Choose File</p> <p id="file-path">No file chosen</p></label>
+    <input id="blob-file" type="file" name="image" accept="image/*" />
+  </div>
+  <input id="submit-form" type="submit" class="button" />
+</form>
