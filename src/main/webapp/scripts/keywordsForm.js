@@ -1,26 +1,22 @@
 const BLOB_URL_PROMISE = loadTemplate('/user-image');
 
-$().ready(async function() { 
-  $('#previous-keywords').on('click', function() {
-    let keywordsWindow = $('#modal-window');
-    if (keywordsWindow.hasClass('hide')) {
-      keywordsWindow.removeClass('hide');
-    } else {
-      keywordsWindow.addClass('hide');
-    }
-  });
-
+function loadKeywordsFormListeners() {
   $('#select-blob').on('click', async function() {
-    const blobURL = await BLOB_URL_PROMISE;
-    $('#keyword-form, #blob-input, #submit-form').removeClass('hide');
-    $('#keyword-form').attr('action', blobURL).attr('enctype', 'multipart/form-data');
+    $('#keyword-form, #blob-input').removeClass('hide');
+    $('#keyword-form')
+      .attr('action', await BLOB_URL_PROMISE)
+      .attr('enctype', 'multipart/form-data');
+      
     $('#text-input').addClass('hide').val(null);
     $('#form-title > p').text('Upload an Image Here');
   });
 
   $('#select-text').on('click', function() {
-    $('#keyword-form, #text-input, #submit-form').removeClass('hide');
-    $('#keyword-form').attr('action', '/keyword').attr('enctype', 'application/x-www-form-urlencoded');
+    $('#keyword-form, #text-input').removeClass('hide');
+    $('#keyword-form')
+      .attr('action', '/keyword')
+      .attr('enctype', 'application/x-www-form-urlencoded');
+
     $('#blob-input').addClass('hide').val(null);
     $('#form-title > p').text('Copy Your Tweet Here');
   });
@@ -33,7 +29,6 @@ $().ready(async function() {
   $('#keyword-form').on('submit', function(event) {
     // Check whether the inputs are valid before submitting.
     if ($('#blob-input').hasClass('hide')) {
-      // Check whether the text input is null, or has an empty string as a value.
       if ($('#text-input').val() == null || $('#text-input').val() === "") {
         alert('Your input cannot be empty!'); 
         event.preventDefault();
@@ -57,9 +52,8 @@ $().ready(async function() {
       }    
     }
     $('#keyword-form').off('submit');
-    $('body').addClass('loading');
-    $('body').children(':not(.load)').hide();
+    $('body').addClass('loading').children(':not(.load)').hide();
     $('.load').removeClass('hide');
     return true;
   });
-});
+}
