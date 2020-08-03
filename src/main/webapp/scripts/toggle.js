@@ -52,12 +52,19 @@ async function loadContentSection() {
  * Returns a promise of the keywords array.
  */
 async function loadKeywords(keywordsUrl) {
+  console.log("in lodadKeywords");
   const key = $("body").attr("data-key");
+  console.log("line 57");
   let keywords;
+  console.log("line 59");
   const keywordsCookie = getCookie(key);
+  console.log("line 61");
   if (keywordsCookie === "") {
+    console.log("line 63");
     keywords = await loadObject(`${keywordsUrl}?k=${key}`);
+    console.log("line 65")
     const keywordsJson = JSON.stringify(keywords);
+    console.log(keywordsJson);
     setCookie(key, keywordsJson, 1);
   } else {
     keywords = JSON.parse(keywordsCookie);

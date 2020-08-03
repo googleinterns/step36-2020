@@ -52,9 +52,24 @@ public final class Keywords {
    */
   public static Collection<String> getKeywords(String keyString) {
     UserService userService = UserServiceFactory.getUserService();
-    Map<String, Collection<String>> allKeywords = getKeyToKeywordMap(userService.getCurrentUser().getUserId());   
-    System.out.println(allKeywords.get(keyString));     
+    Map<String, Collection<String>> allKeywords = getKeyToKeywordMap(userService.getCurrentUser().getUserId());    
     return allKeywords.get(keyString);
+  }
+
+  public static String getLanguage(String keyString) {
+    UserService userService = UserServiceFactory.getUserService();
+    String id = userService.getCurrentUser().getUserId();
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    Query query = new Query("Keyword").setFilter(
+        new Query.FilterPredicate("id", Query.FilterOperator.EQUAL, id));
+    PreparedQuery results = datastore.prepare(query);
+    Map<String, String> keyKeywordMap = new HashMap<>();
+    for (Entity entity : results.asIterable()) {
+      String language = (String) entity.getProperty("language");
+      // Map the key to its respective collection of keywords
+      keyKeywordMap.put(KeyFactory.keyToString(entity.getKey()), language);
+    }
+    return keyKeywordMap.get(keyString);
   }
 
   /**

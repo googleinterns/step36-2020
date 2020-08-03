@@ -10,6 +10,10 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.Collection;
+import java.util.ArrayList;
 
 /**
  * Given a tweet or sentence, the servlet will extract salient terms
@@ -24,11 +28,18 @@ public class KeywordServlet extends HttpServlet {
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     String key = request.getParameter("k");
     Collection<String> keywords = null;
+    String language = null;
     if (userService.isUserLoggedIn()) {
       keywords = Keywords.getKeywords(key);
+      language = Keywords.getLanguage(key);
     }
+    Map<String, Collection<String>> combinedMap = new HashMap<>();
+    combinedMap.put("keywords", keywords);
+    Collection<String> languageList = new ArrayList();
+    languageList.add(language);
+    combinedMap.put("language", languageList);
     Gson gson = new Gson();
-    String json = gson.toJson(keywords);
+    String json = gson.toJson(combinedMap);
     response.setCharacterEncoding("UTF-8");
     response.getWriter().println(json);
   }
