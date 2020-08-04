@@ -25,6 +25,11 @@ async function loadContentSection() {
   }
   const keywords = await loadKeywords(KEYWORDS_OBJ_URL);
   const elementsToLoad = Math.max(keywords.length, 1);
+    if (keywords == null) {	
+    $('#login-error').removeClass('hide');	
+    hideLoading();	
+    return;	
+  }
   counter.add(elementsToLoad);
   loadingCounter = traceCounterMethods(counter, elementsToLoad);
   if (keywords.length === 0) {
