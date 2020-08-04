@@ -91,7 +91,6 @@ function makeUrl(url, keyword) {
       fullUrl = `${fullUrl}&country=${country}`;
     }
   }
-  console.log(fullUrl); // test
   return fullUrl;
 }
 

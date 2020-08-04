@@ -62,7 +62,6 @@ public class NewsServlet extends HttpServlet {
 
   public HttpURLConnection getConnection(String basePath, Map<String, String> paramMap) throws IOException {
     String path = String.format("%s?%s", basePath, UrlRequest.getParamsString(paramMap));
-    System.out.println(path);
     URL url = new URL(path);
     HttpURLConnection connection = (HttpURLConnection) url.openConnection();
     connection.setRequestMethod("GET");
