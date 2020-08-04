@@ -3,6 +3,7 @@ const LOCATION_TEMPLATE_PROMISE = loadTemplate('/templates/location.html');
 const NO_KEYWORDS_HTML = loadTemplate('/templates/noKeywords.html')
 
 let locationObj = null;
+let language = null;
 
 const KEYWORDS_OBJ_URL = '/keyword';
 const CIVIC_OBJ_URL = '/actions/civic';
@@ -25,7 +26,7 @@ async function loadContentSection() {
   }
   let keywordsJson = await loadKeywords(KEYWORDS_OBJ_URL);
   const keywords = keywordsJson["keywords"];
-  const language = keywordsJson["language"];
+  language = keywordsJson["language"][0];
   if (keywords == null) {
     $('#login-error').removeClass('hide');
     hideLoading();
@@ -82,9 +83,15 @@ function hideLoading() {
 function makeUrl(url, keyword) {
   let queryString = `?key=${keyword}`;
   let fullUrl = `${url}${queryString}`;
-  if (url === '/news' && locationObj != null) {
-    fullUrl = `${fullUrl}&country=${locationObj["Short Country"]}`;
+  if (url === '/news') {
+    if (locationObj != null) {
+      fullUrl = `${fullUrl}&country=${locationObj["Short Country"]}`;
+    } else if (language != null) {
+      let country = languageToCountry(language);
+      fullUrl = `${fullUrl}&country=${country}`;
+    }
   }
+  console.log(fullUrl); // test
   return fullUrl;
 }
 
@@ -178,7 +185,7 @@ function languageToCountry(language) {
       country = "br";
       break;
     default:
-      country = "language"
+      country = language
   }
   return country;
 }
