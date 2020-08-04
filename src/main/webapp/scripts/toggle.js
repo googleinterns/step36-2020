@@ -24,12 +24,12 @@ async function loadContentSection() {
     locationObj = JSON.parse(getCookie('location'))
   }
   const keywords = await loadKeywords(KEYWORDS_OBJ_URL);
-  const elementsToLoad = Math.max(keywords.length, 1);
-    if (keywords == null) {	
+  if (keywords == null) {	
     $('#login-error').removeClass('hide');	
     hideLoading();	
     return;	
   }
+  const elementsToLoad = Math.max(keywords.length, 1);
   counter.add(elementsToLoad);
   loadingCounter = traceCounterMethods(counter, elementsToLoad);
   if (keywords.length === 0) {
