@@ -3,7 +3,6 @@ const LOG_URL_PROMISE = loadObject('/login');
 
 $().ready(async function() {
   let logURL = await LOG_URL_PROMISE;
-  console.log("Log URL: " + logURL);
   $('#log-btn').attr('href', logURL[0]);
   if (logURL.length == 2) {  // User is not logged in.
     $('#form-title > p').text('You are not logged in');
