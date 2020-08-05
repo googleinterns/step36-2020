@@ -5,7 +5,7 @@
 }
 
 .nav {
-  font-size: 45%;
+  font-size: max(45%, 1.5rem);
   margin: 1.5vh 3vw;
   display: flex;
   align-items: center;

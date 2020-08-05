@@ -1,13 +1,22 @@
+:root {
+  --background-col-width: max(50vw, 22rem);
+}
+
+body {
+  height: max(100vh, 40rem) !important;
+  width: calc(var(--background-col-width) * 2) !important;
+}
+
 .body {
   background: linear-gradient( to right,
     var(--upperColor) 0, 
-    var(--upperColor) 50vw, 
-    var(--lowerColor) 50vw, 
+    var(--upperColor) var(--background-col-width), 
+    var(--lowerColor) var(--background-col-width), 
     var(--lowerColor));
   display: grid;
-  grid: [row1-start] "header content" 90vh [row1-end]
-        [row2-start] "footer footer " 10vh [row2-end]
-        / 50vw 50vw;
+  grid: [row1-start] "header content" max(90vh, 36rem) [row1-end]
+        [row2-start] "footer footer " max(10vh, 4rem)  [row2-end]
+        / var(--background-col-width) var(--background-col-width);
   place-items: center;
 }
 
@@ -17,14 +26,14 @@
 }
 
 #title {
-  font-size: min(200%, 30vmin);
+  font-size: max(min(200%, 30vmin), 8rem);
   text-align: center;
   padding: 4vw;
   margin: 0;
 }
 
 #instructions {
-  font-size: min(3.6vmin, 1.6vh);
+  font-size: max(min(3.6vmin, 1.6vh), 1rem);
   margin: 0 max(4vw, 2vmax);
   font-family: 'Open Sans', sans-serif;
   font-weight: 300;
@@ -39,7 +48,7 @@
   place-self: start;
   margin: 30vh 0;
   height: auto;
-  font-size: 1.3vh;
+  font-size: max(1.3vh, 1rem);
 }
 
 #form-title {
@@ -84,7 +93,7 @@
   font-size: inherit;
   font-family: inherit;
   padding: 0.5vh 0.5vw;
-  max-width: 21.5vw;
+  max-width: 20vw;
   min-width: 15vw;
 }
 
@@ -113,8 +122,8 @@
 
 .checkmark {
   background-color: hsl(var(--lowerColor-hs), calc(var(--lowerColor-l) - 15%));
-  width: 1.3vh;
-  height: 1.3vh;
+  width: 1em;
+  height: 1em;
   margin: 0 0.5vw;
   display: inline-block;
 }
@@ -167,7 +176,7 @@
   margin: 0.5vh 0.3vw;
   padding: 1vh 1vw;
   box-sizing: border-box;
-  font-size: 1vh;
+  font-size: max(1vh, 0.8rem);
 }
 
 #blob-label {
@@ -183,7 +192,7 @@
   background-color: var(--lowerColor);
   color: black;
   font-weight: 600;
-  font-size: 1vh;
+  font-size: max(1vh, 0.9rem);
   padding: 0.7vh 1vw;;
   border: black 0.1vh solid;
   cursor: pointer;
@@ -202,6 +211,12 @@
 
 #submit-form:not(.hide) {
   display: block;
+}
+
+@media (max-height: 800px) {
+  #content {
+    margin: max(20vh, 10rem) 0;
+  }
 }
 
 @media (orientation: portrait) {
