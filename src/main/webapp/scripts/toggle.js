@@ -24,9 +24,9 @@ async function loadContentSection() {
   if (locationCookie != "") {
     locationObj = JSON.parse(getCookie('location'))
   }
-  let keywordsJson = await loadKeywords(KEYWORDS_OBJ_URL);
-  const keywords = keywordsJson["keywords"];
-  language = keywordsJson["language"][0];
+  const keywordsObj = await loadKeywords(KEYWORDS_OBJ_URL);
+  const keywords = keywordsObj["keywords"];
+  language = keywordsObj["language"][0];
   if (keywords == null) {
     $('#login-error').removeClass('hide');
     hideLoading();
@@ -60,7 +60,7 @@ async function loadKeywords(keywordsUrl) {
   const keywordsCookie = getCookie(key);
   if (keywordsCookie === "") {
     keywords = await loadObject(`${keywordsUrl}?k=${key}`);
-    let keywordsJson = JSON.stringify(keywords);
+    const keywordsJson = JSON.stringify(keywords);
     setCookie(key, keywordsJson, 1);
   } else {
     keywords = JSON.parse(keywordsCookie);
