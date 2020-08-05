@@ -220,21 +220,41 @@ body {
 }
 
 @media (orientation: portrait) {
+  :root {
+    --height-ratio: max(10vh, 9.5rem);
+  }
+
+  body {
+    width: 100vw !important;
+    height: calc(var(--height-ratio) * 4 + 60vh) !important;
+  }
+
   .body {
     background: linear-gradient(
       var(--upperColor) 0, 
-      var(--upperColor) 33vh, 
-      var(--lowerColor) 33vh, 
+      var(--upperColor) calc(var(--height-ratio) * 3), 
+      var(--lowerColor) calc(var(--height-ratio) * 3), 
       var(--lowerColor));
     display: grid;
-    grid: [row1-start] "header " 30vh [row1-end]
+    grid: [row1-start] "header " calc(var(--height-ratio) * 3) [row1-end]
           [row2-start] "content" 60vh [row2-end]
-          [row3-start] "footer " 10vh [row3-end]
+          [row3-start] "footer " calc(var(--height-ratio) * 1)  [row3-end]
           / 100vw;
   }
 
   #content {
-    margin: 10vh 0;
+    margin: 2vw 0;
+  }
+
+#location:not(.hide) {
+  width: 100%;
+  display: flex;
+  flex-flow: column-reverse;
+  justify-content: center;
+  align-items: center;
+}
+  #address {
+    max-width: 90vw;
   }
 
   #text-input:not(.hide) {
