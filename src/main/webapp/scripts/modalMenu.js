@@ -36,12 +36,10 @@ async function loadMenu() {
 }
 
 $('body').on('click', '#open-modal', function() {
-  $('body').addClass('no-scroll');
   $('#modal-window').removeClass('hide');
 });
 
 $('body').on('click', '#pop-up > .close', function() {
-  $('body').removeClass('no-scroll');
   $('#modal-window').addClass('hide');
 });
 
