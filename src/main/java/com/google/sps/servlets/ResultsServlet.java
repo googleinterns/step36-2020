@@ -24,7 +24,7 @@ public class ResultsServlet extends HttpServlet {
     Map<String, String> map = new HashMap<>();
     DefaultMustacheFactory mf = new DefaultMustacheFactory();
     Mustache mustache;
-	  if (userService.isUserLoggedIn()) {
+    if (userService.isUserLoggedIn()) {
       String logoutUrl = userService.createLogoutURL("/");
       map.put("key", key);
       map.put("logoutUrl", logoutUrl);
