@@ -28,6 +28,10 @@
   cursor: progress;
 }
 
+.no-scroll {
+  overflow: hidden;
+}
+
 body {
   margin: 0 0;
   padding: 0 0;
@@ -57,7 +61,7 @@ body {
   justify-content: center;
   align-items: center;
   font-family: 'Open Sans', sans-serif;
-  font-size: min(1.2vh, 4.6vmin);
+  font-size: max(min(1.2vh, 4.6vmin), 0.8rem);
 }
 
 #footer > p {
@@ -75,7 +79,7 @@ body {
   background-color: var(--upperColor);
   color: white;
   font-weight: 600;
-  font-size: 1vh;
+  font-size: max(1vh, 0.8rem);
   padding: 0.7vh 1vw;;
   border: none;
   text-decoration: none;
