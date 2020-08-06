@@ -66,7 +66,7 @@ public final class Keywords {
     Map<String, String> keyKeywordMap = new HashMap<>();
     for (Entity entity : results.asIterable()) {
       String language = (String) entity.getProperty("language");
-      // Map the key to its respective collection of keywords
+      // Map the key to its respective collection of keywords.
       keyKeywordMap.put(KeyFactory.keyToString(entity.getKey()), language);
     }
     return keyKeywordMap.get(keyString);
