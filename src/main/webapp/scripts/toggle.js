@@ -137,8 +137,8 @@ async function loadCivicSectionFromLocation(locationObj) {
     loadCivicSectionFromAddress(address);
   } else {
     alert('Sorry, your current location is not supported');
+    loadingCounter.decrement();
   }
-  loadingCounter.decrement();
 }
 
 /**
