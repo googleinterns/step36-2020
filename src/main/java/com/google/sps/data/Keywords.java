@@ -52,8 +52,24 @@ public final class Keywords {
    */
   public static Collection<String> getKeywords(String keyString) {
     UserService userService = UserServiceFactory.getUserService();
-    Map<String, Collection<String>> allKeywords = getKeyToKeywordMap(userService.getCurrentUser().getUserId());        
+    Map<String, Collection<String>> allKeywords = getKeyToKeywordMap(userService.getCurrentUser().getUserId());    
     return allKeywords.get(keyString);
+  }
+
+  public static String getLanguage(String keyString) {
+    UserService userService = UserServiceFactory.getUserService();
+    String id = userService.getCurrentUser().getUserId();
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    Query query = new Query("Keyword").setFilter(
+        new Query.FilterPredicate("id", Query.FilterOperator.EQUAL, id));
+    PreparedQuery results = datastore.prepare(query);
+    Map<String, String> keyKeywordMap = new HashMap<>();
+    for (Entity entity : results.asIterable()) {
+      String language = (String) entity.getProperty("language");
+      // Map the key to its respective collection of keywords.
+      keyKeywordMap.put(KeyFactory.keyToString(entity.getKey()), language);
+    }
+    return keyKeywordMap.get(keyString);
   }
 
   /**
@@ -97,6 +113,7 @@ public final class Keywords {
   private static String addToDatastore(String message) throws IOException {
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     AnalyzeEntitiesResponse entityResponse = analyzeEntity(message);
+    String language = entityResponse.getLanguage();
     List<com.google.cloud.language.v1.Entity> entities = entityResponse.getEntitiesList();
     TreeSet<com.google.cloud.language.v1.Entity> orderSet = 
         new TreeSet<>((com.google.cloud.language.v1.Entity o1, com.google.cloud.language.v1.Entity o2) -> {
@@ -125,6 +142,7 @@ public final class Keywords {
     Entity datastoreEntity = new Entity("Keyword");
     datastoreEntity.setProperty("keywords", keywordCollection);
     datastoreEntity.setProperty("id", userId);
+    datastoreEntity.setProperty("language", language);
     datastore.put(datastoreEntity);
     return KeyFactory.keyToString(datastoreEntity.getKey());
   }

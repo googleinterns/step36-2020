@@ -3,6 +3,7 @@ const LOCATION_TEMPLATE_PROMISE = loadTemplate('/templates/location.html');
 const NO_KEYWORDS_HTML = loadTemplate('/templates/noKeywords.html')
 
 let locationObj = null;
+let language = null;
 
 const KEYWORDS_OBJ_URL = '/keyword';
 const CIVIC_OBJ_URL = '/actions/civic';
@@ -23,7 +24,9 @@ async function loadContentSection() {
   if (locationCookie != "") {
     locationObj = JSON.parse(getCookie('location'))
   }
-  const keywords = await loadKeywords(KEYWORDS_OBJ_URL);
+  const keywordsObj = await loadKeywords(KEYWORDS_OBJ_URL);
+  const keywords = keywordsObj["keywords"];
+  language = keywordsObj["language"][0];
   if (keywords == null) {
     $('#login-error').removeClass('hide');
     hideLoading();
@@ -80,8 +83,13 @@ function hideLoading() {
 function makeUrl(url, keyword) {
   let queryString = `?key=${keyword}`;
   let fullUrl = `${url}${queryString}`;
-  if (url === '/news' && locationObj != null) {
-    fullUrl = `${fullUrl}&country=${locationObj["Short Country"]}`;
+  if (url === '/news') {
+    if (locationObj != null) {
+      fullUrl = `${fullUrl}&country=${locationObj["Short Country"]}`;
+    } else if (language != null) {
+      let country = languageToCountry(language);
+      fullUrl = `${fullUrl}&country=${country}`;
+    }
   }
   return fullUrl;
 }
@@ -155,4 +163,28 @@ function renderLocation(template, civicLocationObj) {
   const locationHTML = Mustache.render(template, civicLocationObj);
   $('#keywords').append(locationHTML);
   hideLoading();
+}
+
+function languageToCountry(language) {
+  let country = "";
+  switch(language) {
+    case "en":
+      country = "us";
+      break;
+    case "zh":
+      country = "cn";
+      break;
+    case "ja":
+      country = "jp";
+      break;
+    case "ko":
+      country = "kp";
+      break;
+    case "pt":
+      country = "br";
+      break;
+    default:
+      country = language
+  }
+  return country;
 }
