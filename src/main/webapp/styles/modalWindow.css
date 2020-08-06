@@ -21,6 +21,7 @@
   display: flex;
   flex-flow: column nowrap;
   align-items: center;
+  padding: 1vh 1vw;
 }
 
 #pop-up > .close {
@@ -70,6 +71,13 @@
   display: flex;
   align-items: center;
 }
+
+#buttons > .button {
+  font-size: 1.5vh;
+  display: inline-flex;
+  align-items: center;
+}
+
 
 @media (orientation: portrait) {
   #pop-up {
