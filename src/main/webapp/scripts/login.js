@@ -11,7 +11,7 @@ $().ready(async function() {
     $('#form-title > p').text('Choose Type of Input');
     $('#log-btn').text('Log Out');
     $('#content').append(await FORM_HTML_PROMISE);
-    if ($('index').length) {  // Index page.
+    if ($('#index').length) {  // Index page.
       loadIndexListeners();
       loadKeywordsFormListeners();
     }
