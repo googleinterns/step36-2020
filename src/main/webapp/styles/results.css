@@ -89,7 +89,7 @@ body:not(.loading) {
 }
 
 .error {
-  font-size: 1.5vh;
+  font-size: max(1.5vh, 1.3rem);
   text-align: center;
 }
 
@@ -97,7 +97,7 @@ body:not(.loading) {
   width: 100%;
   margin: 0.5vh 0;	
   transition: all 0.3s ease-in-out;
-  font-size: 1.3vh;
+  font-size: max(1.3vh, 1rem);
   display: none;
 }
 
@@ -107,7 +107,7 @@ body:not(.loading) {
 
 .item > p {
   margin: 0.15vh;
-  font-size: min(1.2vh, 1.5vmin);
+  font-size: max(min(1.2vh, 1.5vmin), 1rem);
   text-align: left;
 }
 
@@ -225,7 +225,7 @@ body:not(.loading) {
     margin: 0;
     padding: 0;
     text-align: center;
-    font-size: 1.1vh;
+    font-size: max(1.1vh, 1rem);
   }
   
   .keyword:hover ion-icon {
