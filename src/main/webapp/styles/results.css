@@ -151,7 +151,8 @@ body:not(.loading) {
   }
   
   #title {
-    margin: calc(var(--height-ratio));
+    font-size: var(--height-ratio);
+    margin: var(--height-ratio);
   }
 
   #keywords {
@@ -174,6 +175,10 @@ body:not(.loading) {
     width: auto;
     font-size: max(1.5vh, 1rem);
     text-align: center;
+  }
+  
+  #footer {
+    place-self: start;
   }
 }
 
