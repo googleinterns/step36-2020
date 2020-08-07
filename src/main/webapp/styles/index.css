@@ -246,13 +246,14 @@ body {
     margin: 2vw 0;
   }
 
-#location:not(.hide) {
-  width: 100%;
-  display: flex;
-  flex-flow: column-reverse;
-  justify-content: center;
-  align-items: center;
-}
+  #location:not(.hide) {
+    width: 100%;
+    display: flex;
+    flex-flow: column-reverse;
+    justify-content: center;
+    align-items: center;
+  }
+  
   #address {
     max-width: 90vw;
   }

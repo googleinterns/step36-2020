@@ -10,7 +10,7 @@
 
 .subtitle {
   grid-area: location;
-  font-size: 1.5vh;
+  font-size: max(1.5vh, 1rem);
   margin: 0 0 auto;
 }
 
@@ -26,7 +26,7 @@
   }
 }
 
-@media (any-hover: hover) {
+@media (any-hover: hover) and (orientation: landscape) {
   .location:hover {
     background-color: lightgray;
   }

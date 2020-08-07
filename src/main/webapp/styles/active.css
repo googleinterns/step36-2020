@@ -99,7 +99,7 @@
   }
 }
 
-@media (any-hover: hover) {
+@media (any-hover: hover) and (orientation: landscape) {
   .active:hover {
     position: absolute;
     z-index: 5;

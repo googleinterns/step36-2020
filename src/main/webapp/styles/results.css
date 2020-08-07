@@ -182,7 +182,7 @@ body:not(.loading) {
   }
 }
 
-@media (any-hover: hover) {
+@media (any-hover: hover) and (orientation: landscape) {
   .keyword:hover { 
     width: 40vw;
     cursor: pointer;
@@ -199,7 +199,7 @@ body:not(.loading) {
   .keyword:hover > .title {
     padding: 3vh 0 0;
     font-weight: bold;
-    font-size: 2.5vh;
+    font-size: max(2.5vh, 2rem);
     transform: rotate(0deg);
     writing-mode: horizontal-tb;
     transition: all 0.5s ease-in-out;
