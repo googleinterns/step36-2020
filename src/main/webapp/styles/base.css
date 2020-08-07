@@ -1,4 +1,6 @@
 :root {
+  --height-ratio: max(10vh, 4rem);
+
   --upperColor-hs: 182, 50%;
   --upperColor-l: 30%;
   --upperColor: hsl(var(--upperColor-hs), var(--upperColor-l));
@@ -92,4 +94,6 @@ body {
   position: absolute;
   top: 0;
   right: 0;
+  font-family: 'Open Sans', sans-serif;
+  font-size: max(1.2vh, 1.2rem);
 }

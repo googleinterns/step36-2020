@@ -1,6 +1,6 @@
 #keywords > hr {
   margin: 0 3vw;
-  height: 50vh;
+  height: max(50vh, 25rem);
   border: 0.1vw solid hsl(var(--lowerColor-hs), calc(var(--lowerColor-l) - 30%));
 }
 

@@ -14,8 +14,8 @@ body {
     var(--lowerColor) var(--background-col-width), 
     var(--lowerColor));
   display: grid;
-  grid: [row1-start] "header content" max(90vh, 36rem) [row1-end]
-        [row2-start] "footer footer " max(10vh, 4rem)  [row2-end]
+  grid: [row1-start] "header content" calc(var(--height-ratio) * 9) [row1-end]
+        [row2-start] "footer footer " calc(var(--height-ratio) * 1) [row2-end]
         / var(--background-col-width) var(--background-col-width);
   place-items: center;
 }

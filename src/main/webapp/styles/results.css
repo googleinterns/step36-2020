@@ -1,22 +1,31 @@
+body {
+  justify-content: start;
+}
+
+#real-body {
+  height: calc(var(--height-ratio) * 10);
+}
+
 .body {
+  justify-self: start;
   background: linear-gradient(var(--upperColor) 0, 
-    var(--upperColor) 50vh, 
-    var(--lowerColor) 50vh, 
-    var(--lowerColor));
+    var(--upperColor) calc(var(--height-ratio) * 5), 
+    var(--lowerColor) calc(var(--height-ratio) * 5), 
+    var(--lowerColor) calc(var(--height-ratio) * 5));
   display: grid;
-  grid: [row1-start] "header " 25vh [row1-end]
-        [row2-start] "content" 65vh [row2-end]
-        [row3-start] "footer " 10vh [row3-end]
+  grid: [row1-start] "header " calc(var(--height-ratio) * 2.5) [row1-end]
+        [row2-start] "content" calc(var(--height-ratio) * 6.5) [row2-end]
+        [row3-start] "footer " calc(var(--height-ratio) * 1.0) [row3-end]
         / 1fr;
   place-items: center center;
 }
 
 .body.focus {
   background: linear-gradient(var(--upperColor) 0, 
-    var(--upperColor) 49.5vh, 
-    var(--lowerColor) 50.5vh, 
+    var(--upperColor) calc(var(--height-ratio) * 5 - 0.5vh), 
+    var(--lowerColor) calc(var(--height-ratio) * 5 + 0.5vh), 
     var(--lowerColor));
-  grid: [row1-start] "content " 100vh [row1-end]
+  grid: [row1-start] "content " calc(var(--height-ratio) * 10) [row1-end]
         / 1fr;
   place-items: stretch;
   transition: all 0.3s ease-in-out;
@@ -31,14 +40,15 @@
 }
 
 #title {
-  font-size: 120%;
-  margin: 10vh 0 0;
+  font-size: max(10vh, 5rem);
+  margin: 5vh 0 0;
 }
 
 #keywords {
   margin: auto;
   height: 100%;
   width: 100%;
+  max-width: 100vw;
   display: flex;
   justify-content: center;
   align-items: start;
@@ -52,10 +62,10 @@
 .keyword {
   margin: 0 0.5vw;
   width: 4vw;
-  height: 50vh;
+  height: max(50vh, 25rem);
   background-color: white;
   box-shadow: 0.01vh 0.01vw 0.2vmax rgba(0,0,0,0.25);
-  border-radius: min(3vmax, 5vh);
+  border-radius: 50rem;
   display: flex;
   transition: all 0.5s ease-out;
   justify-content: center;
