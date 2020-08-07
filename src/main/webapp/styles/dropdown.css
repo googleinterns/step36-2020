@@ -58,7 +58,7 @@
   overflow: auto;
 }
 
-@media (orientation: portrait) {
+@media (orientation: portrait), (max-width: 400px) {
   .level-name {
     font-size: 2vh;
   }

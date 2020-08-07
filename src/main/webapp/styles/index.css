@@ -219,7 +219,7 @@ body {
   }
 }
 
-@media (orientation: portrait) {
+@media (orientation: portrait), (max-width: 400px) {
   :root {
     --height-ratio: max(10vh, 9.5rem);
   }
@@ -238,7 +238,7 @@ body {
     display: grid;
     grid: [row1-start] "header " calc(var(--height-ratio) * 3) [row1-end]
           [row2-start] "content" 60vh [row2-end]
-          [row3-start] "footer " calc(var(--height-ratio) * 1)  [row3-end]
+          [row3-start] "footer " calc(var(--height-ratio) * 1) [row3-end]
           / 100vw;
   }
 

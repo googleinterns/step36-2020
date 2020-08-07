@@ -88,7 +88,7 @@
   right: 0;
 }
 
-@media (orientation: portrait) {
+@media (orientation: portrait), (max-width: 400px) {
   .active {
     width: 95vw;
     height: 95vh;
@@ -133,7 +133,7 @@
     cursor: pointer;
   }
 
-  @media (orientation: portrait) {   
+  @media (orientation: portrait), (max-width: 400px) {   
     .active:hover {
       width: 95vw;
       height: 95vh;

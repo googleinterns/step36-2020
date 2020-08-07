@@ -1,4 +1,4 @@
-body {
+body:not(.loading) {
   justify-content: start;
 }
 
@@ -41,7 +41,7 @@ body {
 
 #title {
   font-size: max(10vh, 5rem);
-  margin: 5vh 0 0;
+  margin: calc(var(--height-ratio) / 2) 0 0;
 }
 
 #keywords {
@@ -65,7 +65,7 @@ body {
   height: max(50vh, 25rem);
   background-color: white;
   box-shadow: 0.01vh 0.01vw 0.2vmax rgba(0,0,0,0.25);
-  border-radius: 50rem;
+  border-radius: 2.5em;
   display: flex;
   transition: all 0.5s ease-out;
   justify-content: center;
@@ -138,11 +138,11 @@ body {
   background-color: hsl(var(--actionsColor-hs), 85%);
 }
 
-@media (orientation: portrait) {
+@media (orientation: portrait), (max-width: 400px) {
   .body {
     background: linear-gradient(var(--upperColor) 0, 
-      var(--upperColor) 33vh, 
-      var(--lowerColor) 33vh, 
+      var(--upperColor) calc(var(--height-ratio) * 2.5), 
+      var(--lowerColor) calc(var(--height-ratio) * 2.5), 
       var(--lowerColor));
   }
 
@@ -150,6 +150,10 @@ body {
     justify-content: center;
   }
   
+  #title {
+    margin: calc(var(--height-ratio));
+  }
+
   #keywords {
     flex-direction: column;
     align-items: center;
@@ -159,14 +163,17 @@ body {
   .keyword {
     margin: 0.5vh 0;
     width: 50vw;
-    height: 4vh;
+    height: auto;
+    min-height: 1.5rem;
+    flex-grow: 0.3;
   }
 
   .keyword > .title {
     transform: rotate(0deg);
     writing-mode: horizontal-tb;
     width: auto;
-    font-size: 1.5vh;
+    font-size: max(1.5vh, 1rem);
+    text-align: center;
   }
 }
 
@@ -221,7 +228,7 @@ body {
     transition: transform 0.2s ease-in-out;
   }
 
-  @media (orientation: portrait) {
+  @media (orientation: portrait), (max-width: 400px) {
     .keyword:hover {
       width: 60vw;
       height: 40vh;
