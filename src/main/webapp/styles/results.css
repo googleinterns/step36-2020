@@ -179,6 +179,7 @@ body:not(.loading) {
   
   #footer {
     place-self: start;
+    height: auto;
   }
 }
 
