@@ -22,8 +22,11 @@
   border-radius: 1vh;
 }
 
-@media (orientation: portrait) {
+@media (orientation: portrait), (max-width: 400px) {
   #progress-bar {
     width: 60%;
+    position: absolute;
+    top: calc(var(--height-ratio) * 1);
+    height: 1vh;
   }
 }

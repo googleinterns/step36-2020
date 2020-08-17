@@ -11,7 +11,7 @@
   margin: 0;
   padding: 0;
   text-align: center;
-  font-size: 1.1vh;
+  font-size: max(1.1vh, 1rem);
 }
 
 .level-name > ion-icon {
@@ -21,11 +21,11 @@
 
 .level-name {
   margin: 0;
-  padding: 2.5vh 0;
+  padding: max(2.5vh, 0.5rem) 0;
   cursor: pointer;
   background-color: rgba(0, 0, 0, 0);
   transition: background-color 0.2s ease-in-out;
-  font-size: 1.5vh;
+  font-size: max(1.5vh, 1rem);
   font-weight: bold;
   display: flex;
   justify-content: center;
@@ -34,7 +34,7 @@
 
 .extended > .level-name {
   font-family: 'Oswald', sans-serif;
-  font-size: 2.1vh;
+  font-size: max(2.1vh, 1.3rem) !important;
   letter-spacing: 0.1em;
   background-color: rgba(0, 0, 0, 0.1);
 }
@@ -58,13 +58,17 @@
   overflow: auto;
 }
 
-@media (orientation: portrait) {
+.reduce .level-name {
+  padding: max(1.5vh, 0.5rem) 0;
+}
+
+@media (orientation: portrait), (max-width: 400px) {
   .level-name {
     font-size: 2vh;
   }
 }
 
-@media (any-hover: hover) {
+@media (any-hover: hover) and (orientation: landscape) {
   .levels > .level:hover {
     border-bottom-color: gray;
   }

@@ -21,10 +21,14 @@ $("body").on('click', ".active .item", function() {
 });
 
 $("body").on('click', '.level-name', function() {
-  const isThisExtended = $(this).parent().hasClass("extended");
+  const parent = $(this).parent();
+  const isThisExtended = parent.hasClass("extended");
   $(".extended").removeClass("extended");
   if (!isThisExtended) {
-    $(this).parent().addClass("extended");
+    parent.addClass("extended");
+    parent.parent().addClass('reduce');
+  } else {
+    parent.parent().removeClass('reduce');
   }
 });
 

@@ -79,7 +79,7 @@
 }
 
 
-@media (orientation: portrait) {
+@media (orientation: portrait), (max-width: 400px) {
   #pop-up {
     max-width: 75vw;
   }

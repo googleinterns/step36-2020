@@ -1,6 +1,6 @@
 #keywords > hr {
   margin: 0 3vw;
-  height: 50vh;
+  height: max(50vh, 25rem);
   border: 0.1vw solid hsl(var(--lowerColor-hs), calc(var(--lowerColor-l) - 30%));
 }
 
@@ -10,7 +10,7 @@
 
 .subtitle {
   grid-area: location;
-  font-size: 1.5vh;
+  font-size: max(1.5vh, 1rem);
   margin: 0 0 auto;
 }
 
@@ -18,7 +18,7 @@
   display: block;
 }
 
-@media (orientation: portrait) {
+@media (orientation: portrait), (max-width: 400px) {
   #keywords > hr {
     margin: 1.5vh 0;
     width: 50%;
@@ -26,7 +26,7 @@
   }
 }
 
-@media (any-hover: hover) {
+@media (any-hover: hover) and (orientation: landscape) {
   .location:hover {
     background-color: lightgray;
   }

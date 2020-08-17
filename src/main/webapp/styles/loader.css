@@ -1,6 +1,6 @@
 :root {
-  --thickness: min(1vmax, 1.6vh);
-  --diameter: min(3vmax, 4vh);
+  --thickness: max(min(1vmax, 1.6vh), 0.8rem);
+  --diameter: calc(var(--thickness) * 3);
 }
 
 body {
@@ -24,8 +24,9 @@ body {
 }
 
 #loading-text {
-  font-size: min(1.3vmax, 1.7vh);
+  font-size: max(min(2.3vmax, 1.7vh), 1.2rem);
   letter-spacing: 0.025em;
+  text-align: center;
 }
 
 @keyframes spin {

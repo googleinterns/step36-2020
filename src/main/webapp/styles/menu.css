@@ -20,3 +20,9 @@
 #open-modal > ion-icon {
   font-size: 130%;
 }
+
+@media (orientation: portrait), (max-width: 400px) {
+  .nav {
+    margin: 0 2vw;
+  }
+}
