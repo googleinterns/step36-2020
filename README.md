@@ -1,12 +1,12 @@
 # STEP 2020 Capstone project
 
-Link to the Website: http://engage-step.appspot.com/
+Link to the Website: https://engage-step.appspot.com/
 
 Our objective is to provide users with relevant news and action-initiatives based on their interests We want users to be able to deeply understand topics related to their interests (as indicated by their social media activity) and have the resources to take action.
 
 ## How To Run
 
-### Set your default Java version to Java 8
+### Setting your default Java version to Java 8
 Run the following comand before trying to run the application:
 `sudo update-java-alternatives -s java-1.8.0-openjdk-amd64 && export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/jre`
 

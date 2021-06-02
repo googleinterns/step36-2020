@@ -16,7 +16,7 @@ function loadUrls(urls, loadFunction) {
  * Returns a promise of the template.
  */
 function loadTemplate(url) {
-  const templatePromise = fetch(url).then(promiseResponse => promiseResponse.text());
+  const templatePromise = fetch(url).then(promiseResponse => promiseResponse.text()).catch(error => console.log(error));
   return templatePromise;
 }
 
@@ -25,6 +25,6 @@ function loadTemplate(url) {
  * Returns a promise of the object.
  */
 function loadObject(url) {
-  const objPromise = fetch(url).then(promiseResponse => promiseResponse.json());
+  const objPromise = fetch(url).then(promiseResponse => promiseResponse.json()).catch(error => console.log(error));
   return objPromise;
 }

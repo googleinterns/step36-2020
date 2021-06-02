@@ -112,9 +112,9 @@ async function loadKeywordSection(keyword) {
 function buildKeywordObj(newsObj, booksObj, projectsObj, keyword) {
   let keywordObj = new Object();
   keywordObj.term = keyword;
-  keywordObj.news = newsObj.news[keyword];
-  keywordObj.books = booksObj.books[keyword];
-  keywordObj.projects = projectsObj.results[keyword];
+  keywordObj.news = newsObj && newsObj.news[keyword];
+  keywordObj.books = booksObj && booksObj.books[keyword];
+  keywordObj.projects = projectsObj && projectsObj.results[keyword];
   return keywordObj;
 }
 
